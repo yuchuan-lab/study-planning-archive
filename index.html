@@ -1,410 +1,640 @@
 <!doctype html>
 <html lang="zh-Hant">
+
 <head>
+
 <meta charset="utf-8">
+
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <meta name="theme-color" content="#69704d">
+
 <title>讀書進度工具</title>
 
 <style>
+
 :root{
+
   --paper:#f4f0e4;
   --paper2:#ebe5d5;
   --olive:#69704d;
   --dark:#4f563b;
-  --line:#c9c2ad;
-  --text:#3f4038;
-  --muted:#777565;
+  --ink:#35372d;
+  --line:#c9c4b4;
   --white:#faf8f1;
-  --shadow:0 2px 8px rgba(65,60,45,.08);
+  --muted:#77786d;
+
+  --study:#dfe5ca;
+  --flex:#e8e0cc;
+  --rest:#e4e2dc;
+  --exercise:#d5dfd0;
+  --other:#ddd8cc;
+
+  /* 配分總表專用色 */
+
+  --weight-bg:#e9e1cf;
+  --weight-line:#b9ad92;
+  --weight-accent:#817354;
+
+  /* 現階段科目表專用色 */
+
+  --subject-bg:#e1e6d4;
+  --subject-line:#b5bea0;
+  --subject-accent:#69704d;
+
 }
 
 *{
-  box-sizing:border-box;
-}
 
-html{
-  scroll-behavior:smooth;
+  box-sizing:border-box
+
 }
 
 body{
+
   margin:0;
   background:var(--paper);
-  color:var(--text);
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Noto Sans TC",
-    "PingFang TC",
-    "Microsoft JhengHei",
-    sans-serif;
-  line-height:1.6;
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC",sans-serif
+
 }
 
-button,
-input,
-select{
-  font:inherit;
+button,input,select{
+
+  font:inherit
+
 }
 
 button{
-  cursor:pointer;
+
+  cursor:pointer
+
 }
 
 header{
-  padding:28px 20px 20px;
+
+  padding:24px 5vw 16px;
   border-bottom:1px solid var(--line);
-  background:rgba(244,240,228,.92);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px
+
 }
 
-.header-inner{
-  max-width:1200px;
-  margin:auto;
+.brand{
+
+  display:flex;
+  align-items:center;
+  gap:10px
+
+}
+
+.logo{
+
+  font-size:25px;
+  color:var(--olive)
+
 }
 
 h1{
-  margin:0;
-  color:var(--dark);
-  font-size:28px;
+
+  font:500 21px Georgia,"Times New Roman",serif;
   letter-spacing:.08em;
-  font-weight:600;
+  margin:0
+
 }
 
-.header-sub{
-  margin-top:5px;
+.sub{
+
+  font-size:11px;
   color:var(--muted);
-  font-size:13px;
-  letter-spacing:.08em;
+  margin-top:3px
+
 }
 
 nav{
-  position:sticky;
-  top:0;
-  z-index:20;
-  background:rgba(244,240,228,.96);
-  border-bottom:1px solid var(--line);
-  backdrop-filter:blur(8px);
-}
 
-.nav-inner{
-  max-width:1200px;
-  margin:auto;
   display:flex;
-  overflow-x:auto;
+  gap:6px;
+  flex-wrap:wrap
+
 }
 
-.nav-btn{
-  flex:0 0 auto;
-  padding:13px 22px;
-  border:0;
-  border-bottom:3px solid transparent;
+nav button,.btn{
+
+  border:1px solid var(--line);
   background:transparent;
-  color:var(--muted);
-  font-size:14px;
-  letter-spacing:.06em;
+  color:var(--dark);
+  padding:8px 12px;
+  border-radius:4px
+
 }
 
-.nav-btn.active{
-  color:var(--dark);
-  border-bottom-color:var(--olive);
-  font-weight:600;
+nav button.active,.btn.primary{
+
+  background:var(--olive);
+  color:white;
+  border-color:var(--olive)
+
 }
 
 main{
-  max-width:1200px;
+
+  max-width:1280px;
   margin:auto;
-  padding:24px 18px 60px;
+  padding:26px 5vw 60px
+
 }
 
 .page{
-  display:none;
+
+  display:none
+
 }
 
 .page.active{
-  display:block;
-}
 
-.section-title{
-  margin:0 0 16px;
-  color:var(--dark);
-  font-size:20px;
-  font-weight:600;
-  letter-spacing:.06em;
-}
+  display:block
 
-.card{
-  margin-bottom:20px;
-  padding:20px;
-  border:1px solid var(--line);
-  border-radius:7px;
-  background:rgba(250,248,241,.68);
-  box-shadow:var(--shadow);
-}
-
-.card-title{
-  margin:0 0 14px;
-  color:var(--dark);
-  font-size:16px;
-  font-weight:600;
 }
 
 .grid{
+
   display:grid;
-  gap:14px;
+  gap:16px
+
 }
 
-.grid-2{
-  grid-template-columns:repeat(2,minmax(0,1fr));
+.two{
+
+  grid-template-columns:repeat(2,minmax(0,1fr))
+
 }
 
-.grid-3{
-  grid-template-columns:repeat(3,minmax(0,1fr));
+.three{
+
+  grid-template-columns:repeat(3,minmax(0,1fr))
+
 }
 
-.field{
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-}
+.card{
 
-.field label{
-  color:var(--muted);
-  font-size:13px;
-}
-
-input,
-select{
-  width:100%;
-  min-height:40px;
-  padding:8px 10px;
+  background:rgba(250,248,241,.72);
   border:1px solid var(--line);
-  border-radius:5px;
+  border-radius:6px;
+  padding:19px
+
+}
+
+.card h2{
+
+  font-size:15px;
+  font-weight:600;
+  margin:0 0 14px;
+  color:var(--dark)
+
+}
+
+label{
+
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:5px
+
+}
+
+input,select{
+
+  width:100%;
   background:var(--white);
-  color:var(--text);
-  outline:none;
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:9px;
+  color:var(--ink)
+
 }
 
-input:focus,
-select:focus{
-  border-color:var(--olive);
-  box-shadow:0 0 0 2px rgba(105,112,77,.1);
-}
+.row{
 
-.btn-row{
   display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:14px;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap
+
 }
 
-.btn{
-  min-height:40px;
-  padding:8px 15px;
-  border:1px solid var(--olive);
-  border-radius:5px;
-  background:var(--olive);
-  color:#fff;
-  letter-spacing:.04em;
+.row>*{
+
+  flex:1
+
 }
 
-.btn:hover{
-  background:var(--dark);
+.big{
+
+  font:40px Georgia,serif;
+  color:var(--olive);
+  line-height:1
+
 }
 
-.btn.secondary{
-  background:transparent;
-  color:var(--dark);
+.metric small{
+
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:7px
+
 }
 
-.btn.danger{
-  border-color:#9b6d61;
-  background:#9b6d61;
+.muted{
+
+  color:var(--muted)
+
 }
 
 .small{
-  font-size:12px;
+
+  font-size:11px
+
+}
+
+.notice{
+
+  padding:11px 13px;
+  background:var(--paper2);
+  border-left:3px solid var(--olive);
+  font-size:13px;
+  margin-bottom:14px
+
+}
+
+.danger{
+
+  border-left-color:#956b55
+
+}
+
+.actions{
+
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+  margin-top:13px;
+  flex-wrap:wrap
+
+}
+
+.status{
+
+  font-size:11px;
   color:var(--muted);
+  text-align:right;
+  margin-top:8px
+
+}
+
+.status.saved{
+
+  color:var(--olive)
+
+}
+
+table{
+
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px
+
+}
+
+th,td{
+
+  border-bottom:1px solid var(--line);
+  padding:8px 6px;
+  text-align:left
+
+}
+
+th{
+
+  font-size:11px;
+  color:var(--muted);
+  font-weight:500
+
+}
+
+.schedule{
+
+  overflow:auto;
+  user-select:none;
+  -webkit-user-select:none
+
+}
+
+.schedule table{
+
+  min-width:850px
+
+}
+
+.schedule th,.schedule td{
+
+  height:30px;
+  padding:2px 4px;
+  text-align:center
+
+}
+
+.schedule th:first-child,.schedule td:first-child{
+
+  width:64px;
+  text-align:right;
+  padding-right:8px;
+  color:var(--muted);
+  font-size:11px
+
+}
+
+/* 每日總時數 */
+
+.schedule th.day-header{
+
+  padding:7px 4px 6px;
+  line-height:1.35
+
+}
+
+.day-name{
+
+  display:block;
+  font-size:12px;
+  color:var(--dark);
+  font-weight:600
+
+}
+
+.day-total{
+
+  display:block;
+  margin-top:2px;
+  font-size:10px;
+  color:var(--olive);
+  font-family:Georgia,serif;
+  font-weight:600
+
+}
+
+.slot{
+
+  width:100%;
+  height:26px;
+  border:1px solid rgba(80,80,70,.08);
+  border-radius:3px;
+  background:transparent;
+  font-size:10px;
+  color:var(--ink);
+  touch-action:none;
+  transition:.08s
+
+}
+
+.slot.study{
+
+  background:var(--study)
+
+}
+
+.slot.flex{
+
+  background:var(--flex)
+
+}
+
+.slot.rest{
+
+  background:var(--rest)
+
+}
+
+.slot.exercise{
+
+  background:var(--exercise)
+
+}
+
+.slot.other{
+
+  background:var(--other)
+
+}
+
+.slot.selected{
+
+  outline:2px solid var(--olive);
+  outline-offset:-2px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.65)
+
+}
+
+.palette{
+
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-bottom:8px
+
+}
+
+.palette button{
+
+  border:1px solid var(--line);
+  padding:6px 9px;
+  border-radius:4px;
+  background:var(--white);
+  font-size:12px
+
+}
+
+.palette button.selected{
+
+  outline:2px solid var(--olive);
+  outline-offset:1px
+
+}
+
+.selection-info{
+
+  font-size:11px;
+  color:var(--muted);
+  margin-bottom:12px
+
+}
+
+/* ② 現階段科目配置 */
+
+.subject-form{
+
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1.2fr auto;
+  gap:7px;
+  align-items:end
+
+}
+
+.score-form{
+
+  display:grid;
+  grid-template-columns:2fr 1fr auto;
+  gap:7px;
+  align-items:end
+
+}
+
+.delete{
+
+  border:0;
+  background:none;
+  color:#8a6858;
+  font-size:17px
+
 }
 
 .empty{
-  padding:30px 15px;
+
   text-align:center;
-  color:var(--muted);
-  border:1px dashed var(--line);
-  border-radius:5px;
+  padding:25px;
+  color:var(--muted)
+
 }
 
 /* =========================
-   總覽
+   配分總表：獨立視覺
 ========================= */
 
-.overview-grid{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:12px;
-}
+.weight-section{
 
-.stat{
-  padding:16px;
-  border:1px solid var(--line);
+  background:var(--weight-bg);
+  border:1px solid var(--weight-line);
   border-radius:6px;
-  background:rgba(250,248,241,.65);
+  padding:17px;
+  margin-bottom:24px
+
 }
 
-.stat-label{
-  color:var(--muted);
-  font-size:12px;
+.weight-section h3{
+
+  color:var(--weight-accent)!important
+
 }
 
-.stat-value{
-  margin-top:4px;
+.weight-section .notice{
+
+  background:rgba(250,248,241,.48);
+  border-left-color:var(--weight-accent)
+
+}
+
+.weight-section input{
+
+  background:#f8f4e9
+
+}
+
+.weight-section .total-table{
+
+  background:rgba(250,248,241,.38);
+  border:1px solid rgba(129,115,84,.25)
+
+}
+
+.weight-section .total-table th{
+
+  background:rgba(129,115,84,.10)
+
+}
+
+.total-table th,
+.total-table td{
+
+  text-align:center
+
+}
+
+.total-table th:first-child,
+.total-table td:first-child{
+
+  text-align:left
+
+}
+
+.total-table .ratio{
+
+  font-family:Georgia,serif;
+  color:var(--weight-accent)
+
+}
+
+.total-table .hours{
+
+  font-family:Georgia,serif;
   color:var(--dark);
-  font-size:24px;
+  font-weight:600
+
+}
+
+.sum-row td{
+
   font-weight:600;
+  background:rgba(129,115,84,.10)
+
+}
+
+.week-hours{
+
+  font-family:Georgia,serif;
+  color:var(--weight-accent);
+  font-weight:600
+
 }
 
 /* =========================
-   每週作息
+   現階段科目表：另一套視覺
 ========================= */
 
-.routine-wrapper{
-  overflow:auto;
-  -webkit-overflow-scrolling:touch;
+.subject-section{
+
+  background:rgba(225,230,212,.40);
+  border:1px solid var(--subject-line);
+  border-radius:6px;
+  padding:17px
+
 }
 
-.routine-table{
-  width:100%;
-  min-width:900px;
-  border-collapse:collapse;
-  background:rgba(250,248,241,.55);
+.subject-section h3{
+
+  color:var(--subject-accent)!important
+
 }
 
-.routine-table th,
-.routine-table td{
-  border:1px solid var(--line);
-  text-align:center;
+.subject-section .notice{
+
+  background:rgba(250,248,241,.58);
+  border-left-color:var(--subject-accent)
+
 }
 
-.routine-table th{
-  padding:8px 5px;
-  background:var(--paper2);
-  color:var(--dark);
-  font-size:13px;
+.subject-section table{
+
+  background:rgba(250,248,241,.35)
+
 }
 
-.routine-table td{
-  height:34px;
-  padding:3px;
-}
+.subject-section thead th{
 
-.time-cell{
-  width:65px;
-  color:var(--muted);
-  font-size:11px;
-  background:rgba(235,229,213,.5);
-}
+  background:rgba(105,112,77,.09)
 
-.routine-select{
-  width:100%;
-  min-height:28px;
-  padding:2px;
-  border:0;
-  border-radius:3px;
-  background:transparent;
-  font-size:11px;
-  text-align:center;
-}
-
-.routine-select.study{
-  background:#d9ddc8;
-  color:var(--dark);
-}
-
-.routine-select.meal{
-  background:#e7d7bd;
-}
-
-.routine-select.exercise{
-  background:#d1ddd5;
-}
-
-.routine-select.flex{
-  background:#ddd4df;
-}
-
-.routine-select.rest{
-  background:#e4e1d8;
-  color:#858277;
-}
-
-.routine-select.other{
-  background:#d9d0c4;
-}
-
-/* =========================
-   科目
-========================= */
-
-.subject-table-wrapper{
-  overflow:auto;
-}
-
-.subject-table{
-  width:100%;
-  min-width:700px;
-  border-collapse:collapse;
-}
-
-.subject-table th,
-.subject-table td{
-  border:1px solid var(--line);
-  padding:9px 8px;
-  text-align:center;
-}
-
-.subject-table th{
-  background:var(--paper2);
-  color:var(--dark);
-  font-size:13px;
-}
-
-.subject-table td:first-child{
-  text-align:left;
-}
-
-.subject-input{
-  min-height:34px;
-  padding:5px 7px;
-}
-
-.delete-btn{
-  padding:4px 9px;
-  border:1px solid #bca79c;
-  border-radius:4px;
-  background:transparent;
-  color:#896b60;
-}
-
-/* =========================
-   權重
-========================= */
-
-.weight-table{
-  width:100%;
-  border-collapse:collapse;
-}
-
-.weight-table th,
-.weight-table td{
-  border:1px solid var(--line);
-  padding:9px 8px;
-  text-align:center;
-}
-
-.weight-table th{
-  background:var(--paper2);
-  color:var(--dark);
-  font-size:13px;
 }
 
 /* =========================
@@ -412,352 +642,606 @@ select:focus{
 ========================= */
 
 .plan-wrapper{
+
   overflow:auto;
   -webkit-overflow-scrolling:touch;
-  padding-bottom:6px;
+  padding-bottom:6px
+
 }
 
 .plan-calendar{
+
   min-width:1050px;
   border:1px solid var(--line);
   background:rgba(250,248,241,.55);
   border-radius:6px;
-  overflow:hidden;
+  overflow:hidden
+
 }
 
 .plan-week{
-  border-bottom:1px solid var(--line);
+
+  border-bottom:1px solid var(--line)
+
 }
 
 .plan-week:last-child{
-  border-bottom:0;
+
+  border-bottom:0
+
 }
 
 .plan-week-title{
-  padding:8px 12px;
+
+  padding:9px 12px;
+  background:rgba(235,229,213,.72);
   border-bottom:1px solid var(--line);
-  background:var(--paper2);
   color:var(--dark);
-  font-size:13px;
-  font-weight:600;
+  font-size:12px;
+  font-weight:600
+
 }
 
 .plan-grid{
+
   display:grid;
-  grid-template-columns:64px repeat(7,minmax(0,1fr));
+  grid-template-columns:64px repeat(7,minmax(0,1fr))
+
+}
+
+.plan-corner{
+
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:rgba(235,229,213,.42)
+
 }
 
 .plan-day-header{
-  min-height:42px;
-  padding:7px 4px;
-  border-right:1px solid var(--line);
-  background:rgba(235,229,213,.6);
+
+  min-height:54px;
+  padding:7px 5px;
   text-align:center;
-  color:var(--dark);
-  font-size:12px;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:rgba(250,248,241,.82)
+
 }
 
 .plan-day-header:last-child{
-  border-right:0;
+
+  border-right:0
+
+}
+
+.plan-day-header .weekday{
+
+  display:block;
+  font-size:12px;
+  font-weight:600;
+  color:var(--dark)
+
+}
+
+.plan-day-header .date{
+
+  display:block;
+  margin-top:3px;
+  font-size:10px;
+  color:var(--muted);
+  font-family:Georgia,serif
+
 }
 
 .plan-day-header.outside{
-  color:#aaa79b;
-  background:rgba(225,221,210,.35);
+
+  opacity:.45
+
 }
 
 .plan-time-axis{
+
   position:relative;
-  height:960px;
   border-right:1px solid var(--line);
-  background:rgba(235,229,213,.35);
+  background:rgba(235,229,213,.35)
+
 }
 
 .plan-time-label{
+
   position:absolute;
   right:7px;
   transform:translateY(-50%);
+  font-size:9px;
   color:var(--muted);
-  font-size:10px;
-  white-space:nowrap;
+  font-family:Georgia,serif;
+  white-space:nowrap
+
 }
 
 .plan-days-area{
+
   grid-column:2 / 9;
   display:grid;
-  grid-template-columns:repeat(7,minmax(0,1fr));
+  grid-template-columns:repeat(7,minmax(0,1fr))
+
 }
 
 .plan-day-column{
+
   position:relative;
-  height:960px;
   border-right:1px solid var(--line);
+  background:rgba(250,248,241,.34)
+
 }
 
 .plan-day-column:last-child{
-  border-right:0;
+
+  border-right:0
+
 }
 
 .plan-day-column.outside{
-  background:rgba(225,221,210,.25);
+
+  background:rgba(235,229,213,.18)
+
 }
 
 .plan-grid-area{
-  position:absolute;
-  inset:0;
-}
 
-.plan-hour-line,
-.plan-half-line{
-  position:absolute;
-  left:0;
-  right:0;
-  pointer-events:none;
+  position:relative;
+  min-height:480px
+
 }
 
 .plan-hour-line{
-  border-top:1px solid rgba(130,125,110,.25);
+
+  position:absolute;
+  left:0;
+  right:0;
+  border-top:1px solid rgba(105,112,77,.22);
+  pointer-events:none
+
 }
 
 .plan-half-line{
-  border-top:1px dashed rgba(130,125,110,.12);
+
+  position:absolute;
+  left:0;
+  right:0;
+  border-top:1px dashed rgba(105,112,77,.10);
+  pointer-events:none
+
 }
 
 .plan-event{
+
   position:absolute;
   left:5px;
   right:5px;
   min-height:8px;
   padding:5px 6px;
   border-radius:4px;
-  border:1px solid rgba(75,78,58,.16);
-  color:var(--dark);
+  border:1px solid rgba(79,86,59,.16);
   overflow:hidden;
-  font-size:11px;
-  line-height:1.35;
-  box-shadow:0 1px 3px rgba(60,58,45,.08);
+  z-index:3;
+  box-shadow:0 1px 2px rgba(53,55,45,.06)
+
 }
 
-.plan-event-name{
-  font-weight:600;
-}
+.plan-event b{
 
-.plan-event-time{
-  margin-top:2px;
+  display:block;
   font-size:10px;
-  opacity:.72;
+  font-family:Georgia,"Times New Roman",serif;
+  color:var(--dark);
+  margin-bottom:2px
+
 }
 
-.subject-0{background:#d8dfc4}
-.subject-1{background:#e3d4bb}
-.subject-2{background:#d0ddd5}
-.subject-3{background:#ded4df}
-.subject-4{background:#ddd9c7}
-.subject-5{background:#d6d2c1}
-.subject-6{background:#d8d7c8}
-.subject-7{background:#e0d1c8}
-.subject-8{background:#d1d9dc}
-.subject-9{background:#ddd4c4}
+.plan-event .event-name{
+
+  display:block;
+  font-size:11px;
+  font-weight:600;
+  line-height:1.35
+
+}
+
+.plan-event .event-type{
+
+  display:block;
+  margin-top:2px;
+  font-size:9px;
+  color:var(--muted);
+  line-height:1.3
+
+}
+
+/* 不同科目色塊 */
+
+.plan-event.subject-0{
+
+  background:#dfe5ca
+
+}
+
+.plan-event.subject-1{
+
+  background:#e5dccb
+
+}
+
+.plan-event.subject-2{
+
+  background:#d7e1dc
+
+}
+
+.plan-event.subject-3{
+
+  background:#e1d9df
+
+}
+
+.plan-event.subject-4{
+
+  background:#e7dfc9
+
+}
+
+.plan-event.subject-5{
+
+  background:#d9dfcc
+
+}
+
+.plan-event.subject-6{
+
+  background:#ddd9e3
+
+}
+
+.plan-event.subject-7{
+
+  background:#e4dfd3
+
+}
+
+.plan-event.subject-8{
+
+  background:#d8e0d7
+
+}
+
+.plan-event.subject-9{
+
+  background:#e4dcd1
+
+}
+
+.plan-event.subject-other{
+
+  background:#ddd8cc
+
+}
+
+.plan-blank{
+
+  min-height:40px;
+  padding:18px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px
+
+}
 
 .plan-legend{
+
   display:flex;
+  gap:7px;
   flex-wrap:wrap;
-  gap:8px 14px;
   margin-top:12px;
+  font-size:10px;
+  color:var(--muted)
+
 }
 
-.legend-item{
+.plan-legend-item{
+
   display:flex;
   align-items:center;
-  gap:5px;
-  color:var(--muted);
-  font-size:12px;
+  gap:4px
+
 }
 
-.legend-dot{
-  width:12px;
-  height:12px;
-  border:1px solid rgba(60,60,50,.12);
-  border-radius:3px;
+.plan-legend-dot{
+
+  width:10px;
+  height:10px;
+  border-radius:2px;
+  border:1px solid rgba(79,86,59,.12)
+
 }
 
-.notice{
-  margin-top:14px;
-  padding:12px 14px;
-  border:1px solid var(--line);
-  border-radius:5px;
-  background:rgba(235,229,213,.55);
-  color:var(--muted);
-  font-size:12px;
+.plan-note{
+
+  margin-top:10px;
+  font-size:10px;
+  color:var(--muted)
+
 }
 
 /* =========================
-   備份
+   備份區
 ========================= */
 
 .backup-box{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
+
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid var(--line)
+
 }
 
-/* =========================
-   RWD
-========================= */
+.backup-actions{
 
-@media(max-width:800px){
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap
+
+}
+
+.file-input{
+
+  display:none
+
+}
+
+@media(max-width:850px){
 
   header{
-    padding:22px 15px 17px;
+
+    align-items:flex-start;
+    flex-direction:column
+
   }
 
-  h1{
-    font-size:23px;
+  .two,.three{
+
+    grid-template-columns:1fr
+
   }
+
+  .subject-form{
+
+    grid-template-columns:1fr 1fr
+
+  }
+
+  .score-form{
+
+    grid-template-columns:1fr 1fr
+
+  }
+
+}
+
+@media(max-width:520px){
 
   main{
-    padding:18px 12px 45px;
+
+    padding:20px 4vw 50px
+
   }
 
-  .grid-2,
-  .grid-3{
-    grid-template-columns:1fr;
+  .subject-form,
+  .score-form{
+
+    grid-template-columns:1fr
+
   }
 
-  .overview-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
+  nav{
+
+    width:100%
+
   }
 
-  .card{
-    padding:15px;
-  }
+  nav button{
 
-}
+    flex:1
 
-@media(max-width:480px){
-
-  .overview-grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .stat-value{
-    font-size:20px;
-  }
-
-  .nav-btn{
-    padding:11px 15px;
-    font-size:13px;
   }
 
 }
+
 </style>
+
 </head>
 
 <body>
 
 <header>
-  <div class="header-inner">
-    <h1>讀書進度工具</h1>
-    <div class="header-sub">Study Planning & Progress Tool</div>
+
+  <div class="brand">
+
+    <div class="logo">🕯️</div>
+
+    <div>
+
+      <h1>讀書進度工具</h1>
+
+      <div class="sub">Study Planning Archive</div>
+
+    </div>
+
   </div>
+
+  <nav>
+
+    <button class="active" data-page="home">
+      總覽
+    </button>
+
+    <button data-page="routine">
+      每週作息
+    </button>
+
+    <button data-page="subjects">
+      科目配置
+    </button>
+
+    <button data-page="planner">
+      自動排程
+    </button>
+
+  </nav>
+
 </header>
 
-<nav>
-  <div class="nav-inner">
-    <button class="nav-btn active" data-page="overview">總覽</button>
-    <button class="nav-btn" data-page="routine">每週作息</button>
-    <button class="nav-btn" data-page="subjects">科目配置</button>
-    <button class="nav-btn" data-page="plan">自動排程</button>
-  </div>
-</nav>
 
 <main>
 
-<!-- =========================
-     總覽
-========================= -->
+<!-- ==================== 總覽 ==================== -->
 
-<section id="page-overview" class="page active">
+<section id="home" class="page active">
 
-  <h2 class="section-title">總覽</h2>
+  <div class="grid three">
 
-  <div class="card">
+    <div class="card metric">
 
-    <div class="card-title">考試設定</div>
+      <small>距離考試</small>
 
-    <div class="grid grid-2">
+      <div class="big" id="daysLeft">—</div>
 
-      <div class="field">
-        <label>起始日期</label>
-        <input type="date" id="startDate">
-      </div>
-
-      <div class="field">
-        <label>預計考試日期</label>
-        <input type="date" id="examDate">
-      </div>
+      <div class="muted">天</div>
 
     </div>
 
-    <div class="btn-row">
-      <button class="btn" onclick="saveDates()">儲存設定</button>
+
+    <div class="card metric">
+
+      <small>剩餘週數</small>
+
+      <div class="big" id="weeksLeft">—</div>
+
+      <div class="muted">週</div>
+
     </div>
 
-  </div>
 
-  <div class="overview-grid">
+    <div class="card metric">
 
-    <div class="stat">
-      <div class="stat-label">距離考試</div>
-      <div class="stat-value" id="remainDays">—</div>
-    </div>
+      <small>每週可讀書</small>
 
-    <div class="stat">
-      <div class="stat-label">剩餘週數</div>
-      <div class="stat-value" id="remainWeeks">—</div>
-    </div>
+      <div class="big" id="weeklyStudy">0</div>
 
-    <div class="stat">
-      <div class="stat-label">每週可讀書</div>
-      <div class="stat-value" id="weeklyCapacity">—</div>
-    </div>
+      <div class="muted">小時</div>
 
-    <div class="stat">
-      <div class="stat-label">每週配置</div>
-      <div class="stat-value" id="weeklyDemand">—</div>
     </div>
 
   </div>
 
-  <div class="card" style="margin-top:20px">
 
-    <div class="card-title">備份與還原</div>
+  <div class="grid two" style="margin-top:16px">
 
-    <div class="backup-box">
-      <button class="btn" onclick="exportData()">匯出備份</button>
+    <div class="card">
 
-      <button
-        class="btn secondary"
-        onclick="document.getElementById('importFile').click()"
-      >
-        匯入備份
+      <h2>考試設定</h2>
+
+      <div class="row">
+
+        <div>
+
+          <label>起始日期</label>
+
+          <input id="startDate" type="date">
+
+        </div>
+
+        <div>
+
+          <label>考試日期</label>
+
+          <input id="examDate" type="date">
+
+        </div>
+
+      </div>
+
+
+      <div class="actions">
+
+        <button class="btn primary" id="saveDates">
+          儲存設定
+        </button>
+
+      </div>
+
+
+      <div
+        id="dateInfo"
+        class="small muted"
+        style="margin-top:10px">
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <h2>目前計畫摘要</h2>
+
+      <div id="summary"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==================== 備份 ==================== -->
+
+  <div class="card" style="margin-top:16px">
+
+    <h2>資料保存與備份</h2>
+
+    <div class="notice">
+
+      本工具會將資料<strong>自動保存於目前瀏覽器</strong>。
+
+      如果需要換裝置、重新安裝瀏覽器或保留額外備份，
+
+      可以使用下方的匯出／匯入功能。
+
+    </div>
+
+
+    <div class="backup-actions">
+
+      <button class="btn primary" id="exportData">
+        ↓ 匯出進度備份
       </button>
 
-      <button class="btn danger" onclick="clearAllData()">
+      <button class="btn" id="importData">
+        ↑ 匯入進度備份
+      </button>
+
+      <button class="btn" id="clearData">
         清除全部資料
       </button>
 
       <input
+        id="backupFile"
+        class="file-input"
         type="file"
-        id="importFile"
-        accept=".json,application/json"
-        style="display:none"
-        onchange="importData(event)"
-      >
+        accept=".json,application/json">
+
     </div>
 
-    <div class="small" style="margin-top:10px">
-      建議在大幅修改資料前先匯出一次備份。
+
+    <div id="saveStatus" class="status saved">
+      ✓ 資料已自動保存
     </div>
 
   </div>
@@ -765,38 +1249,119 @@ select:focus{
 </section>
 
 
-<!-- =========================
-     每週作息
-========================= -->
+<!-- ==================== 每週作息 ==================== -->
 
-<section id="page-routine" class="page">
-
-  <h2 class="section-title">每週作息</h2>
+<section id="routine" class="page">
 
   <div class="card">
 
-    <div class="card-title">設定每週固定作息</div>
+    <h2>每週作息表</h2>
 
-    <div class="small" style="margin-bottom:12px">
-      可設定 06:00 ～ 隔日 02:00，每格 30 分鐘。
-      「讀書」時段會提供給自動排程使用。
+
+    <div class="notice">
+
+      一天定義為 <b>06:00～隔日 02:00</b>，
+
+      每格 30 分鐘。跨午夜時段仍歸在原本的讀書日。
+
+      <br><br>
+
+      <b>操作方式：</b>
+
+      點一下選取單格，也可以直接拖曳連續選取多個格子。
+
+      選好後，點上方「讀書／吃飯／運動」等類型，
+
+      即可一次套用。
+
     </div>
 
-    <div class="routine-wrapper">
 
-      <table class="routine-table">
+    <div class="palette" id="palette">
+
+      <button class="selected" data-kind="study">
+        讀書
+      </button>
+
+      <button data-kind="meal">
+        吃飯
+      </button>
+
+      <button data-kind="exercise">
+        運動
+      </button>
+
+      <button data-kind="flex">
+        彈性時間
+      </button>
+
+      <button data-kind="rest">
+        休息
+      </button>
+
+      <button data-kind="other">
+        其他
+      </button>
+
+    </div>
+
+
+    <div class="selection-info">
+
+      已選取：
+      <b id="selectedCount">0</b>
+      格
+
+    </div>
+
+
+    <div class="schedule">
+
+      <table>
 
         <thead>
+
           <tr>
+
             <th>時間</th>
-            <th>一</th>
-            <th>二</th>
-            <th>三</th>
-            <th>四</th>
-            <th>五</th>
-            <th>六</th>
-            <th>日</th>
+
+            <th class="day-header">
+              <span class="day-name">一</span>
+              <span class="day-total" id="dayTotal0">0.0 h</span>
+            </th>
+
+            <th class="day-header">
+              <span class="day-name">二</span>
+              <span class="day-total" id="dayTotal1">0.0 h</span>
+            </th>
+
+            <th class="day-header">
+              <span class="day-name">三</span>
+              <span class="day-total" id="dayTotal2">0.0 h</span>
+            </th>
+
+            <th class="day-header">
+              <span class="day-name">四</span>
+              <span class="day-total" id="dayTotal3">0.0 h</span>
+            </th>
+
+            <th class="day-header">
+              <span class="day-name">五</span>
+              <span class="day-total" id="dayTotal4">0.0 h</span>
+            </th>
+
+            <th class="day-header">
+              <span class="day-name">六</span>
+              <span class="day-total" id="dayTotal5">0.0 h</span>
+            </th>
+
+            <th class="day-header">
+              <span class="day-name">日</span>
+              <span class="day-total" id="dayTotal6">0.0 h</span>
+            </th>
+
           </tr>
+
         </thead>
 
         <tbody id="routineBody"></tbody>
@@ -805,84 +1370,34 @@ select:focus{
 
     </div>
 
-  </div>
 
-</section>
+    <div class="actions">
 
-
-<!-- =========================
-     科目配置
-========================= -->
-
-<section id="page-subjects" class="page">
-
-  <h2 class="section-title">科目配置</h2>
-
-  <div class="card">
-
-    <div class="card-title">每週讀書時間</div>
-
-    <div class="subject-table-wrapper">
-
-      <table class="subject-table">
-
-        <thead>
-          <tr>
-            <th>科目</th>
-            <th>每週</th>
-            <th>每次</th>
-            <th>每週次數</th>
-            <th>科目類型</th>
-            <th></th>
-          </tr>
-        </thead>
-
-        <tbody id="subjectBody"></tbody>
-
-      </table>
-
-    </div>
-
-    <div class="btn-row">
-      <button class="btn" onclick="addSubject()">＋ 新增科目</button>
-      <button class="btn secondary" onclick="saveSubjects()">儲存科目配置</button>
-    </div>
-
-  </div>
-
-
-  <div class="card">
-
-    <div class="card-title">考試科目配置總表</div>
-
-    <div class="small" style="margin-bottom:12px">
-      可設定各科在總分中的權重，系統會依比例計算準備時間。
-    </div>
-
-    <div class="subject-table-wrapper">
-
-      <table class="weight-table">
-
-        <thead>
-          <tr>
-            <th>科目</th>
-            <th>配分</th>
-            <th>比例</th>
-            <th>預估總準備時間</th>
-            <th>建議每週時間</th>
-          </tr>
-        </thead>
-
-        <tbody id="weightBody"></tbody>
-
-      </table>
-
-    </div>
-
-    <div class="btn-row">
-      <button class="btn secondary" onclick="saveWeights()">
-        儲存科目配置總表
+      <button class="btn" id="clearSelection">
+        清除選取
       </button>
+
+      <button class="btn" id="clearRoutine">
+        清除全部
+      </button>
+
+      <button class="btn primary" id="saveRoutine">
+        儲存作息
+      </button>
+
+    </div>
+
+
+    <div class="status saved">
+      ✓ 作息修改會自動保存
+    </div>
+
+
+    <div class="notice" style="margin-top:14px">
+
+      每週可排讀書時間：
+      <b id="routineTotal">0 小時</b>
+
     </div>
 
   </div>
@@ -890,69 +1405,333 @@ select:focus{
 </section>
 
 
-<!-- =========================
-     自動排程
-========================= -->
+<!-- ==================== 科目配置 ==================== -->
 
-<section id="page-plan" class="page">
-
-  <h2 class="section-title">自動排程</h2>
+<section id="subjects" class="page">
 
   <div class="card">
 
-    <div class="card-title">生成讀書計畫</div>
+    <h2>科目配置</h2>
 
-    <div class="grid grid-2">
 
-      <div class="field">
+    <!-- =========================
+         ① 考試配分總表
+    ========================= -->
+
+    <div class="weight-section">
+
+      <h3 style="
+        font-size:13px;
+        margin:0 0 10px
+      ">
+        ① 考試科目配分總表
+      </h3>
+
+
+      <div class="notice small">
+
+        依照考試配分比例，
+
+        將整個準備期間的可讀書時間分配到各科。
+
+        同時顯示「準備期間總時數」與「每週應投入時數」。
+
+        <br>
+
+        這裡屬於<strong>理論配置</strong>，不會直接改動下方的實際科目配置。
+
+      </div>
+
+
+      <div class="score-form">
+
+        <div>
+
+          <label>科目</label>
+
+          <input
+            id="wName"
+            placeholder="例如：民法">
+
+        </div>
+
+
+        <div>
+
+          <label>配分</label>
+
+          <input
+            id="wScore"
+            type="number"
+            min="0"
+            step="1"
+            placeholder="100">
+
+        </div>
+
+
+        <button
+          class="btn primary"
+          id="addWeight">
+          新增科目
+        </button>
+
+      </div>
+
+
+      <div style="overflow:auto;margin-top:14px">
+
+        <table class="total-table">
+
+          <thead>
+
+            <tr>
+
+              <th>科目</th>
+              <th>配分</th>
+              <th>配分比例</th>
+              <th>準備期間總時數</th>
+              <th>每週時數</th>
+              <th></th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="weightBody"></tbody>
+
+        </table>
+
+      </div>
+
+
+      <div
+        id="weightSummary"
+        class="small muted"
+        style="margin-top:9px">
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         ② 現階段科目配置
+    ========================= -->
+
+    <div class="subject-section">
+
+      <h3 style="
+        font-size:13px;
+        margin:0 0 10px
+      ">
+        ② 現階段科目配置
+      </h3>
+
+
+      <div class="notice small">
+
+        這裡是目前真正執行中的讀書配置。
+
+        可以手動安排每週時數、每次時數與讀書類型，
+
+        和上方的理論配分配置彼此獨立。
+
+      </div>
+
+
+      <div class="subject-form">
+
+        <div>
+
+          <label>科目</label>
+
+          <input
+            id="sName"
+            placeholder="例如：民法">
+
+        </div>
+
+
+        <div>
+
+          <label>每週時數</label>
+
+          <input
+            id="sHours"
+            type="number"
+            min=".5"
+            step=".5"
+            placeholder="6">
+
+        </div>
+
+
+        <div>
+
+          <label>每次時數</label>
+
+          <input
+            id="sSession"
+            type="number"
+            min=".5"
+            step=".5"
+            placeholder="3">
+
+        </div>
+
+
+        <div>
+
+          <label>類型</label>
+
+          <select id="sType">
+
+            <option>複習</option>
+            <option>上課</option>
+            <option>寫題目</option>
+            <option>背誦</option>
+            <option>其他</option>
+
+          </select>
+
+        </div>
+
+
+        <button
+          class="btn primary"
+          id="addSubject">
+          新增
+        </button>
+
+      </div>
+
+
+      <div style="overflow:auto;margin-top:18px">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>科目</th>
+              <th>每週</th>
+              <th>每次</th>
+              <th>每週次數</th>
+              <th>考前預估</th>
+              <th></th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="subjectBody"></tbody>
+
+        </table>
+
+      </div>
+
+
+      <div
+        id="subjectCapacityNotice"
+        style="margin-top:12px">
+      </div>
+
+
+      <p class="small muted">
+
+        考前預估＝每週時數 × 剩餘週數；
+
+        第一版尚未扣除最後衝刺或其他階段。
+
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ==================== 自動排程 ==================== -->
+
+<section id="planner" class="page">
+
+  <div class="card">
+
+    <h2>自動排程</h2>
+
+
+    <div class="notice">
+
+      依「每週時數、每次時數、每週次數」
+
+      分散到你標記為「讀書」的 30 分鐘時段。
+
+      <br>
+
+      自動排程以<strong>設定的起始日期</strong>為排程起點，
+
+      顯示時固定以星期一～星期日為一週。
+
+    </div>
+
+
+    <div class="row">
+
+      <div>
+
         <label>排程期間</label>
 
         <select id="planRange">
 
-          <option value="week">1 週</option>
-          <option value="1">1 個月</option>
-          <option value="3">3 個月</option>
+          <option value="week">
+            1 週
+          </option>
+
+          <option value="1">
+            1 個月
+          </option>
+
+          <option value="3">
+            3 個月
+          </option>
 
         </select>
 
       </div>
 
-      <div class="field">
-        <label>排程基準</label>
 
-        <div
-          style="
-            min-height:40px;
-            display:flex;
-            align-items:center;
-            color:var(--muted);
-            font-size:13px;
-          "
-        >
-          從「起始日期」開始安排
-        </div>
+      <div
+        style="
+          flex:0 0 auto;
+          align-self:end
+        ">
+
+        <button
+          class="btn primary"
+          id="generate">
+
+          生成讀書計畫
+
+        </button>
+
       </div>
 
     </div>
 
-    <div class="btn-row">
 
-      <button class="btn" onclick="generate()">
-        生成讀書計畫
-      </button>
-
-      <button class="btn secondary" onclick="clearPlan()">
-        清除計畫
-      </button>
-
+    <div
+      id="capacityNotice"
+      style="margin-top:14px">
     </div>
 
-  </div>
 
-  <div id="planOutput">
-
-    <div class="empty">
-      尚未生成讀書計畫。
+    <div
+      id="planOutput"
+      style="margin-top:16px">
     </div>
 
   </div>
@@ -965,36 +1744,41 @@ select:focus{
 <script>
 
 /* =========================================================
-   基本資料
+   資料核心
 ========================================================= */
 
 const KEY="study-planner-v02";
+
 const BACKUP_VERSION=2;
 
-const days=["一","二","三","四","五","六","日"];
+const days=[
+  "一","二","三","四","五","六","日"
+];
+
 
 const kinds={
+
   study:"讀書",
   meal:"吃飯",
   exercise:"運動",
   flex:"彈性",
   rest:"休息",
   other:"其他"
+
 };
 
+
 const kindClass={
+
   study:"study",
   meal:"meal",
   exercise:"exercise",
   flex:"flex",
   rest:"rest",
   other:"other"
+
 };
 
-
-/* =========================================================
-   載入資料
-========================================================= */
 
 let data={};
 
@@ -1011,9 +1795,7 @@ try{
 }
 
 
-/* =========================================================
-   建立預設資料
-========================================================= */
+/* 舊版本資料相容 */
 
 if(!data.routine){
 
@@ -1025,52 +1807,126 @@ if(!data.routine){
 
 }
 
-data.routine=data.routine.map(dayArray=>{
 
-  let arr=
-    Array.isArray(dayArray)
-      ? dayArray.slice(0,40)
-      : [];
+/*
 
-  while(arr.length<40){
-    arr.push("rest");
-  }
+  如果舊版本沒有 meal，
+  原本的資料仍可正常使用。
 
-  return arr.map(k=>
-    kinds[k]
-      ? k
-      : "rest"
-  );
+*/
 
-});
+data.routine=
+  data.routine.map(dayArray=>{
+
+    let arr=
+      Array.isArray(dayArray)
+        ? dayArray.slice(0,40)
+        : [];
+
+    while(arr.length<40){
+
+      arr.push("rest");
+
+    }
+
+    return arr.map(k=>
+
+      kinds[k]
+        ? k
+        : "rest"
+
+    );
+
+  });
+
 
 data.subjects=
   Array.isArray(data.subjects)
     ? data.subjects
     : [];
 
+
 data.subjectWeights=
   Array.isArray(data.subjectWeights)
     ? data.subjectWeights
-    : data.subjects.map(s=>({
-        name:s.name,
-        score:Number(s.score||0)
-      }));
+    : data.subjects.map(
+        s=>({
+          name:s.name,
+          score:Number(s.score||0)
+        })
+      );
 
-data.startDate=data.startDate||"";
-data.examDate=data.examDate||"";
+
+data.startDate=
+  data.startDate||"";
+
+
+data.examDate=
+  data.examDate||"";
+
+
+let selectedKind="study";
+
+
+/* 多格選取 */
+
+let selectedCells=new Set();
+
+
+let isDragging=false;
+
+let dragMode="add";
 
 
 /* =========================================================
    儲存
 ========================================================= */
 
-function persist(){
+function save(){
 
-  localStorage.setItem(
-    KEY,
-    JSON.stringify(data)
-  );
+  try{
+
+    localStorage.setItem(
+      KEY,
+      JSON.stringify(data)
+    );
+
+    showSaveStatus();
+
+  }catch(e){
+
+    console.error(e);
+
+    document.getElementById(
+      "saveStatus"
+    ).textContent=
+      "⚠ 無法保存資料";
+
+  }
+
+}
+
+
+function showSaveStatus(){
+
+  const el=
+    document.getElementById(
+      "saveStatus"
+    );
+
+  if(!el)return;
+
+  el.textContent=
+    "✓ 已自動保存 · "+
+    new Date().toLocaleTimeString(
+      "zh-TW",
+      {
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    );
+
+  el.classList.add("saved");
 
 }
 
@@ -1078,28 +1934,6 @@ function persist(){
 /* =========================================================
    日期工具
 ========================================================= */
-
-/*
-  使用「本地日期」格式化，
-  避免 toISOString() 在台灣時區造成日期偏移。
-*/
-
-const fmt=d=>{
-
-  const y=d.getFullYear();
-
-  const m=String(
-    d.getMonth()+1
-  ).padStart(2,"0");
-
-  const day=String(
-    d.getDate()
-  ).padStart(2,"0");
-
-  return `${y}-${m}-${day}`;
-
-};
-
 
 const addDays=(d,n)=>{
 
@@ -1114,214 +1948,239 @@ const addDays=(d,n)=>{
 };
 
 
-/*
-  取得該日期所在週的星期一
-*/
+const fmt=d=>
+  d.toISOString().slice(0,10);
 
-function getMonday(date){
 
-  const d=new Date(date);
+const esc=s=>
 
-  d.setHours(0,0,0,0);
-
-  const day=d.getDay();
-
-  const diff=
-    day===0
-      ? -6
-      : 1-day;
-
-  d.setDate(
-    d.getDate()+diff
+  String(s).replace(
+    /[&<>"']/g,
+    c=>({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      "\"":"&quot;",
+      "'":"&#039;"
+    }[c])
   );
 
-  return d;
 
-}
-
-
-/*
-  日期差
-*/
-
-function dateDiffDays(){
-
-  if(!data.startDate||!data.examDate){
-    return 0;
-  }
-
-  const s=
-    new Date(
-      data.startDate+"T00:00:00"
-    );
-
-  const e=
-    new Date(
-      data.examDate+"T00:00:00"
-    );
-
-  return Math.max(
-    0,
-    Math.round(
-      (e-s)/86400000
-    )
-  );
-
-}
-
+/* =========================================================
+   準備期間
+========================================================= */
 
 function dateDiffWeeks(){
 
-  return dateDiffDays()/7;
+  if(
+    !data.startDate||
+    !data.examDate
+  ){
+
+    return 0;
+
+  }
+
+
+  let s=new Date(
+    data.startDate+"T00:00:00"
+  );
+
+  let e=new Date(
+    data.examDate+"T00:00:00"
+  );
+
+
+  return Math.max(
+    0,
+    (e-s)/6048e5
+  );
 
 }
 
+
+/* =========================================================
+   剩餘週數
+========================================================= */
 
 function remainingWeeks(){
 
   if(!data.examDate){
+
     return 0;
+
   }
 
-  const now=new Date();
+
+  let now=new Date();
 
   now.setHours(
     0,0,0,0
   );
 
-  const ex=
-    new Date(
-      data.examDate+"T00:00:00"
-    );
+
+  let ex=new Date(
+    data.examDate+"T00:00:00"
+  );
+
 
   return Math.max(
     0,
-    Math.ceil(
-      (ex-now)/604800000
-    )
+    (ex-now)/6048e5
   );
 
 }
 
 
 /* =========================================================
-   時間格式
-========================================================= */
-
-function formatTime(minutes){
-
-  /*
-    06:00 = 360
-    02:00 = 1200
-  */
-
-  let h=
-    Math.floor(minutes/60);
-
-  const m=
-    minutes%60;
-
-  /*
-    超過 24:00 時仍然顯示隔日時間
-    例如 25:00 → 01:00
-  */
-
-  h=h%24;
-
-  return (
-    String(h).padStart(2,"0")+
-    ":"+
-    String(m).padStart(2,"0")
-  );
-
-}
-
-
-/* =========================================================
-   每週可讀書容量
+   每週可讀書時間
 ========================================================= */
 
 function cap(){
 
-  let total=0;
-
-  data.routine.forEach(dayArray=>{
-
-    dayArray.forEach(k=>{
-
-      if(k==="study"){
-        total+=0.5;
-      }
-
-    });
-
-  });
-
-  return total;
+  return data.routine
+    .flat()
+    .filter(
+      x=>x==="study"
+    )
+    .length*.5;
 
 }
 
+
+/* =========================================================
+   每日讀書時間
+========================================================= */
 
 function dailyStudyHours(dayIndex){
 
+  if(
+    !data.routine[dayIndex]
+  ){
+
+    return 0;
+
+  }
+
+
   return data.routine[dayIndex]
-    .filter(k=>k==="study")
-    .length*0.5;
+    .filter(
+      x=>x==="study"
+    )
+    .length*.5;
 
 }
 
 
 /* =========================================================
-   總覽
+   更新每日總時數
 ========================================================= */
 
-function updateOverview(){
+function updateDailyTotals(){
 
-  const remain=dateDiffDays();
+  for(
+    let d=0;
+    d<7;
+    d++
+  ){
 
-  document.getElementById("remainDays").textContent=
-    data.examDate
-      ? `${remain} 天`
-      : "—";
+    const el=
+      document.getElementById(
+        "dayTotal"+d
+      );
 
-  document.getElementById("remainWeeks").textContent=
-    data.examDate
-      ? `${remainingWeeks()} 週`
-      : "—";
 
-  document.getElementById("weeklyCapacity").textContent=
-    `${cap()} 小時`;
+    if(!el)continue;
 
-  const demand=
-    data.subjects.reduce(
-      (sum,s)=>
-        sum+Number(s.hours||0),
-      0
+
+    el.textContent=
+      dailyStudyHours(d)
+        .toFixed(1)
+      +" h";
+
+  }
+
+}
+
+
+/* =========================================================
+   準備期間理論總時數
+========================================================= */
+
+function totalPlanHours(){
+
+  return cap()*
+    dateDiffWeeks();
+
+}
+
+
+/* =========================================================
+   倒數
+========================================================= */
+
+function countdown(){
+
+  const a=
+    document.getElementById(
+      "daysLeft"
     );
 
-  document.getElementById("weeklyDemand").textContent=
-    `${demand} 小時`;
+  const b=
+    document.getElementById(
+      "weeksLeft"
+    );
 
-}
+
+  if(!data.examDate){
+
+    a.textContent="—";
+
+    b.textContent="—";
+
+    document.getElementById(
+      "dateInfo"
+    ).textContent=
+      "尚未設定考試日期";
+
+    return;
+
+  }
 
 
-/* =========================================================
-   日期設定
-========================================================= */
+  let now=new Date();
 
-function saveDates(){
+  now.setHours(
+    0,0,0,0
+  );
 
-  data.startDate=
-    document.getElementById("startDate").value;
 
-  data.examDate=
-    document.getElementById("examDate").value;
+  let ex=new Date(
+    data.examDate+"T00:00:00"
+  );
 
-  persist();
 
-  updateOverview();
+  let d=Math.max(
+    0,
+    Math.ceil(
+      (ex-now)/864e5
+    )
+  );
 
-  alert("日期設定已儲存。");
+
+  a.textContent=d;
+
+
+  b.textContent=
+    (d/7).toFixed(1);
+
+
+  document.getElementById(
+    "dateInfo"
+  ).textContent=
+    data.startDate
+      ? `準備期間：${data.startDate} ～ ${data.examDate}`
+      : `考試日期：${data.examDate}`;
 
 }
 
@@ -1330,1881 +2189,1187 @@ function saveDates(){
    每週作息
 ========================================================= */
 
+function cellKey(day,index){
+
+  return day+"-"+index;
+
+}
+
+
+function updateSelectionVisual(){
+
+  document
+    .querySelectorAll(".slot")
+    .forEach(
+      b=>{
+
+        if(
+          selectedCells.has(
+            b.dataset.key
+          )
+        ){
+
+          b.classList.add(
+            "selected"
+          );
+
+        }else{
+
+          b.classList.remove(
+            "selected"
+          );
+
+        }
+
+      }
+    );
+
+
+  document.getElementById(
+    "selectedCount"
+  ).textContent=
+    selectedCells.size;
+
+}
+
+
+/* 選取單格 */
+
+function toggleCell(key){
+
+  if(
+    selectedCells.has(key)
+  ){
+
+    selectedCells.delete(key);
+
+  }else{
+
+    selectedCells.add(key);
+
+  }
+
+}
+
+
+/* 拖曳進入格子 */
+
+function dragSelect(key){
+
+  if(dragMode==="add"){
+
+    selectedCells.add(key);
+
+  }else{
+
+    selectedCells.delete(key);
+
+  }
+
+  updateSelectionVisual();
+
+}
+
+
+/* 套用作息 */
+
+function applyKindToSelection(){
+
+  if(!selectedCells.size){
+
+    return;
+
+  }
+
+
+  selectedCells.forEach(
+    key=>{
+
+      let parts=
+        key.split("-");
+
+      let d=
+        Number(parts[0]);
+
+      let i=
+        Number(parts[1]);
+
+
+      if(
+        data.routine[d] &&
+        typeof data.routine[d][i]!=="undefined"
+      ){
+
+        data.routine[d][i]=
+          selectedKind;
+
+      }
+
+    }
+  );
+
+
+  save();
+
+  selectedCells.clear();
+
+  renderRoutine();
+
+  update();
+
+}
+
+
+/* =========================================================
+   Render 作息
+========================================================= */
+
 function renderRoutine(){
 
-  const body=
-    document.getElementById("routineBody");
+  let body=
+    document.getElementById(
+      "routineBody"
+    );
+
 
   body.innerHTML="";
 
-  for(let slot=0;slot<40;slot++){
 
-    const tr=
+  for(
+    let i=0;
+    i<40;
+    i++
+  ){
+
+    let mins=
+      360+i*30;
+
+
+    let h=
+      Math.floor(mins/60)%24;
+
+
+    let m=
+      mins%60;
+
+
+    let label=
+      String(h).padStart(2,"0")
+      +":"
+      +
+      String(m).padStart(2,"0");
+
+
+    let tr=
       document.createElement("tr");
 
-    const tdTime=
-      document.createElement("td");
 
-    tdTime.className="time-cell";
-
-    const minutes=
-      360+slot*30;
-
-    tdTime.textContent=
-      formatTime(minutes);
-
-    tr.appendChild(tdTime);
+    tr.innerHTML=
+      `<td>${label}</td>`;
 
 
-    for(let day=0;day<7;day++){
+    for(
+      let d=0;
+      d<7;
+      d++
+    ){
 
-      const td=
+      let td=
         document.createElement("td");
 
-      const select=
-        document.createElement("select");
 
-      select.className=
-        "routine-select "+
-        kindClass[data.routine[day][slot]];
+      let b=
+        document.createElement(
+          "button"
+        );
 
-      Object.keys(kinds).forEach(key=>{
 
-        const option=
-          document.createElement("option");
+      let k=
+        data.routine[d][i];
 
-        option.value=key;
-        option.textContent=kinds[key];
 
-        if(
-          data.routine[day][slot]===key
-        ){
-          option.selected=true;
+      b.className=
+        "slot "+(
+          kindClass[k]||"rest"
+        );
+
+
+      b.textContent=
+        kinds[k]||"休息";
+
+
+      b.dataset.key=
+        cellKey(d,i);
+
+
+      b.addEventListener(
+        "pointerdown",
+        e=>{
+
+          e.preventDefault();
+
+          isDragging=true;
+
+          const key=
+            b.dataset.key;
+
+
+          if(
+            selectedCells.has(key)
+          ){
+
+            dragMode="remove";
+
+            selectedCells.delete(key);
+
+          }else{
+
+            dragMode="add";
+
+            selectedCells.add(key);
+
+          }
+
+
+          updateSelectionVisual();
+
         }
+      );
 
-        select.appendChild(option);
 
-      });
+      b.addEventListener(
+        "pointerenter",
+        e=>{
 
-      select.onchange=()=>{
+          if(!isDragging)return;
 
-        data.routine[day][slot]=
-          select.value;
+          dragSelect(
+            b.dataset.key
+          );
 
-        select.className=
-          "routine-select "+
-          kindClass[select.value];
+        }
+      );
 
-        persist();
 
-        updateOverview();
+      b.addEventListener(
+        "click",
+        e=>{
 
-      };
+          e.preventDefault();
 
-      td.appendChild(select);
+        }
+      );
+
+
+      td.appendChild(b);
 
       tr.appendChild(td);
 
     }
 
+
     body.appendChild(tr);
 
   }
 
+
+  document.getElementById(
+    "routineTotal"
+  ).textContent=
+    cap().toFixed(1)
+    +" 小時";
+
+
+  updateDailyTotals();
+
+  updateSelectionVisual();
+
 }
+
+
+/*
+
+  在文件層級結束拖曳。
+
+*/
+
+document.addEventListener(
+  "pointerup",
+  ()=>{
+    isDragging=false;
+  }
+);
 
 
 /* =========================================================
-   科目
-========================================================= */
-
-function addSubject(){
-
-  data.subjects.push({
-
-    name:"新科目",
-    hours:2,
-    session:2,
-    type:"study"
-
-  });
-
-  data.subjectWeights.push({
-
-    name:"新科目",
-    score:0
-
-  });
-
-  persist();
-
-  renderSubjects();
-
-  renderWeights();
-
-  updateOverview();
-
-}
-
-
-function removeSubject(index){
-
-  if(!confirm("確定要刪除這個科目嗎？")){
-    return;
-  }
-
-  data.subjects.splice(index,1);
-
-  if(
-    data.subjectWeights &&
-    data.subjectWeights[index]
-  ){
-    data.subjectWeights.splice(index,1);
-  }
-
-  persist();
-
-  renderSubjects();
-
-  renderWeights();
-
-  updateOverview();
-
-}
-
-
-function renderSubjects(){
-
-  const body=
-    document.getElementById("subjectBody");
-
-  body.innerHTML="";
-
-  data.subjects.forEach((s,index)=>{
-
-    const tr=
-      document.createElement("tr");
-
-
-    /* 科目 */
-
-    const tdName=
-      document.createElement("td");
-
-    const nameInput=
-      document.createElement("input");
-
-    nameInput.className="subject-input";
-
-    nameInput.value=
-      s.name||"";
-
-    nameInput.oninput=()=>{
-
-      s.name=nameInput.value;
-
-    };
-
-    nameInput.onchange=()=>{
-
-      if(
-        data.subjectWeights[index]
-      ){
-        data.subjectWeights[index].name=
-          s.name;
-      }
-
-      persist();
-
-      renderWeights();
-
-    };
-
-    tdName.appendChild(nameInput);
-
-
-    /* 每週 */
-
-    const tdHours=
-      document.createElement("td");
-
-    const hoursInput=
-      document.createElement("input");
-
-    hoursInput.type="number";
-    hoursInput.step="0.5";
-    hoursInput.min="0";
-    hoursInput.className="subject-input";
-
-    hoursInput.value=
-      s.hours;
-
-    hoursInput.onchange=()=>{
-
-      s.hours=
-        Number(hoursInput.value)||0;
-
-      persist();
-
-      renderSubjects();
-
-      renderWeights();
-
-      updateOverview();
-
-    };
-
-    tdHours.appendChild(hoursInput);
-
-
-    /* 每次 */
-
-    const tdSession=
-      document.createElement("td");
-
-    const sessionInput=
-      document.createElement("input");
-
-    sessionInput.type="number";
-    sessionInput.step="0.5";
-    sessionInput.min="0.5";
-    sessionInput.className="subject-input";
-
-    sessionInput.value=
-      s.session;
-
-    sessionInput.onchange=()=>{
-
-      s.session=
-        Number(sessionInput.value)||0.5;
-
-      persist();
-
-      renderSubjects();
-
-      updateOverview();
-
-    };
-
-    tdSession.appendChild(sessionInput);
-
-
-    /* 次數 */
-
-    const tdCount=
-      document.createElement("td");
-
-    const count=
-      Number(s.session)>0
-        ? Number(s.hours||0)/
-          Number(s.session)
-        : 0;
-
-    tdCount.textContent=
-      Number.isInteger(count)
-        ? count
-        : count.toFixed(1);
-
-
-    /* 類型 */
-
-    const tdType=
-      document.createElement("td");
-
-    const typeSelect=
-      document.createElement("select");
-
-    [
-      ["study","讀書"],
-      ["review","複習"],
-      ["practice","題目"],
-      ["other","其他"]
-    ].forEach(([value,label])=>{
-
-      const option=
-        document.createElement("option");
-
-      option.value=value;
-      option.textContent=label;
-
-      if(
-        s.type===value
-      ){
-        option.selected=true;
-      }
-
-      typeSelect.appendChild(option);
-
-    });
-
-    typeSelect.onchange=()=>{
-
-      s.type=
-        typeSelect.value;
-
-      persist();
-
-    };
-
-    tdType.appendChild(typeSelect);
-
-
-    /* 刪除 */
-
-    const tdDelete=
-      document.createElement("td");
-
-    const deleteBtn=
-      document.createElement("button");
-
-    deleteBtn.className="delete-btn";
-
-    deleteBtn.textContent="刪除";
-
-    deleteBtn.onclick=()=>
-      removeSubject(index);
-
-    tdDelete.appendChild(deleteBtn);
-
-
-    tr.appendChild(tdName);
-    tr.appendChild(tdHours);
-    tr.appendChild(tdSession);
-    tr.appendChild(tdCount);
-    tr.appendChild(tdType);
-    tr.appendChild(tdDelete);
-
-    body.appendChild(tr);
-
-  });
-
-}
-
-
-function saveSubjects(){
-
-  /*
-    重新從畫面讀取一次，
-    確保資料完整保存。
-  */
-
-  const rows=
-    document.querySelectorAll(
-      "#subjectBody tr"
-    );
-
-  rows.forEach((row,index)=>{
-
-    if(!data.subjects[index]){
-      return;
-    }
-
-    const inputs=
-      row.querySelectorAll("input");
-
-    if(inputs[0]){
-      data.subjects[index].name=
-        inputs[0].value.trim();
-    }
-
-    if(inputs[1]){
-      data.subjects[index].hours=
-        Number(inputs[1].value)||0;
-    }
-
-    if(inputs[2]){
-      data.subjects[index].session=
-        Number(inputs[2].value)||0.5;
-    }
-
-  });
-
-  /*
-    同步權重表的科目名稱
-  */
-
-  data.subjectWeights=
-    data.subjects.map((s,index)=>({
-
-      name:s.name,
-
-      score:
-        Number(
-          data.subjectWeights[index]?.score||0
-        )
-
-    }));
-
-  persist();
-
-  renderSubjects();
-
-  renderWeights();
-
-  updateOverview();
-
-  alert("科目配置已儲存。");
-
-}
-
-
-/* =========================================================
-   科目權重
+   配分總表
 ========================================================= */
 
 function renderWeights(){
 
-  const body=
-    document.getElementById("weightBody");
+  let body=
+    document.getElementById(
+      "weightBody"
+    );
+
+
+  let totalScore=
+    data.subjectWeights.reduce(
+      (a,s)=>
+        a+Number(s.score||0),
+      0
+    );
+
+
+  let totalHours=
+    totalPlanHours();
+
+
+  let weeklyCapacity=
+    cap();
+
 
   body.innerHTML="";
 
-  const totalScore=
-    data.subjectWeights.reduce(
-      (sum,s)=>
-        sum+Number(s.score||0),
-      0
-    );
 
-  const totalHours=
-    data.subjects.reduce(
-      (sum,s)=>
-        sum+Number(s.hours||0),
-      0
-    );
-
-
-  data.subjects.forEach((subject,index)=>{
-
-    if(!data.subjectWeights[index]){
-
-      data.subjectWeights[index]={
-        name:subject.name,
-        score:0
-      };
-
-    }
-
-    data.subjectWeights[index].name=
-      subject.name;
-
-
-    const weight=
-      data.subjectWeights[index];
-
-
-    const tr=
-      document.createElement("tr");
-
-
-    /* 名稱 */
-
-    const tdName=
-      document.createElement("td");
-
-    tdName.textContent=
-      subject.name||"未命名";
-
-    tr.appendChild(tdName);
-
-
-    /* 配分 */
-
-    const tdScore=
-      document.createElement("td");
-
-    const scoreInput=
-      document.createElement("input");
-
-    scoreInput.type="number";
-    scoreInput.step="1";
-    scoreInput.min="0";
-    scoreInput.className="subject-input";
-
-    scoreInput.value=
-      weight.score;
-
-    scoreInput.onchange=()=>{
-
-      weight.score=
-        Number(scoreInput.value)||0;
-
-      persist();
-
-      renderWeights();
-
-    };
-
-    tdScore.appendChild(scoreInput);
-
-    tr.appendChild(tdScore);
-
-
-    /* 比例 */
-
-    const tdRatio=
-      document.createElement("td");
-
-    const ratio=
-      totalScore>0
-        ? Number(weight.score||0)/
-          totalScore*100
-        : 0;
-
-    tdRatio.textContent=
-      `${ratio.toFixed(1)}%`;
-
-    tr.appendChild(tdRatio);
-
-
-    /* 總準備時間 */
-
-    const tdTotal=
-      document.createElement("td");
-
-    const totalPrep=
-      totalHours*
-      (
-        totalScore>0
-          ? Number(weight.score||0)/totalScore
-          : 0
-      );
-
-    tdTotal.textContent=
-      `${totalPrep.toFixed(1)} 小時`;
-
-    tr.appendChild(tdTotal);
-
-
-    /* 每週時間 */
-
-    const tdWeekly=
-      document.createElement("td");
-
-    const weekly=
-      totalHours*
-      (
-        totalScore>0
-          ? Number(weight.score||0)/totalScore
-          : 0
-      );
-
-    tdWeekly.textContent=
-      `${weekly.toFixed(1)} 小時`;
-
-    tr.appendChild(tdWeekly);
-
-
-    body.appendChild(tr);
-
-  });
-
-}
-
-
-/* =========================================================
-   儲存權重
-========================================================= */
-
-function saveWeights(){
-
-  const rows=
-    document.querySelectorAll(
-      "#weightBody tr"
-    );
-
-  rows.forEach((row,index)=>{
-
-    if(!data.subjectWeights[index]){
-      data.subjectWeights[index]={
-        name:data.subjects[index]?.name||"",
-        score:0
-      };
-    }
-
-    const input=
-      row.querySelector("input");
-
-    if(input){
-
-      data.subjectWeights[index].score=
-        Number(input.value)||0;
-
-    }
-
-    data.subjectWeights[index].name=
-      data.subjects[index]?.name||"";
-
-  });
-
-  persist();
-
-  renderWeights();
-
-  alert("科目配置總表已儲存。");
-
-}
-
-
-/* =========================================================
-   自動排程
-   ★ 這裡是這次修正的核心
-========================================================= */
-
-function generate(){
-
-  /*
-    ------------------------------------------------
-    1. 基本檢查
-    ------------------------------------------------
-  */
-
-  if(!data.startDate){
-
-    alert("請先設定起始日期。");
+  if(
+    !data.subjectWeights.length
+  ){
+
+    body.innerHTML=
+      '<tr>'+
+      '<td colspan="6" class="empty">'+
+      '尚未加入科目'+
+      '</td>'+
+      '</tr>';
+
+
+    document.getElementById(
+      "weightSummary"
+    ).textContent=
+      `目前準備期間可配置約 ${totalHours.toFixed(1)} 小時；每週可讀書 ${weeklyCapacity.toFixed(1)} 小時。`;
 
     return;
 
   }
 
-  if(!data.examDate){
 
-    alert("請先設定考試日期。");
+  data.subjectWeights.forEach(
+    (s,i)=>{
 
-    return;
+      let ratio=
+        totalScore
+          ? Number(s.score)/
+            totalScore
+          : 0;
 
-  }
+
+      let totalSubjectHours=
+        totalHours*ratio;
+
+
+      let weeklyHours=
+        weeklyCapacity*ratio;
+
+
+      let tr=
+        document.createElement("tr");
+
+
+      tr.innerHTML=
+        `<td>
+
+          <b>${esc(s.name)}</b>
+
+        </td>
+
+        <td>
+
+          ${Number(s.score||0)}
+
+        </td>
+
+        <td class="ratio">
+
+          ${(ratio*100).toFixed(1)}%
+
+        </td>
+
+        <td class="hours">
+
+          ${totalSubjectHours.toFixed(1)} h
+
+        </td>
+
+        <td class="week-hours">
+
+          ${weeklyHours.toFixed(1)} h
+
+        </td>
+
+        <td>
+
+          <button
+            class="delete"
+            data-i="${i}"
+            title="刪除">
+
+            ×
+
+          </button>
+
+        </td>`;
+
+
+      body.appendChild(tr);
+
+    }
+  );
+
+
+  let tr=
+    document.createElement("tr");
+
+
+  tr.className=
+    "sum-row";
+
+
+  tr.innerHTML=
+    `<td>合計</td>
+     <td>${totalScore}</td>
+     <td>100%</td>
+     <td>${totalHours.toFixed(1)} h</td>
+     <td>${weeklyCapacity.toFixed(1)} h</td>
+     <td></td>`;
+
+
+  body.appendChild(tr);
+
+
+  body
+    .querySelectorAll(".delete")
+    .forEach(
+      b=>{
+
+        b.onclick=()=>{
+
+          data.subjectWeights.splice(
+            +b.dataset.i,
+            1
+          );
+
+
+          save();
+
+          renderWeights();
+
+          update();
+
+        };
+
+      }
+    );
+
+
+  document.getElementById(
+    "weightSummary"
+  ).textContent=
+    `準備期間約 ${dateDiffWeeks().toFixed(1)} 週 × 每週 ${cap().toFixed(1)} 小時 ＝ ${totalHours.toFixed(1)} 小時；上表依考試配分比例換算。`;
+
+}
+
+
+/* =========================================================
+   現階段科目配置
+========================================================= */
+
+function renderSubjects(){
+
+  let body=
+    document.getElementById(
+      "subjectBody"
+    );
+
+
+  body.innerHTML="";
+
 
   if(!data.subjects.length){
 
-    document.getElementById("planOutput").innerHTML=
-      '<div class="empty">請先設定科目。</div>';
+    body.innerHTML=
+      '<tr>'+
+      '<td colspan="6" class="empty">'+
+      '尚未加入科目'+
+      '</td>'+
+      '</tr>';
+
+
+    const notice=
+      document.getElementById(
+        "subjectCapacityNotice"
+      );
+
+
+    if(notice){
+
+      notice.innerHTML="";
+
+    }
+
 
     return;
 
   }
 
 
-  /*
-    ------------------------------------------------
-    2. 取得排程期間
-    ------------------------------------------------
-  */
-
-  const range=
-    document.getElementById("planRange").value;
-
-  const daysCount=
-    range==="week"
-      ? 7
-      : range==="1"
-        ? 30
-        : 90;
+  let weeks=
+    remainingWeeks();
 
 
-  /*
-    起始日就是實際排程起點。
+  data.subjects.forEach(
+    (s,i)=>{
 
-    重要：
-    不再用考試日期把排程偷偷截斷。
-  */
+      let n=
+        Number(s.hours)/
+        Number(s.session);
 
-  const start=
-    new Date(
-      data.startDate+"T00:00:00"
-    );
 
-  start.setHours(
-    0,0,0,0
+      let tr=
+        document.createElement("tr");
+
+
+      tr.innerHTML=
+        `<td>
+
+          <b>${esc(s.name)}</b>
+
+          <div class="small muted">
+
+            ${esc(s.type)}
+
+          </div>
+
+        </td>
+
+        <td>
+
+          ${s.hours} h
+
+        </td>
+
+        <td>
+
+          ${s.session} h
+
+        </td>
+
+        <td>
+
+          ${n.toFixed(1)}
+
+        </td>
+
+        <td>
+
+          ${(Number(s.hours)*weeks).toFixed(1)} h
+
+        </td>
+
+        <td>
+
+          <button
+            class="delete"
+            data-i="${i}">
+
+            ×
+
+          </button>
+
+        </td>`;
+
+
+      body.appendChild(tr);
+
+    }
   );
 
-  const end=
-    addDays(
-      start,
-      daysCount
+
+  body
+    .querySelectorAll(".delete")
+    .forEach(
+      b=>{
+
+        b.onclick=()=>{
+
+          data.subjects.splice(
+            +b.dataset.i,
+            1
+          );
+
+
+          save();
+
+          renderSubjects();
+
+          update();
+
+        };
+
+      }
     );
 
 
   /*
-    ------------------------------------------------
-    3. 檢查每週總容量
-    ------------------------------------------------
+
+    每週科目需求 vs 每週可讀書時間
+
   */
 
-  const weeklyCapacity=cap();
-
-  const weeklyDemand=
+  let need=
     data.subjects.reduce(
-      (sum,s)=>
-        sum+Number(s.hours||0),
+      (a,s)=>
+        a+Number(s.hours||0),
       0
     );
 
 
-  /*
-    ------------------------------------------------
-    4. 建立事件
-    ------------------------------------------------
-  */
-
-  const events={};
-
-  /*
-    記錄每週沒有排完的科目
-  */
-
-  const unscheduled=[];
+  let capacity=
+    cap();
 
 
-  /*
-    ------------------------------------------------
-    5. 找到第一個「星期一」
-    ------------------------------------------------
-
-    即使起始日是星期三，
-    顯示仍然會從該週星期一開始。
-  */
-
-  let weekMonday=
-    getMonday(start);
+  const notice=
+    document.getElementById(
+      "subjectCapacityNotice"
+    );
 
 
-  /*
-    ------------------------------------------------
-    6. 一週一週排
-    ------------------------------------------------
-  */
+  if(
+    notice &&
+    need>capacity
+  ){
 
-  while(weekMonday<end){
+    notice.innerHTML=
+      `<div class="notice danger">
 
-    /*
-      找出本週真正位於排程期間內的日期。
+        ⚠ 目前科目每週需求共
 
-      例如：
+        <b>${need.toFixed(1)} 小時</b>，
 
-      起始日是星期三
+        已超過每週可讀書時間
 
-      星期一、星期二
-      不會被安排。
+        <b>${capacity.toFixed(1)} 小時</b>，
 
-      但日曆仍然會顯示。
-    */
+        超出
 
-    const weekDates=[];
+        <b>${(need-capacity).toFixed(1)} 小時</b>。
 
-    for(let i=0;i<7;i++){
+        <br>
 
-      const d=
-        addDays(
-          weekMonday,
-          i
+        請手動調整各科的每週時數。
+
+      </div>`;
+
+  }else if(notice){
+
+    notice.innerHTML="";
+
+  }
+
+}
+
+
+/* =========================================================
+   總覽更新
+========================================================= */
+
+function update(){
+
+  let c=
+    cap();
+
+
+  let need=
+    data.subjects.reduce(
+      (a,s)=>
+        a+Number(s.hours||0),
+      0
+    );
+
+
+  document.getElementById(
+    "weeklyStudy"
+  ).textContent=
+    c.toFixed(1);
+
+
+  document.getElementById(
+    "summary"
+  ).innerHTML=
+    `<p>
+
+      每週可讀書：
+
+      <b>${c.toFixed(1)} 小時</b>
+
+    </p>
+
+    <p>
+
+      目前科目需求：
+
+      <b>${need.toFixed(1)} 小時／週</b>
+
+    </p>
+
+    <p>
+
+      準備期間可配置：
+
+      <b>${totalPlanHours().toFixed(1)} 小時</b>
+
+    </p>
+
+    ${
+      need>c
+
+        ? '<div class="notice danger">'+
+          '科目需求超過每週可讀書時間。'+
+          '</div>'
+
+        : '<div class="notice">'+
+          '目前容量足以容納科目需求。'+
+          '</div>'
+    }`;
+
+
+  countdown();
+
+  renderWeights();
+
+}
+
+
+/* =========================================================
+   分頁切換
+========================================================= */
+
+document
+  .querySelectorAll("nav button")
+  .forEach(
+    b=>{
+
+      b.onclick=()=>{
+
+        document
+          .querySelectorAll(
+            "nav button"
+          )
+          .forEach(
+            x=>
+              x.classList.remove(
+                "active"
+              )
+          );
+
+
+        b.classList.add(
+          "active"
         );
 
-      if(
-        d>=start &&
-        d<end
-      ){
 
-        weekDates.push({
+        document
+          .querySelectorAll(
+            ".page"
+          )
+          .forEach(
+            x=>
+              x.classList.remove(
+                "active"
+              )
+          );
 
-          date:d,
 
-          key:fmt(d),
+        document
+          .getElementById(
+            b.dataset.page
+          )
+          .classList.add(
+            "active"
+          );
 
-          /*
-            i 就是星期一=0
-            到星期日=6
-          */
-
-          dow:i
-
-        });
-
-      }
+      };
 
     }
+  );
 
 
-    if(!weekDates.length){
+/* =========================================================
+   作息類型
+========================================================= */
 
-      weekMonday=
-        addDays(
-          weekMonday,
-          7
+document
+  .querySelectorAll(
+    "#palette button"
+  )
+  .forEach(
+    b=>{
+
+      b.onclick=()=>{
+
+        document
+          .querySelectorAll(
+            "#palette button"
+          )
+          .forEach(
+            x=>
+              x.classList.remove(
+                "selected"
+              )
+          );
+
+
+        b.classList.add(
+          "selected"
         );
 
-      continue;
+
+        selectedKind=
+          b.dataset.kind;
+
+
+        applyKindToSelection();
+
+      };
 
     }
+  );
 
 
-    /*
-      ------------------------------------------------
-      7. 建立「已佔用時段」
-      ------------------------------------------------
+/* =========================================================
+   清除選取
+========================================================= */
 
-      false = 可以使用
-      true  = 已經被佔用 / 不可使用
-    */
+document.getElementById(
+  "clearSelection"
+).onclick=()=>{
 
-    const occupied={};
+  selectedCells.clear();
 
+  updateSelectionVisual();
 
-    weekDates.forEach(item=>{
+};
 
-      const key=item.key;
 
-      const actualDow=
-        (item.date.getDay()+6)%7;
+/* =========================================================
+   儲存日期
+========================================================= */
 
+function saveDates(){
 
-      occupied[key]=
-        Array(40).fill(false);
+  const start=
+    document.getElementById(
+      "startDate"
+    ).value;
 
 
-      /*
-        把不是「讀書」的固定作息鎖起來。
-      */
+  const exam=
+    document.getElementById(
+      "examDate"
+    ).value;
 
-      for(let slot=0;slot<40;slot++){
 
-        if(
-          data.routine[actualDow][slot]!=="study"
-        ){
+  if(
+    start&&
+    exam&&
+    new Date(exam+"T00:00:00")<
+    new Date(start+"T00:00:00")
+  ){
 
-          occupied[key][slot]=true;
+    alert(
+      "考試日期不能早於起始日期。"
+    );
 
-        }
-
-      }
-
-    });
-
-
-    /*
-      ------------------------------------------------
-      8. 科目排序
-      ------------------------------------------------
-
-      單次讀書時間長的科目先排，
-      可以降低長時段最後塞不進去的情況。
-    */
-
-    const subjectOrder=
-      data.subjects
-        .map((subject,index)=>({
-
-          subject,
-
-          index
-
-        }))
-        .sort((a,b)=>{
-
-          const aSession=
-            Number(a.subject.session)||0;
-
-          const bSession=
-            Number(b.subject.session)||0;
-
-          return bSession-aSession;
-
-        });
-
-
-    /*
-      ------------------------------------------------
-      9. 每科依照「每週次數」排入
-      ------------------------------------------------
-    */
-
-    subjectOrder.forEach(item=>{
-
-      const s=
-        item.subject;
-
-      const si=
-        item.index;
-
-
-      const weeklyHours=
-        Number(s.hours)||0;
-
-      const sessionHours=
-        Number(s.session)||0;
-
-
-      if(
-        weeklyHours<=0 ||
-        sessionHours<=0
-      ){
-
-        return;
-
-      }
-
-
-      /*
-        例如：
-
-        每週 6 小時
-        每次 2 小時
-
-        6 / 2 = 3
-
-        → 每週 3 次
-      */
-
-      const exactSessions=
-        weeklyHours/sessionHours;
-
-
-      const sessionsPerWeek=
-        Math.max(
-          1,
-          Math.round(exactSessions)
-        );
-
-
-      /*
-        一格 = 30 分鐘
-      */
-
-      const needSlots=
-        Math.max(
-          1,
-          Math.round(
-            sessionHours*2
-          )
-        );
-
-
-      let placed=0;
-
-
-      /*
-        記錄這科已經在哪些日子出現。
-        優先分散到不同日期。
-      */
-
-      const usedDays=
-        new Set();
-
-
-      /*
-        ------------------------------------------------
-        10. 日期輪轉
-        ------------------------------------------------
-
-        不讓每一科都永遠從星期一開始搶位置。
-      */
-
-      let rotatedDates=
-        [...weekDates];
-
-
-      if(rotatedDates.length>1){
-
-        const rotateBy=
-          si%rotatedDates.length;
-
-        rotatedDates.push(
-          ...rotatedDates.splice(
-            0,
-            rotateBy
-          )
-        );
-
-      }
-
-
-      /*
-        ------------------------------------------------
-        11. 一次排一個 session
-        ------------------------------------------------
-      */
-
-      for(
-        let sessionNo=0;
-        sessionNo<sessionsPerWeek;
-        sessionNo++
-      ){
-
-        let placedThisRound=false;
-
-
-        /*
-          第一輪：
-          優先使用尚未安排這科的日期。
-
-          第二輪：
-          如果真的沒有辦法，
-          才允許同一天再次出現。
-        */
-
-        for(
-          let pass=0;
-          pass<2 && !placedThisRound;
-          pass++
-        ){
-
-          for(
-            const itemDate of rotatedDates
-          ){
-
-            const key=
-              itemDate.key;
-
-
-            if(
-              pass===0 &&
-              usedDays.has(key)
-            ){
-
-              continue;
-
-            }
-
-
-            /*
-              ------------------------------------------------
-              12. 找連續的可讀書時段
-              ------------------------------------------------
-            */
-
-            for(
-              let st=0;
-              st<=40-needSlots;
-              st++
-            ){
-
-              let ok=true;
-
-
-              for(
-                let j=0;
-                j<needSlots;
-                j++
-              ){
-
-                if(
-                  occupied[key][st+j]
-                ){
-
-                  ok=false;
-
-                  break;
-
-                }
-
-              }
-
-
-              if(!ok){
-                continue;
-              }
-
-
-              /*
-                ------------------------------------------------
-                13. 鎖定時段
-                ------------------------------------------------
-              */
-
-              for(
-                let j=0;
-                j<needSlots;
-                j++
-              ){
-
-                occupied[key][st+j]=true;
-
-              }
-
-
-              /*
-                ------------------------------------------------
-                14. 建立事件
-                ------------------------------------------------
-              */
-
-              const startMinutes=
-                360+
-                st*30;
-
-              const endMinutes=
-                startMinutes+
-                needSlots*30;
-
-
-              events[key]=
-                events[key]||[];
-
-
-              events[key].push({
-
-                time:
-                  formatTime(
-                    startMinutes
-                  ),
-
-                startTime:
-                  formatTime(
-                    startMinutes
-                  ),
-
-                endTime:
-                  formatTime(
-                    endMinutes
-                  ),
-
-                startMinutes,
-
-                endMinutes,
-
-                name:
-                  s.name,
-
-                type:
-                  s.type,
-
-                hours:
-                  s.session,
-
-                subjectIndex:
-                  si
-
-              });
-
-
-              usedDays.add(key);
-
-              placed++;
-
-              placedThisRound=true;
-
-              break;
-
-            }
-
-
-            if(placedThisRound){
-              break;
-            }
-
-          }
-
-        }
-
-      }
-
-
-      /*
-        ------------------------------------------------
-        15. 記錄排不完整的科目
-        ------------------------------------------------
-      */
-
-      if(
-        placed<sessionsPerWeek
-      ){
-
-        unscheduled.push({
-
-          subjectIndex:si,
-
-          name:s.name,
-
-          requested:sessionsPerWeek,
-
-          placed
-
-        });
-
-      }
-
-    });
-
-
-    /*
-      下一週
-    */
-
-    weekMonday=
-      addDays(
-        weekMonday,
-        7
-      );
+    return false;
 
   }
 
 
-  /*
-    ------------------------------------------------
-    16. 每一天按照時間排序
-    ------------------------------------------------
-  */
+  data.startDate=start;
 
-  Object.keys(events).forEach(key=>{
+  data.examDate=exam;
 
-    events[key].sort(
-      (a,b)=>
-        a.startMinutes-
-        b.startMinutes
+
+  save();
+
+  renderSubjects();
+
+  update();
+
+  return true;
+
+}
+
+
+/*
+
+  日期一修改就自動保存。
+
+*/
+
+document.getElementById(
+  "startDate"
+).addEventListener(
+  "change",
+  saveDates
+);
+
+
+document.getElementById(
+  "examDate"
+).addEventListener(
+  "change",
+  saveDates
+);
+
+
+document.getElementById(
+  "saveDates"
+).onclick=
+  saveDates;
+
+
+/* =========================================================
+   清除作息
+========================================================= */
+
+document.getElementById(
+  "clearRoutine"
+).onclick=()=>{
+
+  if(
+    confirm(
+      "確定清除全部作息？"
+    )
+  ){
+
+    data.routine=
+      Array.from(
+        {length:7},
+        ()=>Array(40).fill("rest")
+      );
+
+
+    selectedCells.clear();
+
+    save();
+
+    renderRoutine();
+
+    update();
+
+  }
+
+};
+
+
+/* =========================================================
+   儲存作息
+========================================================= */
+
+document.getElementById(
+  "saveRoutine"
+).onclick=()=>{
+
+  save();
+
+  alert(
+    "作息已保存。"
+  );
+
+};
+
+
+/* =========================================================
+   新增考試配分科目
+========================================================= */
+
+document.getElementById(
+  "addWeight"
+).onclick=()=>{
+
+  let name=
+    document.getElementById(
+      "wName"
+    ).value.trim();
+
+
+  let score=
+    Number(
+      document.getElementById(
+        "wScore"
+      ).value||0
     );
+
+
+  if(
+    !name||
+    score<=0
+  ){
+
+    alert(
+      "請填寫科目名稱與配分。"
+    );
+
+    return;
+
+  }
+
+
+  data.subjectWeights.push({
+
+    name,
+
+    score
 
   });
 
 
-  /*
-    ------------------------------------------------
-    17. 顯示日曆
-    ------------------------------------------------
-  */
-
-  renderPlan(
-    events,
-    start,
-    end
-  );
+  save();
 
 
-  /*
-    ------------------------------------------------
-    18. 顯示容量資訊
-    ------------------------------------------------
-  */
-
-  const output=
-    document.getElementById("planOutput");
+  document.getElementById(
+    "wName"
+  ).value="";
 
 
-  /*
-    找出日曆後面的 notice 區塊
-  */
+  document.getElementById(
+    "wScore"
+  ).value="";
 
-  let notice=
-    output.querySelector(
-      ".schedule-notice"
+
+  renderWeights();
+
+  update();
+
+};
+
+
+/* =========================================================
+   新增現階段科目
+========================================================= */
+
+document.getElementById(
+  "addSubject"
+).onclick=()=>{
+
+  let name=
+    document.getElementById(
+      "sName"
+    ).value.trim();
+
+
+  let hours=
+    Number(
+      document.getElementById(
+        "sHours"
+      ).value||0
     );
 
 
-  if(!notice){
-
-    notice=
-      document.createElement("div");
-
-    notice.className=
-      "notice schedule-notice";
-
-    output.appendChild(notice);
-
-  }
+  let session=
+    Number(
+      document.getElementById(
+        "sSession"
+      ).value||0
+    );
 
 
-  let noticeText=
-    `每週配置：${weeklyDemand} 小時／可讀書：${weeklyCapacity} 小時。`;
+  let type=
+    document.getElementById(
+      "sType"
+    ).value;
 
 
   if(
-    weeklyDemand>weeklyCapacity
+    !name||
+    hours<=0||
+    session<=0
   ){
 
-    noticeText+=
-      `\n目前每週配置超過作息可用容量 ${(
-        weeklyDemand-weeklyCapacity
-      ).toFixed(1)} 小時。`;
-
-  }
-
-
-  if(unscheduled.length){
-
-    noticeText+=
-      "\n\n以下科目在部分週次無法完整排入：";
-
-    unscheduled.forEach(item=>{
-
-      noticeText+=
-        `\n${item.name}：需要 ${item.requested} 次，實際排入 ${item.placed} 次`;
-
-    });
-
-  }else{
-
-    noticeText+=
-      "\n所有科目均已依每週次數排入。";
-
-  }
-
-
-  notice.textContent=
-    noticeText;
-
-}
-
-
-/* =========================================================
-   自動排程日曆
-========================================================= */
-
-function renderPlan(events,start,end){
-
-  const output=
-    document.getElementById("planOutput");
-
-  output.innerHTML="";
-
-
-  /*
-    ------------------------------------------------
-    建立日曆外框
-    ------------------------------------------------
-  */
-
-  const wrapper=
-    document.createElement("div");
-
-  wrapper.className=
-    "plan-wrapper";
-
-
-  const calendar=
-    document.createElement("div");
-
-  calendar.className=
-    "plan-calendar";
-
-
-  /*
-    ------------------------------------------------
-    第一個顯示週一
-    ------------------------------------------------
-  */
-
-  const firstMonday=
-    getMonday(start);
-
-
-  /*
-    最後一天是 end 的前一天
-    因為 end 本身不包含在排程期間。
-  */
-
-  const lastDate=
-    addDays(
-      end,
-      -1
+    alert(
+      "請填寫科目、每週時數、每次時數。"
     );
 
+    return;
 
-  const lastMonday=
-    getMonday(lastDate);
-
-
-  let weekMonday=
-    firstMonday;
+  }
 
 
-  while(
-    weekMonday<=lastMonday
+  if(
+    hours/session<1
   ){
 
-    /*
-      ------------------------------------------------
-      建立一週
-      ------------------------------------------------
-    */
-
-    const week=
-      document.createElement("div");
-
-    week.className=
-      "plan-week";
-
-
-    /*
-      週標題
-    */
-
-    const weekTitle=
-      document.createElement("div");
-
-    weekTitle.className=
-      "plan-week-title";
-
-    const weekEnd=
-      addDays(
-        weekMonday,
-        6
-      );
-
-    weekTitle.textContent=
-      `${fmt(weekMonday)} ～ ${fmt(weekEnd)}`;
-
-    week.appendChild(weekTitle);
-
-
-    /*
-      ------------------------------------------------
-      星期標題
-      ------------------------------------------------
-    */
-
-    const headerGrid=
-      document.createElement("div");
-
-    headerGrid.className=
-      "plan-grid";
-
-
-    /*
-      左上角時間
-    */
-
-    const emptyHeader=
-      document.createElement("div");
-
-    emptyHeader.className=
-      "plan-day-header";
-
-    emptyHeader.textContent=
-      "時間";
-
-    headerGrid.appendChild(
-      emptyHeader
+    alert(
+      "每週時數至少要能安排一次完整的每次時數。"
     );
 
-
-    for(let i=0;i<7;i++){
-
-      const d=
-        addDays(
-          weekMonday,
-          i
-        );
-
-      const key=
-        fmt(d);
-
-
-      const header=
-        document.createElement("div");
-
-      header.className=
-        "plan-day-header";
-
-
-      /*
-        超出排程期間的日期
-        顯示空白 / 灰化。
-      */
-
-      if(
-        d<start ||
-        d>=end
-      ){
-
-        header.classList.add(
-          "outside"
-        );
-
-      }
-
-
-      header.innerHTML=
-        `
-        ${days[i]}<br>
-        <span style="font-size:10px">
-          ${d.getMonth()+1}/${d.getDate()}
-        </span>
-        `;
-
-
-      headerGrid.appendChild(
-        header
-      );
-
-    }
-
-
-    week.appendChild(
-      headerGrid
-    );
-
-
-    /*
-      ------------------------------------------------
-      日曆主體
-      ------------------------------------------------
-    */
-
-    const bodyGrid=
-      document.createElement("div");
-
-    bodyGrid.className=
-      "plan-grid";
-
-
-    /*
-      ------------------------------------------------
-      時間軸
-      ------------------------------------------------
-    */
-
-    const timeAxis=
-      document.createElement("div");
-
-    timeAxis.className=
-      "plan-time-axis";
-
-
-    const pxPerHalfHour=24;
-
-
-    /*
-      06:00 ～ 02:00
-      共 40 個半小時
-    */
-
-    for(let slot=0;slot<=40;slot++){
-
-      const minutes=
-        360+
-        slot*30;
-
-
-      if(
-        slot===40
-      ){
-
-        continue;
-
-      }
-
-
-      if(
-        minutes%60===0
-      ){
-
-        const label=
-          document.createElement("div");
-
-        label.className=
-          "plan-time-label";
-
-        label.style.top=
-          `${slot*pxPerHalfHour}px`;
-
-        label.textContent=
-          formatTime(minutes);
-
-        timeAxis.appendChild(
-          label
-        );
-
-      }
-
-    }
-
-
-    bodyGrid.appendChild(
-      timeAxis
-    );
-
-
-    /*
-      ------------------------------------------------
-      七天欄位
-      ------------------------------------------------
-    */
-
-    const daysArea=
-      document.createElement("div");
-
-    daysArea.className=
-      "plan-days-area";
-
-
-    for(let i=0;i<7;i++){
-
-      const d=
-        addDays(
-          weekMonday,
-          i
-        );
-
-      const key=
-        fmt(d);
-
-
-      const column=
-        document.createElement("div");
-
-      column.className=
-        "plan-day-column";
-
-
-      if(
-        d<start ||
-        d>=end
-      ){
-
-        column.classList.add(
-          "outside"
-        );
-
-      }
-
-
-      /*
-        網格線
-      */
-
-      const gridArea=
-        document.createElement("div");
-
-      gridArea.className=
-        "plan-grid-area";
-
-
-      for(let slot=0;slot<=40;slot++){
-
-        const line=
-          document.createElement("div");
-
-
-        if(
-          slot%2===0
-        ){
-
-          line.className=
-            "plan-hour-line";
-
-        }else{
-
-          line.className=
-            "plan-half-line";
-
-        }
-
-
-        line.style.top=
-          `${slot*pxPerHalfHour}px`;
-
-
-        gridArea.appendChild(
-          line
-        );
-
-      }
-
-
-      /*
-        ------------------------------------------------
-        事件
-        ------------------------------------------------
-      */
-
-      if(
-        d>=start &&
-        d<end &&
-        events[key]
-      ){
-
-        events[key].forEach(event=>{
-
-          const block=
-            document.createElement("div");
-
-          block.className=
-            `plan-event subject-${event.subjectIndex%10}`;
-
-
-          const top=
-            (
-              event.startMinutes-
-              360
-            )/30*
-            pxPerHalfHour;
-
-
-          const height=
-            (
-              event.endMinutes-
-              event.startMinutes
-            )/30*
-            pxPerHalfHour;
-
-
-          block.style.top=
-            `${top}px`;
-
-          block.style.height=
-            `${height}px`;
-
-
-          block.innerHTML=
-            `
-            <div class="plan-event-name">
-              ${escapeHtml(event.name)}
-            </div>
-            <div class="plan-event-time">
-              ${event.startTime}–${event.endTime}
-            </div>
-            `;
-
-
-          gridArea.appendChild(
-            block
-          );
-
-        });
-
-      }
-
-
-      column.appendChild(
-        gridArea
-      );
-
-      daysArea.appendChild(
-        column
-      );
-
-    }
-
-
-    bodyGrid.appendChild(
-      daysArea
-    );
-
-
-    week.appendChild(
-      bodyGrid
-    );
-
-
-    calendar.appendChild(
-      week
-    );
-
-
-    weekMonday=
-      addDays(
-        weekMonday,
-        7
-      );
+    return;
 
   }
 
 
-  wrapper.appendChild(
-    calendar
-  );
+  data.subjects.push({
 
-  output.appendChild(
-    wrapper
+    name,
+
+    hours,
+
+    session,
+
+    type
+
+  });
+
+
+  save();
+
+
+  [
+    "sName",
+    "sHours",
+    "sSession"
+  ].forEach(
+    id=>
+      document.getElementById(
+        id
+      ).value=""
   );
 
 
-  /*
-    ------------------------------------------------
-    科目圖例
-    ------------------------------------------------
-  */
+  renderSubjects();
 
-  if(data.subjects.length){
+  update();
 
-    const legend=
-      document.createElement("div");
-
-    legend.className=
-      "plan-legend";
-
-
-    data.subjects.forEach(
-      (subject,index)=>{
-
-        const item=
-          document.createElement("div");
-
-        item.className=
-          "legend-item";
-
-
-        const dot=
-          document.createElement("span");
-
-        dot.className=
-          `legend-dot subject-${index%10}`;
-
-
-        const text=
-          document.createElement("span");
-
-        text.textContent=
-          subject.name;
-
-
-        item.appendChild(dot);
-
-        item.appendChild(text);
-
-        legend.appendChild(item);
-
-      }
-    );
-
-
-    output.appendChild(
-      legend
-    );
-
-  }
-
-}
+};
 
 
 /* =========================================================
-   HTML 安全處理
+   匯出資料
 ========================================================= */
 
-function escapeHtml(value){
-
-  return String(value??"")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-/* =========================================================
-   清除計畫
-========================================================= */
-
-function clearPlan(){
-
-  document.getElementById("planOutput").innerHTML=
-    '<div class="empty">尚未生成讀書計畫。</div>';
-
-}
-
-
-/* =========================================================
-   匯出
-========================================================= */
-
-function exportData(){
+document.getElementById(
+  "exportData"
+).onclick=()=>{
 
   const backup={
 
+    app:"讀書進度工具",
+
     version:BACKUP_VERSION,
 
-    exportedAt:new Date().toISOString(),
+    exportedAt:
+      new Date().toISOString(),
 
     data:data
 
@@ -3233,10 +3398,18 @@ function exportData(){
   const a=
     document.createElement("a");
 
+
+  const today=
+    new Date()
+      .toISOString()
+      .slice(0,10);
+
+
   a.href=url;
 
   a.download=
-    `讀書進度工具備份_${fmt(new Date())}.json`;
+    `讀書進度備份_${today}.json`;
+
 
   document.body.appendChild(a);
 
@@ -3244,42 +3417,57 @@ function exportData(){
 
   a.remove();
 
+
   URL.revokeObjectURL(url);
 
-}
+};
 
 
 /* =========================================================
-   匯入
+   匯入資料
 ========================================================= */
 
-function importData(event){
+document.getElementById(
+  "importData"
+).onclick=()=>{
 
-  const file=
-    event.target.files[0];
+  document.getElementById(
+    "backupFile"
+  ).click();
 
-  if(!file){
-    return;
-  }
-
-
-  const reader=
-    new FileReader();
+};
 
 
-  reader.onload=e=>{
+document.getElementById(
+  "backupFile"
+).addEventListener(
+  "change",
+  async e=>{
+
+    const file=
+      e.target.files[0];
+
+
+    if(!file)return;
+
 
     try{
 
-      const imported=
-        JSON.parse(
-          e.target.result
-        );
+      const text=
+        await file.text();
+
+
+      const backup=
+        JSON.parse(text);
+
+
+      let imported=
+        backup.data||backup;
 
 
       if(
-        !imported.data ||
-        typeof imported.data!=="object"
+        !imported||
+        typeof imported!=="object"
       ){
 
         throw new Error(
@@ -3289,143 +3477,1468 @@ function importData(event){
       }
 
 
-      data=
-        imported.data;
-
-
-      /*
-        補齊必要欄位
-      */
+      /* 基本資料檢查 */
 
       if(
-        !Array.isArray(data.routine)
+        imported.routine &&
+        !Array.isArray(
+          imported.routine
+        )
       ){
 
-        data.routine=
-          Array.from(
-            {length:7},
-            ()=>Array(40).fill("rest")
-          );
+        throw new Error(
+          "作息資料格式錯誤"
+        );
 
       }
 
 
+      if(
+        imported.subjects &&
+        !Array.isArray(
+          imported.subjects
+        )
+      ){
+
+        throw new Error(
+          "科目資料格式錯誤"
+        );
+
+      }
+
+
+      if(
+        !confirm(
+          "匯入後會覆蓋目前資料，確定繼續嗎？"
+        )
+      ){
+
+        e.target.value="";
+
+        return;
+
+      }
+
+
+      data={
+
+        routine:
+          imported.routine||
+          Array.from(
+            {length:7},
+            ()=>Array(40).fill("rest")
+          ),
+
+        subjects:
+          imported.subjects||
+          [],
+
+        subjectWeights:
+          imported.subjectWeights||
+          [],
+
+        startDate:
+          imported.startDate||
+          "",
+
+        examDate:
+          imported.examDate||
+          ""
+
+      };
+
+
+      /* 修正作息陣列 */
+
       data.routine=
-        data.routine.map(dayArray=>{
+        data.routine
+          .slice(0,7)
+          .map(dayArray=>{
 
-          let arr=
-            Array.isArray(dayArray)
-              ? dayArray.slice(0,40)
-              : [];
-
-          while(arr.length<40){
-            arr.push("rest");
-          }
-
-          return arr.map(k=>
-            kinds[k]
-              ? k
-              : "rest"
-          );
-
-        });
+            let arr=
+              Array.isArray(dayArray)
+                ? dayArray
+                    .slice(0,40)
+                : [];
 
 
-      data.subjects=
-        Array.isArray(data.subjects)
-          ? data.subjects
-          : [];
+            while(
+              arr.length<40
+            ){
+
+              arr.push("rest");
+
+            }
 
 
-      data.subjectWeights=
-        Array.isArray(data.subjectWeights)
-          ? data.subjectWeights
-          : [];
+            return arr.map(
+              k=>
+                kinds[k]
+                  ? k
+                  : "rest"
+            );
+
+          });
 
 
-      data.startDate=
-        data.startDate||"";
+      while(
+        data.routine.length<7
+      ){
 
-      data.examDate=
-        data.examDate||"";
+        data.routine.push(
+          Array(40).fill("rest")
+        );
+
+      }
 
 
-      persist();
+      selectedCells.clear();
 
-      initializeUI();
 
-      alert("備份匯入成功。");
+      save();
+
+
+      document.getElementById(
+        "startDate"
+      ).value=
+        data.startDate;
+
+
+      document.getElementById(
+        "examDate"
+      ).value=
+        data.examDate;
+
+
+      renderRoutine();
+
+      renderSubjects();
+
+      update();
+
+
+      alert(
+        "進度備份已成功匯入。"
+      );
 
 
     }catch(err){
 
       alert(
-        "無法匯入這個備份檔案。"
+        "無法匯入這個備份檔案。\n\n"+
+        "請確認它是本工具匯出的 JSON 備份。"
       );
+
+
+      console.error(err);
 
     }
 
-  };
 
+    e.target.value="";
 
-  reader.readAsText(file);
-
-  event.target.value="";
-
-}
+  }
+);
 
 
 /* =========================================================
    清除全部資料
 ========================================================= */
 
-function clearAllData(){
+document.getElementById(
+  "clearData"
+).onclick=()=>{
 
-  if(
-    !confirm(
-      "確定要清除所有讀書進度工具資料嗎？\n\n"+
-      "這個動作無法復原，建議先匯出備份。"
-    )
-  ){
+  const ok=
+    confirm(
+      "這會清除本工具目前保存的所有資料，包括日期、作息、科目與配分。\n\n確定要全部清除嗎？"
+    );
+
+
+  if(!ok)return;
+
+
+  localStorage.removeItem(KEY);
+
+
+  data={
+
+    routine:
+      Array.from(
+        {length:7},
+        ()=>Array(40).fill("rest")
+      ),
+
+    subjects:[],
+
+    subjectWeights:[],
+
+    startDate:"",
+
+    examDate:""
+
+  };
+
+
+  selectedCells.clear();
+
+
+  document.getElementById(
+    "startDate"
+  ).value="";
+
+
+  document.getElementById(
+    "examDate"
+  ).value="";
+
+
+  renderRoutine();
+
+  renderSubjects();
+
+  update();
+
+  save();
+
+
+  alert(
+    "所有資料已清除。"
+  );
+
+};
+
+
+/* =========================================================
+   自動排程
+========================================================= */
+
+function generate(){
+
+  if(!data.startDate){
+
+    alert(
+      "請先設定起始日期。"
+    );
 
     return;
 
   }
 
 
-  localStorage.removeItem(KEY);
+  if(!data.examDate){
 
-  location.reload();
+    alert(
+      "請先設定考試日期。"
+    );
+
+    return;
+
+  }
+
+
+  let range=
+    document.getElementById(
+      "planRange"
+    ).value;
+
+
+  let daysCount=
+    range==="week"
+      ? 7
+      : range==="1"
+        ? 30
+        : 90;
+
+
+  /*
+    自動排程從「設定的起始日期」開始。
+
+    排程期間只依照使用者選擇的：
+    1 週／1 個月／3 個月。
+
+    考試日期仍然只作為考試倒數與
+    準備期間資料使用，不再截斷排程。
+  */
+
+  let start=
+    new Date(
+      data.startDate+"T00:00:00"
+    );
+
+
+  start.setHours(
+    0,0,0,0
+  );
+
+
+  let end=
+    addDays(
+      start,
+      daysCount
+    );
+
+
+  let c=
+    cap();
+
+
+  let need=
+    data.subjects.reduce(
+      (a,s)=>
+        a+Number(s.hours||0),
+      0
+    );
+
+
+  document.getElementById(
+    "capacityNotice"
+  ).innerHTML=
+    need>c
+
+      ? `<div class="notice danger">
+
+          ⚠ 每週科目需求
+          ${need.toFixed(1)} 小時，
+
+          可用
+          ${c.toFixed(1)} 小時，
+
+          超出
+          ${(need-c).toFixed(1)} 小時。
+
+        </div>`
+
+      : `<div class="notice">
+
+          ✓ 每週科目需求
+          ${need.toFixed(1)} 小時／
+
+          可用
+          ${c.toFixed(1)} 小時。
+
+        </div>`;
+
+
+  if(
+    !data.subjects.length||
+    !c
+  ){
+
+    document.getElementById(
+      "planOutput"
+    ).innerHTML=
+      '<div class="empty">'+
+      '請先設定作息與科目。'+
+      '</div>';
+
+    return;
+
+  }
+
+
+  /*
+    events 以日期為 key。
+
+    occupied：
+    記錄每一天 40 個半小時時段
+    是否已經被其他科目使用。
+
+    這可以避免不同科目互相重疊。
+  */
+
+  let events={};
+
+  let occupied={};
+
+  let unscheduled=[];
+
+
+  /*
+    取得指定日期所在週的星期一。
+
+    排程週期與週曆顯示方式一致，
+    都採用星期一～星期日。
+  */
+
+  function getWeekMondayLocal(date){
+
+    let d=
+      new Date(date);
+
+
+    d.setHours(
+      0,0,0,0
+    );
+
+
+    let day=
+      d.getDay();
+
+
+    let diff=
+      day===0
+        ? -6
+        : 1-day;
+
+
+    return addDays(
+      d,
+      diff
+    );
+
+  }
+
+
+  /*
+    一週一週進行排程。
+
+    第一週如果起始日不是星期一，
+    只使用真正落在排程期間內的日期。
+  */
+
+  for(
+
+    let weekMonday=
+      getWeekMondayLocal(start);
+
+    weekMonday<end;
+
+    weekMonday=
+      addDays(
+        weekMonday,
+        7
+      )
+
+  ){
+
+    let weekDates=[];
+
+
+    for(
+
+      let i=0;
+
+      i<7;
+
+      i++
+
+    ){
+
+      let d=
+        addDays(
+          weekMonday,
+          i
+        );
+
+
+      if(
+        d>=start&&
+        d<end
+      ){
+
+        weekDates.push(d);
+
+      }
+
+    }
+
+
+    if(!weekDates.length){
+
+      continue;
+
+    }
+
+
+    /*
+      每個日期建立 40 個半小時的佔用狀態。
+    */
+
+    weekDates.forEach(
+      d=>{
+
+        let key=
+          fmt(d);
+
+
+        occupied[key]=
+          Array(40).fill(false);
+
+      }
+    );
+
+
+    /*
+      逐科安排。
+
+      每週次數：
+
+      每週時數 ÷ 每次時數
+
+      例如：
+      6h ÷ 2h = 3 次
+    */
+
+    for(
+
+      let si=0;
+
+      si<data.subjects.length;
+
+      si++
+
+    ){
+
+      let s=
+        data.subjects[si];
+
+
+      let weeklyHours=
+        Number(
+          s.hours||0
+        );
+
+
+      let sessionHours=
+        Number(
+          s.session||0
+        );
+
+
+      if(
+        weeklyHours<=0||
+        sessionHours<=0
+      ){
+
+        continue;
+
+      }
+
+
+      let sessionsPerWeek=
+        Math.max(
+          1,
+          Math.round(
+            weeklyHours/
+            sessionHours
+          )
+        );
+
+
+      let needSlots=
+        Math.max(
+          1,
+          Math.round(
+            sessionHours*2
+          )
+        );
+
+
+      let placed=0;
+
+      let usedDays=
+        new Set();
+
+
+      /*
+        第一輪：
+        優先安排到尚未使用的日期。
+
+        例如同一科一週要讀 3 次，
+        優先分散到三個不同日期。
+      */
+
+      for(
+
+        let pass=0;
+
+        pass<2&&
+        placed<sessionsPerWeek;
+
+        pass++
+
+      ){
+
+        for(
+
+          let di=0;
+
+          di<weekDates.length&&
+          placed<sessionsPerWeek;
+
+          di++
+
+        ){
+
+          let d=
+            weekDates[di];
+
+
+          let key=
+            fmt(d);
+
+
+          let dow=
+            (d.getDay()+6)%7;
+
+
+          /*
+            第一輪不允許同一科在同一天
+            出現兩次。
+
+            第二輪若仍有需要，
+            才允許使用已經安排過的日期。
+          */
+
+          if(
+            pass===0&&
+            usedDays.has(key)
+          ){
+
+            continue;
+
+          }
+
+
+          /*
+            尋找連續的可用讀書時段。
+          */
+
+          for(
+
+            let st=0;
+
+            st<=40-needSlots;
+
+            st++
+
+          ){
+
+            let ok=true;
+
+
+            for(
+
+              let j=0;
+
+              j<needSlots;
+
+              j++
+
+            ){
+
+              let slot=
+                st+j;
+
+
+              if(
+                data.routine[dow][slot]
+                !=="study"||
+                occupied[key][slot]
+              ){
+
+                ok=false;
+
+                break;
+
+              }
+
+            }
+
+
+            if(!ok){
+
+              continue;
+
+            }
+
+
+            /*
+              確認後正式占用這些時段。
+            */
+
+            for(
+
+              let j=0;
+
+              j<needSlots;
+
+              j++
+
+            ){
+
+              occupied[key][st+j]=true;
+
+            }
+
+
+            events[key]=
+              events[key]||[];
+
+
+            let startMinutes=
+              360+st*30;
+
+
+            let endMinutes=
+              startMinutes+
+              needSlots*30;
+
+
+            events[key].push({
+
+              time:
+                formatTime(
+                  startMinutes
+                ),
+
+              startTime:
+                formatTime(
+                  startMinutes
+                ),
+
+              endTime:
+                formatTime(
+                  endMinutes
+                ),
+
+              startMinutes,
+
+              endMinutes,
+
+              name:
+                s.name,
+
+              type:
+                s.type,
+
+              hours:
+                s.session,
+
+              subjectIndex:si
+
+            });
+
+
+            usedDays.add(key);
+
+            placed++;
+
+            break;
+
+          }
+
+        }
+
+      }
+
+
+      /*
+        如果本週實際可用時段不足，
+        不再默默漏掉，而是記錄實際排入次數。
+      */
+
+      if(
+        placed<sessionsPerWeek
+      ){
+
+        unscheduled.push({
+
+          name:s.name,
+
+          requested:sessionsPerWeek,
+
+          placed
+
+        });
+
+      }
+
+    }
+
+  }
+
+
+  /*
+    每一天依開始時間排序。
+  */
+
+  Object.keys(events).forEach(
+    key=>{
+
+      events[key].sort(
+        (a,b)=>
+          a.startMinutes-
+          b.startMinutes
+      );
+
+    }
+  );
+
+
+  /*
+    如果有科目沒有完全排滿，
+    在原本的容量提示區顯示。
+  */
+
+  if(
+    unscheduled.length
+  ){
+
+    let unique=[];
+
+
+    unscheduled.forEach(
+      item=>{
+
+        let existing=
+          unique.find(
+            x=>x.name===item.name
+          );
+
+
+        if(existing){
+
+          existing.requested+=
+            item.requested;
+
+          existing.placed+=
+            item.placed;
+
+        }else{
+
+          unique.push({
+
+            name:item.name,
+
+            requested:item.requested,
+
+            placed:item.placed
+
+          });
+
+        }
+
+      }
+    );
+
+
+    document.getElementById(
+      "capacityNotice"
+    ).innerHTML+=
+      `<div
+        class="notice danger"
+        style="margin-top:8px">
+
+        ⚠ 部分科目無法完全排入：
+
+        ${unique.map(
+          x=>
+            `${esc(x.name)}
+            ${x.placed}/${x.requested} 次`
+        ).join("、")}
+
+        <br>
+
+        請檢查每週作息中的「讀書」時段、
+        每次時數，以及各科每週需求。
+
+      </div>`;
+
+  }
+
+
+  renderPlan(
+    events,
+    start,
+    end
+  );
 
 }
 
 
 /* =========================================================
-   頁面切換
+   時間格式
 ========================================================= */
 
-function switchPage(page){
+function formatTime(mins){
 
-  document.querySelectorAll(".page")
-    .forEach(el=>{
+  let normalized=
+    mins%(24*60);
 
-      el.classList.toggle(
-        "active",
-        el.id===`page-${page}`
+
+  if(normalized<0){
+
+    normalized+=24*60;
+
+  }
+
+
+  let h=
+    Math.floor(
+      normalized/60
+    );
+
+
+  let m=
+    normalized%60;
+
+
+  return String(h).padStart(2,"0")
+    +":"
+    +String(m).padStart(2,"0");
+
+}
+
+
+/* =========================================================
+   取得某日期所在週的星期一
+========================================================= */
+
+function getMonday(date){
+
+  let d=
+    new Date(date);
+
+
+  d.setHours(
+    0,0,0,0
+  );
+
+
+  let day=
+    d.getDay();
+
+
+  /*
+    JS：
+    日=0
+    一=1
+    二=2
+    ...
+    六=6
+  */
+
+  let diff=
+    day===0
+      ? -6
+      : 1-day;
+
+
+  return addDays(
+    d,
+    diff
+  );
+
+}
+
+
+/* =========================================================
+   顯示自動排程
+========================================================= */
+
+function renderPlan(
+  events,
+  start,
+  end
+){
+
+  /*
+    第一週固定從「起始日期所在週」的星期一開始。
+
+    例如：
+    起始日＝星期三
+
+    第一週：
+    一 二 → 空白
+    三 四 五 六 日 → 可排程
+
+    後面全部按照完整週顯示。
+  */
+
+  let firstMonday=
+    getMonday(start);
+
+
+  /*
+    最後一週要完整顯示到星期日，
+    但超過排程結束日期的部分保持空白。
+  */
+
+  let lastDisplaySunday=
+    addDays(
+      getMonday(
+        addDays(end,-1)
+      ),
+      6
+    );
+
+
+  let html=
+    '<div class="plan-wrapper">';
+
+
+  html+=
+    '<div class="plan-calendar">';
+
+
+  /*
+    每週一個區塊。
+  */
+
+  for(
+
+    let weekMonday=
+      new Date(firstMonday);
+
+    weekMonday<=lastDisplaySunday;
+
+    weekMonday=
+      addDays(
+        weekMonday,
+        7
+      )
+
+  ){
+
+    let weekSunday=
+      addDays(
+        weekMonday,
+        6
       );
 
-    });
 
-
-  document.querySelectorAll(".nav-btn")
-    .forEach(btn=>{
-
-      btn.classList.toggle(
-        "active",
-        btn.dataset.page===page
+    let firstWeekText=
+      formatDateShort(
+        weekMonday
       );
 
-    });
+
+    let lastWeekText=
+      formatDateShort(
+        weekSunday
+      );
+
+
+    html+=
+      `<div class="plan-week">
+
+        <div class="plan-week-title">
+
+          ${firstWeekText} ～ ${lastWeekText}
+
+        </div>
+
+        <div class="plan-grid">
+
+          <div class="plan-corner"></div>`;
+
+
+    /*
+      七天標題。
+    */
+
+    for(
+
+      let i=0;
+
+      i<7;
+
+      i++
+
+    ){
+
+      let day=
+        addDays(
+          weekMonday,
+          i
+        );
+
+
+      let key=
+        fmt(day);
+
+
+      let insideRange=
+        day>=start &&
+        day<end;
+
+
+      html+=
+        `<div class="plan-day-header ${
+          insideRange
+            ? ""
+            : "outside"
+        }">
+
+          <span class="weekday">
+            星期${days[i]}
+          </span>
+
+          <span class="date">
+            ${key}
+          </span>
+
+        </div>`;
+
+    }
+
+
+    /*
+      時間軸與七天內容。
+
+      一天仍然沿用「06:00～隔日02:00」，
+      共 40 個半小時 = 20 小時。
+    */
+
+    const totalMinutes=
+      40*30;
+
+
+    const pxPerHalfHour=
+      24;
+
+
+    const gridHeight=
+      40*pxPerHalfHour;
+
+
+    html+=
+      `<div
+        class="plan-time-axis"
+        style="height:${gridHeight}px">`;
+
+
+    /*
+      每 30 分鐘顯示時間文字，
+      但每小時顯示一次即可，避免過度密集。
+    */
+
+    for(
+
+      let slot=0;
+
+      slot<=40;
+
+      slot++
+
+    ){
+
+      if(slot%2!==0)continue;
+
+
+      let mins=
+        360+slot*30;
+
+
+      let top=
+        slot*pxPerHalfHour;
+
+
+      let label=
+        formatTime(mins);
+
+
+      html+=
+        `<div
+          class="plan-time-label"
+          style="top:${top}px">
+
+          ${label}
+
+        </div>`;
+
+    }
+
+
+    html+=
+      '</div>';
+
+
+    /*
+      七個日期欄。
+    */
+
+    html+=
+      `<div
+        class="plan-days-area"
+        style="height:${gridHeight}px">`;
+
+
+    for(
+
+      let i=0;
+
+      i<7;
+
+      i++
+
+    ){
+
+      let day=
+        addDays(
+          weekMonday,
+          i
+        );
+
+
+      let key=
+        fmt(day);
+
+
+      let insideRange=
+        day>=start &&
+        day<end;
+
+
+      html+=
+        `<div
+          class="plan-day-column ${
+            insideRange
+              ? ""
+              : "outside"
+          }">
+
+          <div
+            class="plan-grid-area"
+            style="height:${gridHeight}px">`;
+
+
+      /*
+        每小時實線。
+      */
+
+      for(
+
+        let slot=0;
+
+        slot<=40;
+
+        slot+=2
+
+      ){
+
+        let top=
+          slot*pxPerHalfHour;
+
+
+        html+=
+          `<div
+            class="plan-hour-line"
+            style="top:${top}px">
+          </div>`;
+
+      }
+
+
+      /*
+        每半小時虛線。
+      */
+
+      for(
+
+        let slot=1;
+
+        slot<40;
+
+        slot+=2
+
+      ){
+
+        let top=
+          slot*pxPerHalfHour;
+
+
+        html+=
+          `<div
+            class="plan-half-line"
+            style="top:${top}px">
+          </div>`;
+
+      }
+
+
+      /*
+        只有在真正排程範圍內的日期才放行程。
+      */
+
+      if(insideRange){
+
+        let list=
+          events[key]||[];
+
+
+        list.forEach(
+          e=>{
+
+            /*
+              06:00 是時間軸的起點。
+
+              因此：
+              06:00 → top 0
+              06:30 → top 24
+              07:00 → top 48
+            */
+
+            let top=
+              (e.startMinutes-360)/
+              30*
+              pxPerHalfHour;
+
+
+            let height=
+              (e.endMinutes-e.startMinutes)/
+              30*
+              pxPerHalfHour;
+
+
+            /*
+              如果事件跨過 02:00，
+              不讓它超出當日時間軸。
+            */
+
+            let maxHeight=
+              gridHeight-top;
+
+
+            height=
+              Math.min(
+                height,
+                maxHeight
+              );
+
+
+            let subjectClass=
+              e.subjectIndex<10
+                ? `subject-${e.subjectIndex}`
+                : "subject-other";
+
+
+            html+=
+              `<div
+                class="plan-event ${subjectClass}"
+                style="
+                  top:${top}px;
+                  height:${height}px;
+                ">
+
+                <b>
+                  ${e.startTime}–${e.endTime}
+                </b>
+
+                <span class="event-name">
+                  ${esc(e.name)}
+                </span>
+
+                <span class="event-type">
+                  ${esc(e.type)} · ${e.hours}h
+                </span>
+
+              </div>`;
+
+          }
+        );
+
+      }
+
+
+      html+=
+        `</div>
+        </div>`;
+
+    }
+
+
+    html+=
+      '</div>';
+
+    html+=
+      '</div>';
+
+    html+=
+      '</div>';
+
+  }
+
+
+  html+=
+    '</div>';
+
+
+  /*
+    科目色彩圖例。
+  */
+
+  if(data.subjects.length){
+
+    html+=
+      '<div class="plan-legend">';
+
+
+    data.subjects.forEach(
+      (s,i)=>{
+
+        let cls=
+          i<10
+            ? `subject-${i}`
+            : "subject-other";
+
+
+        html+=
+          `<div class="plan-legend-item">
+
+            <span
+              class="plan-legend-dot ${cls}">
+            </span>
+
+            <span>
+              ${esc(s.name)}
+            </span>
+
+          </div>`;
+
+      }
+    );
+
+
+    html+=
+      '</div>';
+
+  }
+
+
+  html+=
+    `<div class="plan-note">
+
+      時間軸：06:00～隔日02:00 · 每30分鐘一格。
+
+      色塊位置依實際開始時間與結束時間排列。
+
+      起始日期前與排程期間結束後的日期保留為空白。
+
+    </div>`;
+
+
+  html+=
+    '</div>';
+
+
+  document.getElementById(
+    "planOutput"
+  ).innerHTML=
+    html;
+
+}
+
+
+/* =========================================================
+   日期顯示
+========================================================= */
+
+function formatDateShort(d){
+
+  return `${d.getMonth()+1}/${d.getDate()}`;
 
 }
 
@@ -3434,44 +4947,34 @@ function switchPage(page){
    初始化
 ========================================================= */
 
-function initializeUI(){
-
-  document.getElementById("startDate").value=
-    data.startDate||"";
-
-  document.getElementById("examDate").value=
-    data.examDate||"";
+document.getElementById(
+  "generate"
+).onclick=
+  generate;
 
 
-  renderRoutine();
-
-  renderSubjects();
-
-  renderWeights();
-
-  updateOverview();
-
-}
+document.getElementById(
+  "startDate"
+).value=
+  data.startDate;
 
 
-document.querySelectorAll(".nav-btn")
-  .forEach(btn=>{
-
-    btn.addEventListener(
-      "click",
-      ()=>{
-        switchPage(
-          btn.dataset.page
-        );
-      }
-    );
-
-  });
+document.getElementById(
+  "examDate"
+).value=
+  data.examDate;
 
 
-initializeUI();
+renderRoutine();
+
+renderSubjects();
+
+update();
+
+showSaveStatus();
 
 </script>
 
 </body>
+
 </html>
