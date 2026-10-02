@@ -1,4 +1,3 @@
-```html
 <!doctype html>
 <html lang="zh-Hant">
 <head>
@@ -354,9 +353,10 @@ th{
   margin-bottom:12px
 }
 
+/* ② 現階段科目配置 */
 .subject-form{
   display:grid;
-  grid-template-columns:2fr 1fr 1fr 1fr 1.2fr auto;
+  grid-template-columns:2fr 1fr 1fr 1.2fr auto;
   gap:7px;
   align-items:end
 }
@@ -1063,19 +1063,6 @@ th{
 
         <div>
 
-          <label>配分</label>
-
-          <input
-            id="sScore"
-            type="number"
-            min="0"
-            placeholder="200">
-
-        </div>
-
-
-        <div>
-
           <label>每週時數</label>
 
           <input
@@ -1139,7 +1126,6 @@ th{
             <tr>
 
               <th>科目</th>
-              <th>比例</th>
               <th>每週</th>
               <th>每次</th>
               <th>每週次數</th>
@@ -1155,6 +1141,12 @@ th{
 
         </table>
 
+      </div>
+
+
+      <div
+        id="subjectCapacityNotice"
+        style="margin-top:12px">
       </div>
 
 
@@ -1827,6 +1819,7 @@ function applyKindToSelection(){
 
   update();
 
+
 }
 
 
@@ -2202,14 +2195,6 @@ function renderSubjects(){
     );
 
 
-  let totalScore=
-    data.subjects.reduce(
-      (a,s)=>
-        a+Number(s.score||0),
-      0
-    );
-
-
   body.innerHTML="";
 
 
@@ -2217,10 +2202,19 @@ function renderSubjects(){
 
     body.innerHTML=
       '<tr>'+
-      '<td colspan="7" class="empty">'+
+      '<td colspan="6" class="empty">'+
       '尚未加入科目'+
       '</td>'+
       '</tr>';
+
+    const notice=
+      document.getElementById(
+        "subjectCapacityNotice"
+      );
+
+    if(notice){
+      notice.innerHTML="";
+    }
 
     return;
 
@@ -2234,13 +2228,6 @@ function renderSubjects(){
   data.subjects.forEach(
     (s,i)=>{
 
-      let ratio=
-        totalScore
-          ? Number(s.score)/
-            totalScore*100
-          : 0;
-
-
       let n=
         Number(s.hours)/
         Number(s.session);
@@ -2250,21 +2237,12 @@ function renderSubjects(){
         document.createElement("tr");
 
 
-      /*
-        這裡只移除「配分」顯示欄位，
-        其他欄位全部保留。
-      */
-
       tr.innerHTML=
         `<td>
           <b>${esc(s.name)}</b>
           <div class="small muted">
             ${esc(s.type)}
           </div>
-        </td>
-
-        <td>
-          ${ratio.toFixed(1)}%
         </td>
 
         <td>
@@ -2321,6 +2299,52 @@ function renderSubjects(){
 
       }
     );
+
+
+  /*
+    每週科目需求 vs 每週可讀書時間
+  */
+
+  let need=
+    data.subjects.reduce(
+      (a,s)=>
+        a+Number(s.hours||0),
+      0
+    );
+
+
+  let capacity=
+    cap();
+
+
+  const notice=
+    document.getElementById(
+      "subjectCapacityNotice"
+    );
+
+
+  if(
+    notice &&
+    need>capacity
+  ){
+
+    notice.innerHTML=
+      `<div class="notice danger">
+        ⚠ 目前科目每週需求共
+        <b>${need.toFixed(1)} 小時</b>，
+        已超過每週可讀書時間
+        <b>${capacity.toFixed(1)} 小時</b>，
+        超出
+        <b>${(need-capacity).toFixed(1)} 小時</b>。
+        <br>
+        請手動調整各科的每週時數。
+      </div>`;
+
+  }else if(notice){
+
+    notice.innerHTML="";
+
+  }
 
 }
 
@@ -2704,14 +2728,6 @@ document.getElementById(
     ).value.trim();
 
 
-  let score=
-    Number(
-      document.getElementById(
-        "sScore"
-      ).value||0
-    );
-
-
   let hours=
     Number(
       document.getElementById(
@@ -2764,7 +2780,6 @@ document.getElementById(
 
   data.subjects.push({
     name,
-    score,
     hours,
     session,
     type
@@ -2776,7 +2791,6 @@ document.getElementById(
 
   [
     "sName",
-    "sScore",
     "sHours",
     "sSession"
   ].forEach(
@@ -2989,6 +3003,11 @@ document.getElementById(
 
       };
 
+
+      /*
+        舊資料即使 subjects 裡仍有 score，
+        也完整保留，不會因為本版本取消配分欄位而無法匯入。
+      */
 
       /*
         修正作息陣列
@@ -3546,4 +3565,3 @@ showSaveStatus();
 
 </body>
 </html>
-```
