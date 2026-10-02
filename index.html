@@ -18,6 +18,7 @@
   --muted:#77786d;
 
   --study:#dfe5ca;
+  --meal:#e7dcc8;
   --flex:#e8e0cc;
   --rest:#e4e2dc;
   --exercise:#d5dfd0;
@@ -202,8 +203,13 @@ input,select{
   margin-bottom:14px
 }
 
-.danger{
-  border-left-color:#956b55
+.notice.danger{
+  border-left-color:#956b55;
+  background:#eee1d8
+}
+
+.notice.ok{
+  border-left-color:var(--olive);
 }
 
 .actions{
@@ -281,6 +287,10 @@ th{
 
 .slot.study{
   background:var(--study)
+}
+
+.slot.meal{
+  background:var(--meal)
 }
 
 .slot.flex{
@@ -486,6 +496,14 @@ th{
 .event .type{
   font-size:9px;
   color:var(--muted)
+}
+
+.plan-summary{
+  margin-top:14px;
+  padding:11px 13px;
+  background:var(--paper2);
+  border-left:3px solid var(--olive);
+  font-size:12px
 }
 
 /* =========================
@@ -995,6 +1013,11 @@ th{
       </div>
 
 
+      <!-- 容量提醒 -->
+
+      <div id="subjectCapacityNotice"></div>
+
+
       <div class="subject-form">
 
         <div>
@@ -1087,7 +1110,6 @@ th{
 
               <th>科目</th>
               <th>配分</th>
-              <th>比例</th>
               <th>每週</th>
               <th>每次</th>
               <th>每週次數</th>
@@ -1108,8 +1130,9 @@ th{
 
       <p class="small muted">
 
-        考前預估＝每週時數 × 剩餘週數；
-        第一版尚未扣除最後衝刺或其他階段。
+        考前預估＝每週時數 × 剩餘週數。
+        每週次數＝每週時數 ÷ 每次時數。
+        若結果不是整數，代表最後一次可能需要縮短。
 
       </p>
 
@@ -1131,9 +1154,10 @@ th{
 
     <div class="notice">
 
-      依「每週時數、每次時數、每週次數」
-      分散到你標記為「讀書」的 30 分鐘時段。
-      第一版先把核心排程流程跑通。
+      排程最小單位為<strong>一週</strong>。
+      系統會以目前這一週的「週一～週日」為範圍，
+      依照每個科目的「每週時數」與「每次時數」，
+      分配到你標記為「讀書」的 30 分鐘時段。
 
     </div>
 
@@ -1147,11 +1171,7 @@ th{
         <select id="planRange">
 
           <option value="1">
-            1 個月
-          </option>
-
-          <option value="3">
-            3 個月
+            1 週
           </option>
 
         </select>
@@ -1169,7 +1189,7 @@ th{
           class="btn primary"
           id="generate">
 
-          生成讀書計畫
+          生成本週讀書計畫
 
         </button>
 
@@ -1229,12 +1249,19 @@ const kinds={
 
 
 const kindClass={
+
   study:"study",
+
   meal:"meal",
+
   exercise:"exercise",
+
   flex:"flex",
+
   rest:"rest",
+
   other:"other"
+
 };
 
 
@@ -1253,7 +1280,9 @@ try{
 }
 
 
-/* 舊版本資料相容 */
+/* =========================================================
+   舊版本資料相容
+========================================================= */
 
 if(!data.routine){
 
@@ -1266,30 +1295,36 @@ if(!data.routine){
 }
 
 
-/*
-  如果舊版本沒有 meal，
-  原本的資料仍可正常使用。
-*/
-
 data.routine=
-  data.routine.map(dayArray=>{
+  Array.isArray(data.routine)
+    ? data.routine
+        .slice(0,7)
+        .map(dayArray=>{
 
-    let arr=
-      Array.isArray(dayArray)
-        ? dayArray.slice(0,40)
-        : [];
+          let arr=
+            Array.isArray(dayArray)
+              ? dayArray.slice(0,40)
+              : [];
 
-    while(arr.length<40){
-      arr.push("rest");
-    }
+          while(arr.length<40){
+            arr.push("rest");
+          }
 
-    return arr.map(k=>
-      kinds[k]
-        ? k
-        : "rest"
-    );
+          return arr.map(
+            k=>kinds[k] ? k : "rest"
+          );
 
-  });
+        })
+    : [];
+
+
+while(data.routine.length<7){
+
+  data.routine.push(
+    Array(40).fill("rest")
+  );
+
+}
 
 
 data.subjects=
@@ -1321,8 +1356,8 @@ let selectedKind="study";
 
 
 /* 多格選取 */
-let selectedCells=new Set();
 
+let selectedCells=new Set();
 
 let isDragging=false;
 
@@ -1348,10 +1383,17 @@ function save(){
 
     console.error(e);
 
-    document.getElementById(
-      "saveStatus"
-    ).textContent=
-      "⚠ 無法保存資料";
+    const el=
+      document.getElementById(
+        "saveStatus"
+      );
+
+    if(el){
+
+      el.textContent=
+        "⚠ 無法保存資料";
+
+    }
 
   }
 
@@ -1629,6 +1671,7 @@ function updateSelectionVisual(){
 
 
 /* 選取單格 */
+
 function toggleCell(key){
 
   if(
@@ -1647,6 +1690,7 @@ function toggleCell(key){
 
 
 /* 拖曳進入格子 */
+
 function dragSelect(key){
 
   if(dragMode==="add"){
@@ -1669,12 +1713,6 @@ function dragSelect(key){
 function applyKindToSelection(){
 
   if(!selectedCells.size){
-
-    /*
-      如果沒有選取任何格子，
-      點選類型只改變「目前工具」，
-      讓使用者之後單格點選時可以直接使用。
-    */
 
     return;
 
@@ -1788,9 +1826,8 @@ function renderRoutine(){
 
 
       b.className=
-        "slot "+(
-          kindClass[k]||"rest"
-        );
+        "slot "+
+        (kindClass[k]||"rest");
 
 
       b.textContent=
@@ -1803,7 +1840,7 @@ function renderRoutine(){
 
       /*
         pointerdown：
-        開始選取或取消選取。
+        開始選取或取消選取
       */
 
       b.addEventListener(
@@ -1843,12 +1880,12 @@ function renderRoutine(){
 
       /*
         pointerenter：
-        拖曳時連續選取。
+        拖曳時連續選取
       */
 
       b.addEventListener(
         "pointerenter",
-        e=>{
+        ()=>{
 
           if(!isDragging)return;
 
@@ -1859,12 +1896,6 @@ function renderRoutine(){
         }
       );
 
-
-      /*
-        click：
-        手機單點與一般滑鼠點擊。
-        如果剛才是拖曳，則不額外處理。
-      */
 
       b.addEventListener(
         "click",
@@ -1899,10 +1930,6 @@ function renderRoutine(){
 
 }
 
-
-/*
-  在文件層級結束拖曳。
-*/
 
 document.addEventListener(
   "pointerup",
@@ -2081,6 +2108,89 @@ function renderWeights(){
    現階段科目配置
 ========================================================= */
 
+function getSubjectNeed(){
+
+  return data.subjects.reduce(
+    (a,s)=>
+      a+Number(s.hours||0),
+    0
+  );
+
+}
+
+
+function renderSubjectCapacity(){
+
+  const el=
+    document.getElementById(
+      "subjectCapacityNotice"
+    );
+
+
+  if(!el)return;
+
+
+  const available=
+    cap();
+
+
+  const need=
+    getSubjectNeed();
+
+
+  if(!data.subjects.length){
+
+    el.innerHTML=
+      `<div class="notice">
+        目前尚未設定科目。
+        每週可讀書時間為
+        <b>${available.toFixed(1)} 小時</b>。
+      </div>`;
+
+    return;
+
+  }
+
+
+  if(need>available){
+
+    el.innerHTML=
+      `<div class="notice danger">
+        ⚠ <strong>目前科目配置超過每週可讀書時間。</strong><br>
+        科目需求：
+        <b>${need.toFixed(1)} 小時／週</b>
+        ／
+        每週可讀：
+        <b>${available.toFixed(1)} 小時</b>
+        ／
+        超出：
+        <b>${(need-available).toFixed(1)} 小時</b>
+        <br>
+        請回到下方科目配置，調整每週時數。
+      </div>`;
+
+  }else{
+
+    const remaining=
+      available-need;
+
+
+    el.innerHTML=
+      `<div class="notice ok">
+        ✓ 目前科目需求
+        <b>${need.toFixed(1)} 小時／週</b>，
+        每週可讀
+        <b>${available.toFixed(1)} 小時</b>，
+        尚有
+        <b>${remaining.toFixed(1)} 小時</b>
+        可安排。
+      </div>`;
+
+  }
+
+}
+
+
 function renderSubjects(){
 
   let body=
@@ -2089,22 +2199,17 @@ function renderSubjects(){
     );
 
 
-  let totalScore=
-    data.subjects.reduce(
-      (a,s)=>
-        a+Number(s.score||0),
-      0
-    );
-
-
   body.innerHTML="";
+
+
+  renderSubjectCapacity();
 
 
   if(!data.subjects.length){
 
     body.innerHTML=
       '<tr>'+
-      '<td colspan="8" class="empty">'+
+      '<td colspan="7" class="empty">'+
       '尚未加入科目'+
       '</td>'+
       '</tr>';
@@ -2121,16 +2226,18 @@ function renderSubjects(){
   data.subjects.forEach(
     (s,i)=>{
 
-      let ratio=
-        totalScore
-          ? Number(s.score)/
-            totalScore*100
-          : 0;
+      let hours=
+        Number(s.hours||0);
+
+
+      let session=
+        Number(s.session||0);
 
 
       let n=
-        Number(s.hours)/
-        Number(s.session);
+        session>0
+          ? hours/session
+          : 0;
 
 
       let tr=
@@ -2141,24 +2248,20 @@ function renderSubjects(){
         `<td>
           <b>${esc(s.name)}</b>
           <div class="small muted">
-            ${esc(s.type)}
+            ${esc(s.type||"")}
           </div>
         </td>
 
         <td>
-          ${s.score}
+          ${Number(s.score||0)}
         </td>
 
         <td>
-          ${ratio.toFixed(1)}%
+          ${hours.toFixed(1)} h
         </td>
 
         <td>
-          ${s.hours} h
-        </td>
-
-        <td>
-          ${s.session} h
+          ${session.toFixed(1)} h
         </td>
 
         <td>
@@ -2166,13 +2269,14 @@ function renderSubjects(){
         </td>
 
         <td>
-          ${(Number(s.hours)*weeks).toFixed(1)} h
+          ${(hours*weeks).toFixed(1)} h
         </td>
 
         <td>
           <button
             class="delete"
-            data-i="${i}">
+            data-i="${i}"
+            title="刪除">
             ×
           </button>
         </td>`;
@@ -2222,17 +2326,36 @@ function update(){
 
 
   let need=
-    data.subjects.reduce(
-      (a,s)=>
-        a+Number(s.hours||0),
-      0
-    );
+    getSubjectNeed();
 
 
   document.getElementById(
     "weeklyStudy"
   ).textContent=
     c.toFixed(1);
+
+
+  let capacityHTML="";
+
+
+  if(need>c){
+
+    capacityHTML=
+      `<div class="notice danger">
+        ⚠ 科目需求超出每週可讀時間
+        ${(need-c).toFixed(1)} 小時。
+      </div>`;
+
+  }else{
+
+    capacityHTML=
+      `<div class="notice">
+        目前尚有
+        ${(c-need).toFixed(1)}
+        小時／週可安排。
+      </div>`;
+
+  }
 
 
   document.getElementById(
@@ -2253,20 +2376,14 @@ function update(){
       <b>${totalPlanHours().toFixed(1)} 小時</b>
     </p>
 
-    ${
-      need>c
-        ? '<div class="notice danger">'+
-          '科目需求超過每週可讀書時間。'+
-          '</div>'
-        : '<div class="notice">'+
-          '目前容量足以容納科目需求。'+
-          '</div>'
-    }`;
+    ${capacityHTML}`;
 
 
   countdown();
 
   renderWeights();
+
+  renderSubjectCapacity();
 
 }
 
@@ -2359,11 +2476,6 @@ document
           b.dataset.kind;
 
 
-        /*
-          有選取格子時，
-          立即套用。
-        */
-
         applyKindToSelection();
 
       };
@@ -2438,7 +2550,7 @@ function saveDates(){
 
 
 /*
-  日期一修改就自動保存。
+  日期修改就自動保存
 */
 
 document.getElementById(
@@ -2803,10 +2915,6 @@ document.getElementById(
       }
 
 
-      /*
-        基本資料檢查
-      */
-
       if(
         imported.routine &&
         !Array.isArray(
@@ -2876,10 +2984,6 @@ document.getElementById(
       };
 
 
-      /*
-        修正作息陣列
-      */
-
       data.routine=
         data.routine
           .slice(0,7)
@@ -2887,8 +2991,7 @@ document.getElementById(
 
             let arr=
               Array.isArray(dayArray)
-                ? dayArray
-                    .slice(0,40)
+                ? dayArray.slice(0,40)
                 : [];
 
 
@@ -2956,7 +3059,7 @@ document.getElementById(
 
       alert(
         "無法匯入這個備份檔案。\n\n"+
-        "請確認它是本工具匯出的 JSON 備份。"
+        "請確認它是本工具的 JSON 備份。"
       );
 
       console.error(err);
@@ -3040,7 +3143,108 @@ document.getElementById(
 
 /* =========================================================
    自動排程
+   最小單位：一週
 ========================================================= */
+
+function getMonday(date){
+
+  let d=new Date(date);
+
+  d.setHours(
+    0,0,0,0
+  );
+
+
+  let day=d.getDay();
+
+  let diff=
+    day===0
+      ? -6
+      : 1-day;
+
+
+  d.setDate(
+    d.getDate()+diff
+  );
+
+
+  return d;
+
+}
+
+
+/*
+  找出某一天所有連續的「讀書」時段
+*/
+
+function getStudyBlocks(dayIndex){
+
+  let blocks=[];
+
+  let start=null;
+
+
+  for(
+    let i=0;
+    i<40;
+    i++
+  ){
+
+    let isStudy=
+      data.routine[dayIndex][i]
+      ==="study";
+
+
+    if(isStudy){
+
+      if(start===null){
+        start=i;
+      }
+
+    }else{
+
+      if(start!==null){
+
+        blocks.push({
+          start,
+          end:i-1,
+          length:i-start
+        });
+
+        start=null;
+
+      }
+
+    }
+
+  }
+
+
+  if(start!==null){
+
+    blocks.push({
+      start,
+      end:39,
+      length:40-start
+    });
+
+  }
+
+
+  return blocks;
+
+}
+
+
+/*
+  一週排程。
+
+  以 30 分鐘為最小單位，
+  每個科目先計算：
+  ① 每週需要幾個 30 分鐘格
+  ② 每次需要幾個 30 分鐘格
+  ③ 理論上需要幾次
+*/
 
 function generate(){
 
@@ -3055,26 +3259,63 @@ function generate(){
   }
 
 
-  let months=
-    +document.getElementById(
-      "planRange"
-    ).value;
+  if(!data.subjects.length){
+
+    document.getElementById(
+      "capacityNotice"
+    ).innerHTML=
+      `<div class="notice">
+        請先到「科目配置」新增目前需要安排的科目。
+      </div>`;
+
+    document.getElementById(
+      "planOutput"
+    ).innerHTML=
+      '<div class="empty">'+
+      '尚未設定科目。'+
+      '</div>';
+
+    return;
+
+  }
 
 
-  let start=new Date();
-
-  start.setHours(
-    0,0,0,0
-  );
+  let start=
+    getMonday(new Date());
 
 
   let end=
-    addDays(
-      start,
-      months===1
-        ? 30
-        : 90
+    addDays(start,7);
+
+
+  /*
+    如果考試日期已經在本週以前，
+    不再生成本週排程。
+  */
+
+  let exam=
+    new Date(
+      data.examDate+"T00:00:00"
     );
+
+
+  if(exam<start){
+
+    document.getElementById(
+      "capacityNotice"
+    ).innerHTML=
+      `<div class="notice danger">
+        考試日期已經早於目前這一週，
+        因此無法生成本週讀書計畫。
+      </div>`;
+
+    document.getElementById(
+      "planOutput"
+    ).innerHTML="";
+
+    return;
+
+  }
 
 
   let c=
@@ -3082,11 +3323,7 @@ function generate(){
 
 
   let need=
-    data.subjects.reduce(
-      (a,s)=>
-        a+Number(s.hours),
-      0
-    );
+    getSubjectNeed();
 
 
   document.getElementById(
@@ -3095,204 +3332,406 @@ function generate(){
     need>c
       ? `<div class="notice danger">
           ⚠ 每週科目需求
-          ${need.toFixed(1)} 小時，
+          <b>${need.toFixed(1)} 小時</b>，
           可用
-          ${c.toFixed(1)} 小時，
+          <b>${c.toFixed(1)} 小時</b>，
           超出
-          ${(need-c).toFixed(1)} 小時。
+          <b>${(need-c).toFixed(1)} 小時</b>。
+          本週排程將盡可能安排，但不會超過你設定的讀書時段。
         </div>`
       : `<div class="notice">
-          ✓ 每週科目需求
-          ${need.toFixed(1)} 小時／
+          ✓ 本週科目需求
+          <b>${need.toFixed(1)} 小時</b>／
           可用
-          ${c.toFixed(1)} 小時。
+          <b>${c.toFixed(1)} 小時</b>。
+          剩餘
+          <b>${(c-need).toFixed(1)} 小時</b>。
         </div>`;
 
 
-  if(
-    !data.subjects.length||
-    !c
-  ){
+  if(!c){
 
     document.getElementById(
       "planOutput"
     ).innerHTML=
-      '<div class="empty">'+
-      '請先設定作息與科目。'+
-      '</div>';
+      `<div class="empty">
+        目前作息表沒有標記任何「讀書」時段。
+        <br>
+        請先到「每週作息」設定可讀書時間。
+      </div>`;
 
     return;
 
   }
 
 
+  /*
+    occupied[d]：
+    該天哪些 30 分鐘格已被排程占用。
+  */
+
+  let occupied=
+    Array.from(
+      {length:7},
+      ()=>new Set()
+    );
+
+
   let events={};
 
-  let lastDay={};
+  let scheduledHours=0;
+
+  let unscheduledHours=0;
 
 
-  for(
-    let d=new Date(start);
-    d<end;
-    d=addDays(d,1)
-  ){
+  /*
+    依序處理科目。
 
-    let dow=
-      (d.getDay()+6)%7;
+    為避免全部科目集中在同一天，
+    每個科目會從不同的星期開始尋找。
+  */
 
+  data.subjects.forEach(
+    (s,si)=>{
 
-    let week=
-      Math.floor(
-        (d-start)/6048e5
-      );
+      let weeklyHours=
+        Number(s.hours||0);
 
 
-    for(
-      let si=0;
-      si<data.subjects.length;
-      si++
-    ){
-
-      let s=
-        data.subjects[si];
+      let sessionHours=
+        Number(s.session||0);
 
 
-      let sessions=
+      if(
+        weeklyHours<=0||
+        sessionHours<=0
+      ){
+
+        return;
+
+      }
+
+
+      /*
+        轉成 30 分鐘格。
+      */
+
+      let targetSlots=
+        Math.round(
+          weeklyHours*2
+        );
+
+
+      let fullSessionSlots=
         Math.max(
           1,
           Math.round(
-            Number(s.hours)/
-            Number(s.session)
+            sessionHours*2
           )
         );
 
 
-      if(
-        (week+si)%7!==0||
-        lastDay[si]===fmt(d)
-      ){
+      /*
+        完整場次
+      */
 
-        continue;
-
-      }
-
-
-      let needSlots=
-        Math.round(
-          Number(s.session)*2
+      let fullSessions=
+        Math.floor(
+          targetSlots/
+          fullSessionSlots
         );
 
 
-      let free=[];
+      let remainderSlots=
+        targetSlots-
+        fullSessions*
+        fullSessionSlots;
 
 
-      for(
-        let i=0;
-        i<40;
-        i++
+      /*
+        如果每週時數小於每次時數，
+        至少嘗試排一次較短的課。
+      */
+
+      if(
+        fullSessions===0 &&
+        targetSlots>0
       ){
 
-        if(
-          data.routine[dow][i]
-          ==="study"
-        ){
+        fullSessions=1;
 
-          free.push(i);
+        remainderSlots=0;
 
-        }
+        fullSessionSlots=
+          targetSlots;
 
       }
 
 
+      let sessions=[];
+
+
       for(
-        let st=0;
-        st<=40-needSlots;
-        st++
+        let n=0;
+        n<fullSessions;
+        n++
       ){
 
-        let ok=true;
+        sessions.push(
+          fullSessionSlots
+        );
+
+      }
 
 
-        for(
-          let j=0;
-          j<needSlots;
-          j++
-        ){
+      if(remainderSlots>0){
 
-          if(
-            !free.includes(
-              st+j
-            )
+        sessions.push(
+          remainderSlots
+        );
+
+      }
+
+
+      /*
+        從不同的星期開始，
+        讓不同科目不要永遠從星期一開始排。
+      */
+
+      let dayOrder=[];
+
+
+      for(
+        let offset=0;
+        offset<7;
+        offset++
+      ){
+
+        dayOrder.push(
+          (si+offset)%7
+        );
+
+      }
+
+
+      sessions.forEach(
+        (slotCount,sessionIndex)=>{
+
+          let placed=false;
+
+
+          /*
+            優先選擇目前已排時數較少的日子。
+          */
+
+          let candidates=
+            dayOrder
+              .map(d=>{
+
+                let used=
+                  occupied[d].size;
+
+
+                return {
+                  d,
+                  used
+                };
+
+              })
+              .sort(
+                (a,b)=>
+                  a.used-b.used
+              );
+
+
+          for(
+            let ci=0;
+            ci<candidates.length;
+            ci++
           ){
 
-            ok=false;
+            let d=
+              candidates[ci].d;
 
-            break;
+
+            let blocks=
+              getStudyBlocks(d);
+
+
+            for(
+              let bi=0;
+              bi<blocks.length;
+              bi++
+            ){
+
+              let block=
+                blocks[bi];
+
+
+              /*
+                在同一個 study block 中找
+                足夠長、尚未被占用的位置。
+              */
+
+              for(
+                let st=block.start;
+                st<=block.end-slotCount+1;
+                st++
+              ){
+
+                let ok=true;
+
+
+                for(
+                  let j=0;
+                  j<slotCount;
+                  j++
+                ){
+
+                  if(
+                    occupied[d].has(
+                      st+j
+                    )
+                  ){
+
+                    ok=false;
+
+                    break;
+
+                  }
+
+                }
+
+
+                if(!ok)continue;
+
+
+                /*
+                  找到了。
+                */
+
+                for(
+                  let j=0;
+                  j<slotCount;
+                  j++
+                ){
+
+                  occupied[d].add(
+                    st+j
+                  );
+
+                }
+
+
+                let date=
+                  addDays(
+                    start,
+                    d
+                  );
+
+
+                let mins=
+                  360+st*30;
+
+
+                let hours=
+                  slotCount*.5;
+
+
+                let key=
+                  fmt(date);
+
+
+                events[key]=
+                  events[key]||[];
+
+
+                events[key].push({
+
+                  time:
+                    String(
+                      Math.floor(
+                        mins/60
+                      )%24
+                    ).padStart(2,"0")
+                    +":"
+                    +
+                    String(
+                      mins%60
+                    ).padStart(2,"0"),
+
+                  name:
+                    s.name,
+
+                  type:
+                    s.type,
+
+                  hours
+
+                });
+
+
+                scheduledHours+=
+                  hours;
+
+
+                placed=true;
+
+                break;
+
+              }
+
+
+              if(placed)break;
+
+            }
+
+
+            if(placed)break;
+
+          }
+
+
+          if(!placed){
+
+            unscheduledHours+=
+              slotCount*.5;
 
           }
 
         }
-
-
-        if(ok){
-
-          let key=
-            fmt(d);
-
-
-          events[key]=
-            events[key]||[];
-
-
-          let mins=
-            360+st*30;
-
-
-          events[key].push({
-
-            time:
-              String(
-                Math.floor(
-                  mins/60
-                )%24
-              ).padStart(2,"0")
-              +":"
-              +
-              String(
-                mins%60
-              ).padStart(2,"0"),
-
-            name:
-              s.name,
-
-            type:
-              s.type,
-
-            hours:
-              s.session
-
-          });
-
-
-          lastDay[si]=
-            key;
-
-
-          break;
-
-        }
-
-      }
+      );
 
     }
+  );
 
-  }
+
+  /*
+    依時間排序每天的事件
+  */
+
+  Object.keys(events).forEach(
+    key=>{
+
+      events[key].sort(
+        (a,b)=>
+          a.time.localeCompare(
+            b.time
+          )
+      );
+
+    }
+  );
 
 
   renderPlan(
     events,
     start,
-    end
+    end,
+    scheduledHours,
+    unscheduledHours,
+    need,
+    c
   );
 
 }
@@ -3305,11 +3744,40 @@ function generate(){
 function renderPlan(
   events,
   start,
-  end
+  end,
+  scheduledHours,
+  unscheduledHours,
+  need,
+  capacity
 ){
 
   let html=
-    '<div class="plan-grid">';
+    `<div class="plan-summary">
+
+      <b>本週排程摘要</b>
+      <br><br>
+
+      需要安排：
+      <b>${need.toFixed(1)} 小時</b>
+      ／
+      已安排：
+      <b>${scheduledHours.toFixed(1)} 小時</b>
+
+      ${
+        unscheduledHours>0
+          ? `<br>
+             ⚠ 尚有
+             <b>${unscheduledHours.toFixed(1)} 小時</b>
+             無法放入目前的讀書時段。
+             `
+          : `<br>
+             ✓ 本週科目需求已全部放入目前的讀書時段。
+             `
+      }
+
+    </div>
+
+    <div class="plan-grid" style="margin-top:12px">`;
 
 
   for(
@@ -3336,7 +3804,7 @@ function renderPlan(
       `<div class="day">
 
         <h3>
-          ${key}　${label}
+          ${key}　週${label}
         </h3>`;
 
 
@@ -3353,9 +3821,9 @@ function renderPlan(
             ${esc(e.name)}
 
             <div class="type">
-              ${esc(e.type)}
+              ${esc(e.type||"")}
               ·
-              ${e.hours}h
+              ${e.hours.toFixed(1)}h
             </div>
 
           </div>`;
@@ -3368,7 +3836,7 @@ function renderPlan(
 
       html+=
         '<span class="small muted">'+
-        '—'+
+        '本日沒有自動安排'+
         '</span>';
 
     }
