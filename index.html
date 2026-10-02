@@ -16,14 +16,27 @@
   --line:#c9c4b4;
   --white:#faf8f1;
   --muted:#77786d;
+
   --study:#dfe5ca;
   --flex:#e8e0cc;
   --rest:#e4e2dc;
   --exercise:#d5dfd0;
-  --other:#ddd8cc
+  --other:#ddd8cc;
+
+  /* 配分總表專用色 */
+  --weight-bg:#e9e1cf;
+  --weight-line:#b9ad92;
+  --weight-accent:#817354;
+
+  /* 現階段科目表專用色 */
+  --subject-bg:#e1e6d4;
+  --subject-line:#b5bea0;
+  --subject-accent:#69704d;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box
+}
 
 body{
   margin:0;
@@ -197,7 +210,19 @@ input,select{
   display:flex;
   gap:8px;
   justify-content:flex-end;
-  margin-top:13px
+  margin-top:13px;
+  flex-wrap:wrap
+}
+
+.status{
+  font-size:11px;
+  color:var(--muted);
+  text-align:right;
+  margin-top:8px
+}
+
+.status.saved{
+  color:var(--olive)
 }
 
 table{
@@ -219,7 +244,9 @@ th{
 }
 
 .schedule{
-  overflow:auto
+  overflow:auto;
+  user-select:none;
+  -webkit-user-select:none
 }
 
 .schedule table{
@@ -247,7 +274,9 @@ th{
   border-radius:3px;
   background:transparent;
   font-size:10px;
-  color:var(--ink)
+  color:var(--ink);
+  touch-action:none;
+  transition:.08s
 }
 
 .slot.study{
@@ -270,11 +299,17 @@ th{
   background:var(--other)
 }
 
+.slot.selected{
+  outline:2px solid var(--olive);
+  outline-offset:-2px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.65)
+}
+
 .palette{
   display:flex;
   gap:6px;
   flex-wrap:wrap;
-  margin-bottom:12px
+  margin-bottom:8px
 }
 
 .palette button{
@@ -288,6 +323,12 @@ th{
 .palette button.selected{
   outline:2px solid var(--olive);
   outline-offset:1px
+}
+
+.selection-info{
+  font-size:11px;
+  color:var(--muted);
+  margin-bottom:12px
 }
 
 .subject-form{
@@ -317,6 +358,40 @@ th{
   color:var(--muted)
 }
 
+/* =========================
+   配分總表：獨立視覺
+========================= */
+
+.weight-section{
+  background:var(--weight-bg);
+  border:1px solid var(--weight-line);
+  border-radius:6px;
+  padding:17px;
+  margin-bottom:24px
+}
+
+.weight-section h3{
+  color:var(--weight-accent)!important
+}
+
+.weight-section .notice{
+  background:rgba(250,248,241,.48);
+  border-left-color:var(--weight-accent)
+}
+
+.weight-section input{
+  background:#f8f4e9
+}
+
+.weight-section .total-table{
+  background:rgba(250,248,241,.38);
+  border:1px solid rgba(129,115,84,.25)
+}
+
+.weight-section .total-table th{
+  background:rgba(129,115,84,.10)
+}
+
 .total-table th,
 .total-table td{
   text-align:center
@@ -329,7 +404,7 @@ th{
 
 .total-table .ratio{
   font-family:Georgia,serif;
-  color:var(--olive)
+  color:var(--weight-accent)
 }
 
 .total-table .hours{
@@ -340,8 +415,46 @@ th{
 
 .sum-row td{
   font-weight:600;
-  background:rgba(235,229,213,.45)
+  background:rgba(129,115,84,.10)
 }
+
+.week-hours{
+  font-family:Georgia,serif;
+  color:var(--weight-accent);
+  font-weight:600
+}
+
+/* =========================
+   現階段科目表：另一套視覺
+========================= */
+
+.subject-section{
+  background:rgba(225,230,212,.40);
+  border:1px solid var(--subject-line);
+  border-radius:6px;
+  padding:17px
+}
+
+.subject-section h3{
+  color:var(--subject-accent)!important
+}
+
+.subject-section .notice{
+  background:rgba(250,248,241,.58);
+  border-left-color:var(--subject-accent)
+}
+
+.subject-section table{
+  background:rgba(250,248,241,.35)
+}
+
+.subject-section thead th{
+  background:rgba(105,112,77,.09)
+}
+
+/* =========================
+   自動排程
+========================= */
 
 .plan-grid{
   display:grid;
@@ -375,7 +488,28 @@ th{
   color:var(--muted)
 }
 
+/* =========================
+   備份區
+========================= */
+
+.backup-box{
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid var(--line)
+}
+
+.backup-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap
+}
+
+.file-input{
+  display:none
+}
+
 @media(max-width:850px){
+
   header{
     align-items:flex-start;
     flex-direction:column
@@ -397,27 +531,70 @@ th{
     grid-template-columns:1fr 1fr
   }
 }
+
+@media(max-width:520px){
+
+  main{
+    padding:20px 4vw 50px
+  }
+
+  .subject-form,
+  .score-form{
+    grid-template-columns:1fr
+  }
+
+  .plan-grid{
+    grid-template-columns:1fr
+  }
+
+  nav{
+    width:100%
+  }
+
+  nav button{
+    flex:1
+  }
+}
 </style>
 </head>
 
 <body>
 
 <header>
+
   <div class="brand">
+
     <div class="logo">🕯️</div>
+
     <div>
       <h1>讀書進度工具</h1>
       <div class="sub">Study Planning Archive</div>
     </div>
+
   </div>
 
   <nav>
-    <button class="active" data-page="home">總覽</button>
-    <button data-page="routine">每週作息</button>
-    <button data-page="subjects">科目配置</button>
-    <button data-page="planner">自動排程</button>
+
+    <button class="active" data-page="home">
+      總覽
+    </button>
+
+    <button data-page="routine">
+      每週作息
+    </button>
+
+    <button data-page="subjects">
+      科目配置
+    </button>
+
+    <button data-page="planner">
+      自動排程
+    </button>
+
   </nav>
+
 </header>
+
 
 <main>
 
@@ -428,24 +605,39 @@ th{
   <div class="grid three">
 
     <div class="card metric">
+
       <small>距離考試</small>
+
       <div class="big" id="daysLeft">—</div>
+
       <div class="muted">天</div>
+
     </div>
 
+
     <div class="card metric">
+
       <small>剩餘週數</small>
+
       <div class="big" id="weeksLeft">—</div>
+
       <div class="muted">週</div>
+
     </div>
 
+
     <div class="card metric">
+
       <small>每週可讀書</small>
+
       <div class="big" id="weeklyStudy">0</div>
+
       <div class="muted">小時</div>
+
     </div>
 
   </div>
+
 
   <div class="grid two" style="margin-top:16px">
 
@@ -456,20 +648,32 @@ th{
       <div class="row">
 
         <div>
+
           <label>起始日期</label>
+
           <input id="startDate" type="date">
+
         </div>
 
         <div>
+
           <label>考試日期</label>
+
           <input id="examDate" type="date">
+
         </div>
 
       </div>
 
+
       <div class="actions">
-        <button class="btn primary" id="saveDates">儲存設定</button>
+
+        <button class="btn primary" id="saveDates">
+          儲存設定
+        </button>
+
       </div>
+
 
       <div id="dateInfo"
            class="small muted"
@@ -478,12 +682,58 @@ th{
 
     </div>
 
+
     <div class="card">
 
       <h2>目前計畫摘要</h2>
 
       <div id="summary"></div>
 
+    </div>
+
+  </div>
+
+
+  <!-- ==================== 備份 ==================== -->
+
+  <div class="card" style="margin-top:16px">
+
+    <h2>資料保存與備份</h2>
+
+    <div class="notice">
+
+      本工具會將資料<strong>自動保存於目前瀏覽器</strong>。
+      如果需要換裝置、重新安裝瀏覽器或保留額外備份，
+      可以使用下方的匯出／匯入功能。
+
+    </div>
+
+
+    <div class="backup-actions">
+
+      <button class="btn primary" id="exportData">
+        ↓ 匯出進度備份
+      </button>
+
+      <button class="btn" id="importData">
+        ↑ 匯入進度備份
+      </button>
+
+      <button class="btn" id="clearData">
+        清除全部資料
+      </button>
+
+      <input
+        id="backupFile"
+        class="file-input"
+        type="file"
+        accept=".json,application/json">
+
+    </div>
+
+
+    <div id="saveStatus" class="status saved">
+      ✓ 資料已自動保存
     </div>
 
   </div>
@@ -499,15 +749,32 @@ th{
 
     <h2>每週作息表</h2>
 
+
     <div class="notice">
+
       一天定義為 <b>06:00～隔日 02:00</b>，
       每格 30 分鐘。跨午夜時段仍歸在原本的讀書日。
+      <br><br>
+      <b>操作方式：</b>
+      點一下選取單格，也可以直接拖曳連續選取多個格子。
+      選好後，點上方「讀書／吃飯／運動」等類型，
+      即可一次套用。
+
     </div>
+
 
     <div class="palette" id="palette">
 
       <button class="selected" data-kind="study">
         讀書
+      </button>
+
+      <button data-kind="meal">
+        吃飯
+      </button>
+
+      <button data-kind="exercise">
+        運動
       </button>
 
       <button data-kind="flex">
@@ -518,21 +785,26 @@ th{
         休息
       </button>
 
-      <button data-kind="exercise">
-        運動
-      </button>
-
       <button data-kind="other">
         其他
       </button>
 
     </div>
 
+
+    <div class="selection-info">
+      已選取：
+      <b id="selectedCount">0</b>
+      格
+    </div>
+
+
     <div class="schedule">
 
       <table>
 
         <thead>
+
           <tr>
             <th>時間</th>
             <th>一</th>
@@ -543,6 +815,7 @@ th{
             <th>六</th>
             <th>日</th>
           </tr>
+
         </thead>
 
         <tbody id="routineBody"></tbody>
@@ -551,7 +824,12 @@ th{
 
     </div>
 
+
     <div class="actions">
+
+      <button class="btn" id="clearSelection">
+        清除選取
+      </button>
 
       <button class="btn" id="clearRoutine">
         清除全部
@@ -562,6 +840,12 @@ th{
       </button>
 
     </div>
+
+
+    <div class="status saved">
+      ✓ 作息修改會自動保存
+    </div>
+
 
     <div class="notice" style="margin-top:14px">
 
@@ -583,31 +867,28 @@ th{
 
     <h2>科目配置</h2>
 
-    <div class="notice">
-      上方是「考試配分總表」：
-      你可以自由增減科目，配分比例與依比例換算的總時數會自動計算。
-      下方則維持目前的手動科目配置，兩者彼此獨立。
-    </div>
 
+    <!-- =========================
+         ① 考試配分總表
+    ========================= -->
 
-    <!-- ===== ① 考試科目配分總表 ===== -->
-
-    <div style="margin-bottom:22px">
+    <div class="weight-section">
 
       <h3 style="
         font-size:13px;
-        color:var(--dark);
         margin:0 0 10px
       ">
         ① 考試科目配分總表
       </h3>
 
+
       <div class="notice small">
 
-        理論總時數＝準備期間內
-        「每週可讀書時間 × 準備週數」；
-        各科再依配分比例自動分配。
-        這裡只作為參考，不會改動下方的實際配置。
+        依照考試配分比例，
+        將整個準備期間的可讀書時間分配到各科。
+        同時顯示「準備期間總時數」與「每週應投入時數」。
+        <br>
+        這裡屬於<strong>理論配置</strong>，不會直接改動下方的實際科目配置。
 
       </div>
 
@@ -615,26 +896,36 @@ th{
       <div class="score-form">
 
         <div>
+
           <label>科目</label>
+
           <input
             id="wName"
             placeholder="例如：民法">
+
         </div>
 
+
         <div>
+
           <label>配分</label>
+
           <input
             id="wScore"
             type="number"
             min="0"
             step="1"
             placeholder="100">
+
         </div>
+
 
         <button
           class="btn primary"
           id="addWeight">
+
           新增科目
+
         </button>
 
       </div>
@@ -647,14 +938,23 @@ th{
           <thead>
 
             <tr>
+
               <th>科目</th>
+
               <th>配分</th>
+
               <th>配分比例</th>
-              <th>依比例換算時數</th>
+
+              <th>準備期間總時數</th>
+
+              <th>每週時數</th>
+
               <th></th>
+
             </tr>
 
           </thead>
+
 
           <tbody id="weightBody"></tbody>
 
@@ -672,27 +972,25 @@ th{
     </div>
 
 
-    <!-- ===== ② 現階段科目配置 ===== -->
+    <!-- =========================
+         ② 現階段科目配置
+    ========================= -->
 
-    <div
-      style="
-        border-top:1px solid var(--line);
-        padding-top:20px
-      ">
+    <div class="subject-section">
 
       <h3 style="
         font-size:13px;
-        color:var(--dark);
         margin:0 0 10px
       ">
         ② 現階段科目配置
       </h3>
 
+
       <div class="notice small">
 
-        這裡照你目前的方式手動安排
-        每週時數、每次時數與讀書類型；
-        可以和上方的理論配分時數不同。
+        這裡是目前真正執行中的讀書配置。
+        可以手動安排每週時數、每次時數與讀書類型，
+        和上方的理論配分配置彼此獨立。
 
       </div>
 
@@ -700,58 +998,80 @@ th{
       <div class="subject-form">
 
         <div>
+
           <label>科目</label>
+
           <input
             id="sName"
             placeholder="例如：民法">
+
         </div>
 
+
         <div>
+
           <label>配分</label>
+
           <input
             id="sScore"
             type="number"
             min="0"
             placeholder="200">
+
         </div>
 
+
         <div>
+
           <label>每週時數</label>
+
           <input
             id="sHours"
             type="number"
             min=".5"
             step=".5"
             placeholder="6">
+
         </div>
 
+
         <div>
+
           <label>每次時數</label>
+
           <input
             id="sSession"
             type="number"
             min=".5"
             step=".5"
             placeholder="3">
+
         </div>
 
+
         <div>
+
           <label>類型</label>
 
           <select id="sType">
+
             <option>複習</option>
             <option>上課</option>
             <option>寫題目</option>
             <option>背誦</option>
             <option>其他</option>
+
           </select>
 
         </div>
 
+
         <button
           class="btn primary"
           id="addSubject">
+
           新增
+
         </button>
 
       </div>
@@ -764,6 +1084,7 @@ th{
           <thead>
 
             <tr>
+
               <th>科目</th>
               <th>配分</th>
               <th>比例</th>
@@ -772,9 +1093,11 @@ th{
               <th>每週次數</th>
               <th>考前預估</th>
               <th></th>
+
             </tr>
 
           </thead>
+
 
           <tbody id="subjectBody"></tbody>
 
@@ -784,8 +1107,10 @@ th{
 
 
       <p class="small muted">
+
         考前預估＝每週時數 × 剩餘週數；
         第一版尚未扣除最後衝刺或其他階段。
+
       </p>
 
     </div>
@@ -802,6 +1127,7 @@ th{
   <div class="card">
 
     <h2>自動排程</h2>
+
 
     <div class="notice">
 
@@ -842,7 +1168,9 @@ th{
         <button
           class="btn primary"
           id="generate">
+
           生成讀書計畫
+
         </button>
 
       </div>
@@ -870,54 +1198,120 @@ th{
 
 <script>
 
-const KEY="yuchuan-study-v01";
+/* =========================================================
+   資料核心
+========================================================= */
+
+const KEY="study-planner-v02";
+
+const BACKUP_VERSION=2;
 
 const days=[
   "一","二","三","四","五","六","日"
 ];
 
+
 const kinds={
+
   study:"讀書",
-  flex:"彈性",
-  rest:"休息",
+
+  meal:"吃飯",
+
   exercise:"運動",
+
+  flex:"彈性",
+
+  rest:"休息",
+
   other:"其他"
+
 };
 
 
-let data=JSON.parse(
-  localStorage.getItem(KEY)||"{}"
-);
+const kindClass={
+  study:"study",
+  meal:"meal",
+  exercise:"exercise",
+  flex:"flex",
+  rest:"rest",
+  other:"other"
+};
 
 
-data.routine=
-  data.routine||
-  Array.from(
-    {length:7},
-    ()=>Array(40).fill("rest")
+let data={};
+
+try{
+
+  data=JSON.parse(
+    localStorage.getItem(KEY)||"{}"
   );
 
+}catch(e){
 
-data.subjects=
-  data.subjects||[];
+  data={};
+
+}
+
+
+/* 舊版本資料相容 */
+
+if(!data.routine){
+
+  data.routine=
+    Array.from(
+      {length:7},
+      ()=>Array(40).fill("rest")
+    );
+
+}
 
 
 /*
-  上方的「考試配分總表」與下方
-  「現階段科目配置」分開儲存。
+  如果舊版本沒有 meal，
+  原本的資料仍可正常使用。
 */
+
+data.routine=
+  data.routine.map(dayArray=>{
+
+    let arr=
+      Array.isArray(dayArray)
+        ? dayArray.slice(0,40)
+        : [];
+
+    while(arr.length<40){
+      arr.push("rest");
+    }
+
+    return arr.map(k=>
+      kinds[k]
+        ? k
+        : "rest"
+    );
+
+  });
+
+
+data.subjects=
+  Array.isArray(data.subjects)
+    ? data.subjects
+    : [];
+
+
 data.subjectWeights=
-  data.subjectWeights||
-  data.subjects.map(
-    s=>({
-      name:s.name,
-      score:Number(s.score||0)
-    })
-  );
+  Array.isArray(data.subjectWeights)
+    ? data.subjectWeights
+    : data.subjects.map(
+        s=>({
+          name:s.name,
+          score:Number(s.score||0)
+        })
+      );
 
 
 data.startDate=
   data.startDate||"";
+
 
 data.examDate=
   data.examDate||"";
@@ -926,17 +1320,82 @@ data.examDate=
 let selectedKind="study";
 
 
-const save=()=>
-  localStorage.setItem(
-    KEY,
-    JSON.stringify(data)
-  );
+/* 多格選取 */
+let selectedCells=new Set();
 
+
+let isDragging=false;
+
+let dragMode="add";
+
+
+/* =========================================================
+   儲存
+========================================================= */
+
+function save(){
+
+  try{
+
+    localStorage.setItem(
+      KEY,
+      JSON.stringify(data)
+    );
+
+    showSaveStatus();
+
+  }catch(e){
+
+    console.error(e);
+
+    document.getElementById(
+      "saveStatus"
+    ).textContent=
+      "⚠ 無法保存資料";
+
+  }
+
+}
+
+
+function showSaveStatus(){
+
+  const el=
+    document.getElementById(
+      "saveStatus"
+    );
+
+  if(!el)return;
+
+  el.textContent=
+    "✓ 已自動保存 · "+
+    new Date().toLocaleTimeString(
+      "zh-TW",
+      {
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    );
+
+  el.classList.add("saved");
+
+}
+
+
+/* =========================================================
+   日期工具
+========================================================= */
 
 const addDays=(d,n)=>{
+
   let x=new Date(d);
-  x.setDate(x.getDate()+n);
+
+  x.setDate(
+    x.getDate()+n
+  );
+
   return x;
+
 };
 
 
@@ -957,15 +1416,21 @@ const esc=s=>
   );
 
 
-/* 準備期間，以「起始日 → 考試日」計算 */
+/* =========================================================
+   準備期間
+========================================================= */
+
 function dateDiffWeeks(){
 
   if(
     !data.startDate||
     !data.examDate
   ){
+
     return 0;
+
   }
+
 
   let s=new Date(
     data.startDate+"T00:00:00"
@@ -975,19 +1440,27 @@ function dateDiffWeeks(){
     data.examDate+"T00:00:00"
   );
 
+
   return Math.max(
     0,
     (e-s)/6048e5
   );
+
 }
 
 
-/* 距離考試的剩餘週數 */
+/* =========================================================
+   剩餘週數
+========================================================= */
+
 function remainingWeeks(){
 
   if(!data.examDate){
+
     return 0;
+
   }
+
 
   let now=new Date();
 
@@ -995,21 +1468,24 @@ function remainingWeeks(){
     0,0,0,0
   );
 
+
   let ex=new Date(
     data.examDate+"T00:00:00"
   );
+
 
   return Math.max(
     0,
     (ex-now)/6048e5
   );
+
 }
 
 
-/*
-  每週可讀書時間
-  每一格 30 分鐘
-*/
+/* =========================================================
+   每週可讀書時間
+========================================================= */
+
 function cap(){
 
   return data.routine
@@ -1022,9 +1498,10 @@ function cap(){
 }
 
 
-/*
-  準備期間內的理論總可配置時數
-*/
+/* =========================================================
+   準備期間理論總時數
+========================================================= */
+
 function totalPlanHours(){
 
   return cap()*
@@ -1033,9 +1510,9 @@ function totalPlanHours(){
 }
 
 
-/* =========================
+/* =========================================================
    倒數
-========================= */
+========================================================= */
 
 function countdown(){
 
@@ -1053,6 +1530,7 @@ function countdown(){
   if(!data.examDate){
 
     a.textContent="—";
+
     b.textContent="—";
 
     document.getElementById(
@@ -1087,6 +1565,7 @@ function countdown(){
 
   a.textContent=d;
 
+
   b.textContent=
     (d/7).toFixed(1);
 
@@ -1101,9 +1580,148 @@ function countdown(){
 }
 
 
-/* =========================
+/* =========================================================
    每週作息
-========================= */
+========================================================= */
+
+function cellKey(day,index){
+
+  return day+"-"+index;
+
+}
+
+
+function updateSelectionVisual(){
+
+  document
+    .querySelectorAll(".slot")
+    .forEach(
+      b=>{
+
+        if(
+          selectedCells.has(
+            b.dataset.key
+          )
+        ){
+
+          b.classList.add(
+            "selected"
+          );
+
+        }else{
+
+          b.classList.remove(
+            "selected"
+          );
+
+        }
+
+      }
+    );
+
+
+  document.getElementById(
+    "selectedCount"
+  ).textContent=
+    selectedCells.size;
+
+}
+
+
+/* 選取單格 */
+function toggleCell(key){
+
+  if(
+    selectedCells.has(key)
+  ){
+
+    selectedCells.delete(key);
+
+  }else{
+
+    selectedCells.add(key);
+
+  }
+
+}
+
+
+/* 拖曳進入格子 */
+function dragSelect(key){
+
+  if(dragMode==="add"){
+
+    selectedCells.add(key);
+
+  }else{
+
+    selectedCells.delete(key);
+
+  }
+
+  updateSelectionVisual();
+
+}
+
+
+/* 套用作息 */
+
+function applyKindToSelection(){
+
+  if(!selectedCells.size){
+
+    /*
+      如果沒有選取任何格子，
+      點選類型只改變「目前工具」，
+      讓使用者之後單格點選時可以直接使用。
+    */
+
+    return;
+
+  }
+
+
+  selectedCells.forEach(
+    key=>{
+
+      let parts=
+        key.split("-");
+
+      let d=
+        Number(parts[0]);
+
+      let i=
+        Number(parts[1]);
+
+
+      if(
+        data.routine[d] &&
+        typeof data.routine[d][i]!=="undefined"
+      ){
+
+        data.routine[d][i]=
+          selectedKind;
+
+      }
+
+    }
+  );
+
+
+  save();
+
+  selectedCells.clear();
+
+  renderRoutine();
+
+  update();
+
+}
+
+
+/* =========================================================
+   Render 作息
+========================================================= */
 
 function renderRoutine(){
 
@@ -1111,6 +1729,7 @@ function renderRoutine(){
     document.getElementById(
       "routineBody"
     );
+
 
   body.innerHTML="";
 
@@ -1124,16 +1743,20 @@ function renderRoutine(){
     let mins=
       360+i*30;
 
+
     let h=
       Math.floor(mins/60)%24;
+
 
     let m=
       mins%60;
 
+
     let label=
       String(h).padStart(2,"0")
       +":"
-      +String(m).padStart(2,"0");
+      +
+      String(m).padStart(2,"0");
 
 
     let tr=
@@ -1153,6 +1776,7 @@ function renderRoutine(){
       let td=
         document.createElement("td");
 
+
       let b=
         document.createElement(
           "button"
@@ -1164,24 +1788,92 @@ function renderRoutine(){
 
 
       b.className=
-        "slot "+k;
+        "slot "+(
+          kindClass[k]||"rest"
+        );
+
 
       b.textContent=
-        kinds[k];
+        kinds[k]||"休息";
 
 
-      b.onclick=()=>{
+      b.dataset.key=
+        cellKey(d,i);
 
-        data.routine[d][i]=
-          selectedKind;
 
-        save();
+      /*
+        pointerdown：
+        開始選取或取消選取。
+      */
 
-        renderRoutine();
+      b.addEventListener(
+        "pointerdown",
+        e=>{
 
-        update();
+          e.preventDefault();
 
-      };
+          isDragging=true;
+
+          const key=
+            b.dataset.key;
+
+
+          if(
+            selectedCells.has(key)
+          ){
+
+            dragMode="remove";
+
+            selectedCells.delete(key);
+
+          }else{
+
+            dragMode="add";
+
+            selectedCells.add(key);
+
+          }
+
+
+          updateSelectionVisual();
+
+        }
+      );
+
+
+      /*
+        pointerenter：
+        拖曳時連續選取。
+      */
+
+      b.addEventListener(
+        "pointerenter",
+        e=>{
+
+          if(!isDragging)return;
+
+          dragSelect(
+            b.dataset.key
+          );
+
+        }
+      );
+
+
+      /*
+        click：
+        手機單點與一般滑鼠點擊。
+        如果剛才是拖曳，則不額外處理。
+      */
+
+      b.addEventListener(
+        "click",
+        e=>{
+
+          e.preventDefault();
+
+        }
+      );
 
 
       td.appendChild(b);
@@ -1202,12 +1894,27 @@ function renderRoutine(){
     cap().toFixed(1)
     +" 小時";
 
+
+  updateSelectionVisual();
+
 }
 
 
-/* =========================
-   上方：考試科目配分總表
-========================= */
+/*
+  在文件層級結束拖曳。
+*/
+
+document.addEventListener(
+  "pointerup",
+  ()=>{
+    isDragging=false;
+  }
+);
+
+
+/* =========================================================
+   配分總表
+========================================================= */
 
 function renderWeights(){
 
@@ -1225,8 +1932,12 @@ function renderWeights(){
     );
 
 
-  let hours=
+  let totalHours=
     totalPlanHours();
+
+
+  let weeklyCapacity=
+    cap();
 
 
   body.innerHTML="";
@@ -1238,7 +1949,7 @@ function renderWeights(){
 
     body.innerHTML=
       '<tr>'+
-      '<td colspan="5" class="empty">'+
+      '<td colspan="6" class="empty">'+
       '尚未加入科目'+
       '</td>'+
       '</tr>';
@@ -1247,7 +1958,7 @@ function renderWeights(){
     document.getElementById(
       "weightSummary"
     ).textContent=
-      `目前準備期間可配置約 ${hours.toFixed(1)} 小時。`;
+      `目前準備期間可配置約 ${totalHours.toFixed(1)} 小時；每週可讀書 ${weeklyCapacity.toFixed(1)} 小時。`;
 
     return;
 
@@ -1264,8 +1975,12 @@ function renderWeights(){
           : 0;
 
 
-      let h=
-        hours*ratio;
+      let totalSubjectHours=
+        totalHours*ratio;
+
+
+      let weeklyHours=
+        weeklyCapacity*ratio;
 
 
       let tr=
@@ -1276,15 +1991,23 @@ function renderWeights(){
         `<td>
           <b>${esc(s.name)}</b>
         </td>
+
         <td>
           ${Number(s.score||0)}
         </td>
+
         <td class="ratio">
           ${(ratio*100).toFixed(1)}%
         </td>
+
         <td class="hours">
-          ${h.toFixed(1)} h
+          ${totalSubjectHours.toFixed(1)} h
         </td>
+
+        <td class="week-hours">
+          ${weeklyHours.toFixed(1)} h
+        </td>
+
         <td>
           <button
             class="delete"
@@ -1313,7 +2036,8 @@ function renderWeights(){
     `<td>合計</td>
      <td>${totalScore}</td>
      <td>100%</td>
-     <td>${hours.toFixed(1)} h</td>
+     <td>${totalHours.toFixed(1)} h</td>
+     <td>${weeklyCapacity.toFixed(1)} h</td>
      <td></td>`;
 
 
@@ -1332,6 +2056,7 @@ function renderWeights(){
             1
           );
 
+
           save();
 
           renderWeights();
@@ -1347,14 +2072,14 @@ function renderWeights(){
   document.getElementById(
     "weightSummary"
   ).textContent=
-    `準備期間約 ${dateDiffWeeks().toFixed(1)} 週 × 每週 ${cap().toFixed(1)} 小時 ＝ ${hours.toFixed(1)} 小時可配置；上表僅作為配分參考。`;
+    `準備期間約 ${dateDiffWeeks().toFixed(1)} 週 × 每週 ${cap().toFixed(1)} 小時 ＝ ${totalHours.toFixed(1)} 小時；上表依考試配分比例換算。`;
 
 }
 
 
-/* =========================
-   下方：現階段科目配置
-========================= */
+/* =========================================================
+   現階段科目配置
+========================================================= */
 
 function renderSubjects(){
 
@@ -1471,6 +2196,7 @@ function renderSubjects(){
             1
           );
 
+
           save();
 
           renderSubjects();
@@ -1485,9 +2211,9 @@ function renderSubjects(){
 }
 
 
-/* =========================
+/* =========================================================
    總覽更新
-========================= */
+========================================================= */
 
 function update(){
 
@@ -1545,9 +2271,9 @@ function update(){
 }
 
 
-/* =========================
+/* =========================================================
    分頁切換
-========================= */
+========================================================= */
 
 document
   .querySelectorAll("nav button")
@@ -1599,9 +2325,9 @@ document
   );
 
 
-/* =========================
-   作息工具選擇
-========================= */
+/* =========================================================
+   作息類型
+========================================================= */
 
 document
   .querySelectorAll(
@@ -1632,46 +2358,72 @@ document
         selectedKind=
           b.dataset.kind;
 
+
+        /*
+          有選取格子時，
+          立即套用。
+        */
+
+        applyKindToSelection();
+
       };
 
     }
   );
 
 
-/* =========================
-   儲存日期
-========================= */
+/* =========================================================
+   清除選取
+========================================================= */
 
 document.getElementById(
-  "saveDates"
+  "clearSelection"
 ).onclick=()=>{
 
-  data.startDate=
+  selectedCells.clear();
+
+  updateSelectionVisual();
+
+};
+
+
+/* =========================================================
+   儲存日期
+========================================================= */
+
+function saveDates(){
+
+  const start=
     document.getElementById(
       "startDate"
     ).value;
 
 
-  data.examDate=
+  const exam=
     document.getElementById(
       "examDate"
     ).value;
 
 
   if(
-    data.startDate&&
-    data.examDate&&
-    new Date(data.examDate)<
-    new Date(data.startDate)
+    start&&
+    exam&&
+    new Date(exam+"T00:00:00")<
+    new Date(start+"T00:00:00")
   ){
 
     alert(
       "考試日期不能早於起始日期。"
     );
 
-    return;
+    return false;
 
   }
+
+
+  data.startDate=start;
+
+  data.examDate=exam;
 
 
   save();
@@ -1680,12 +2432,40 @@ document.getElementById(
 
   update();
 
-};
+  return true;
+
+}
 
 
-/* =========================
+/*
+  日期一修改就自動保存。
+*/
+
+document.getElementById(
+  "startDate"
+).addEventListener(
+  "change",
+  saveDates
+);
+
+
+document.getElementById(
+  "examDate"
+).addEventListener(
+  "change",
+  saveDates
+);
+
+
+document.getElementById(
+  "saveDates"
+).onclick=
+  saveDates;
+
+
+/* =========================================================
    清除作息
-========================= */
+========================================================= */
 
 document.getElementById(
   "clearRoutine"
@@ -1704,6 +2484,8 @@ document.getElementById(
       );
 
 
+    selectedCells.clear();
+
     save();
 
     renderRoutine();
@@ -1715,9 +2497,9 @@ document.getElementById(
 };
 
 
-/* =========================
+/* =========================================================
    儲存作息
-========================= */
+========================================================= */
 
 document.getElementById(
   "saveRoutine"
@@ -1726,15 +2508,15 @@ document.getElementById(
   save();
 
   alert(
-    "作息已儲存。"
+    "作息已保存。"
   );
 
 };
 
 
-/* =========================
+/* =========================================================
    新增考試配分科目
-========================= */
+========================================================= */
 
 document.getElementById(
   "addWeight"
@@ -1794,9 +2576,9 @@ document.getElementById(
 };
 
 
-/* =========================
+/* =========================================================
    新增現階段科目
-========================= */
+========================================================= */
 
 document.getElementById(
   "addSubject"
@@ -1898,9 +2680,367 @@ document.getElementById(
 };
 
 
-/* =========================
+/* =========================================================
+   匯出資料
+========================================================= */
+
+document.getElementById(
+  "exportData"
+).onclick=()=>{
+
+  const backup={
+
+    app:"讀書進度工具",
+
+    version:BACKUP_VERSION,
+
+    exportedAt:
+      new Date().toISOString(),
+
+    data:data
+
+  };
+
+
+  const blob=
+    new Blob(
+      [
+        JSON.stringify(
+          backup,
+          null,
+          2
+        )
+      ],
+      {
+        type:"application/json"
+      }
+    );
+
+
+  const url=
+    URL.createObjectURL(blob);
+
+
+  const a=
+    document.createElement("a");
+
+
+  const today=
+    new Date()
+      .toISOString()
+      .slice(0,10);
+
+
+  a.href=url;
+
+  a.download=
+    `讀書進度備份_${today}.json`;
+
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+
+  URL.revokeObjectURL(url);
+
+};
+
+
+/* =========================================================
+   匯入資料
+========================================================= */
+
+document.getElementById(
+  "importData"
+).onclick=()=>{
+
+  document.getElementById(
+    "backupFile"
+  ).click();
+
+};
+
+
+document.getElementById(
+  "backupFile"
+).addEventListener(
+  "change",
+  async e=>{
+
+    const file=
+      e.target.files[0];
+
+
+    if(!file)return;
+
+
+    try{
+
+      const text=
+        await file.text();
+
+
+      const backup=
+        JSON.parse(text);
+
+
+      let imported=
+        backup.data||backup;
+
+
+      if(
+        !imported||
+        typeof imported!=="object"
+      ){
+
+        throw new Error(
+          "格式錯誤"
+        );
+
+      }
+
+
+      /*
+        基本資料檢查
+      */
+
+      if(
+        imported.routine &&
+        !Array.isArray(
+          imported.routine
+        )
+      ){
+
+        throw new Error(
+          "作息資料格式錯誤"
+        );
+
+      }
+
+
+      if(
+        imported.subjects &&
+        !Array.isArray(
+          imported.subjects
+        )
+      ){
+
+        throw new Error(
+          "科目資料格式錯誤"
+        );
+
+      }
+
+
+      if(
+        !confirm(
+          "匯入後會覆蓋目前資料，確定繼續嗎？"
+        )
+      ){
+
+        e.target.value="";
+
+        return;
+
+      }
+
+
+      data={
+
+        routine:
+          imported.routine||
+          Array.from(
+            {length:7},
+            ()=>Array(40).fill("rest")
+          ),
+
+        subjects:
+          imported.subjects||
+          [],
+
+        subjectWeights:
+          imported.subjectWeights||
+          [],
+
+        startDate:
+          imported.startDate||
+          "",
+
+        examDate:
+          imported.examDate||
+          ""
+
+      };
+
+
+      /*
+        修正作息陣列
+      */
+
+      data.routine=
+        data.routine
+          .slice(0,7)
+          .map(dayArray=>{
+
+            let arr=
+              Array.isArray(dayArray)
+                ? dayArray
+                    .slice(0,40)
+                : [];
+
+
+            while(
+              arr.length<40
+            ){
+
+              arr.push("rest");
+
+            }
+
+
+            return arr.map(
+              k=>
+                kinds[k]
+                  ? k
+                  : "rest"
+            );
+
+          });
+
+
+      while(
+        data.routine.length<7
+      ){
+
+        data.routine.push(
+          Array(40).fill("rest")
+        );
+
+      }
+
+
+      selectedCells.clear();
+
+
+      save();
+
+
+      document.getElementById(
+        "startDate"
+      ).value=
+        data.startDate;
+
+
+      document.getElementById(
+        "examDate"
+      ).value=
+        data.examDate;
+
+
+      renderRoutine();
+
+      renderSubjects();
+
+      update();
+
+
+      alert(
+        "進度備份已成功匯入。"
+      );
+
+
+    }catch(err){
+
+      alert(
+        "無法匯入這個備份檔案。\n\n"+
+        "請確認它是本工具匯出的 JSON 備份。"
+      );
+
+      console.error(err);
+
+    }
+
+
+    e.target.value="";
+
+  }
+);
+
+
+/* =========================================================
+   清除全部資料
+========================================================= */
+
+document.getElementById(
+  "clearData"
+).onclick=()=>{
+
+  const ok=
+    confirm(
+      "這會清除本工具目前保存的所有資料，包括日期、作息、科目與配分。\n\n確定要全部清除嗎？"
+    );
+
+
+  if(!ok)return;
+
+
+  localStorage.removeItem(KEY);
+
+
+  data={
+
+    routine:
+      Array.from(
+        {length:7},
+        ()=>Array(40).fill("rest")
+      ),
+
+    subjects:[],
+
+    subjectWeights:[],
+
+    startDate:"",
+
+    examDate:""
+
+  };
+
+
+  selectedCells.clear();
+
+
+  document.getElementById(
+    "startDate"
+  ).value="";
+
+
+  document.getElementById(
+    "examDate"
+  ).value="";
+
+
+  renderRoutine();
+
+  renderSubjects();
+
+  update();
+
+  save();
+
+
+  alert(
+    "所有資料已清除。"
+  );
+
+};
+
+
+/* =========================================================
    自動排程
-========================= */
+========================================================= */
 
 function generate(){
 
@@ -1921,9 +3061,7 @@ function generate(){
     ).value;
 
 
-  let start=
-    new Date();
-
+  let start=new Date();
 
   start.setHours(
     0,0,0,0
@@ -2033,7 +3171,9 @@ function generate(){
         (week+si)%7!==0||
         lastDay[si]===fmt(d)
       ){
+
         continue;
+
       }
 
 
@@ -2158,9 +3298,9 @@ function generate(){
 }
 
 
-/* =========================
+/* =========================================================
    顯示自動排程
-========================= */
+========================================================= */
 
 function renderPlan(
   events,
@@ -2252,9 +3392,9 @@ function renderPlan(
 }
 
 
-/* =========================
+/* =========================================================
    初始化
-========================= */
+========================================================= */
 
 document.getElementById(
   "generate"
@@ -2279,6 +3419,8 @@ renderRoutine();
 renderSubjects();
 
 update();
+
+showSaveStatus();
 
 </script>
 
