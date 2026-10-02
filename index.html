@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="zh-Hant">
 
 <head>
@@ -16,30 +17,45 @@
 :root{
 
   --paper:#f4f0e4;
+
   --paper2:#ebe5d5;
+
   --olive:#69704d;
+
   --dark:#4f563b;
+
   --ink:#35372d;
+
   --line:#c9c4b4;
+
   --white:#faf8f1;
+
   --muted:#77786d;
 
   --study:#dfe5ca;
+
   --flex:#e8e0cc;
+
   --rest:#e4e2dc;
+
   --exercise:#d5dfd0;
+
   --other:#ddd8cc;
 
   /* 配分總表專用色 */
 
   --weight-bg:#e9e1cf;
+
   --weight-line:#b9ad92;
+
   --weight-accent:#817354;
 
   /* 現階段科目表專用色 */
 
   --subject-bg:#e1e6d4;
+
   --subject-line:#b5bea0;
+
   --subject-accent:#69704d;
 
 }
@@ -53,8 +69,11 @@
 body{
 
   margin:0;
+
   background:var(--paper);
+
   color:var(--ink);
+
   font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC",sans-serif
 
 }
@@ -74,10 +93,15 @@ button{
 header{
 
   padding:24px 5vw 16px;
+
   border-bottom:1px solid var(--line);
+
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
+
   gap:18px
 
 }
@@ -85,7 +109,9 @@ header{
 .brand{
 
   display:flex;
+
   align-items:center;
+
   gap:10px
 
 }
@@ -93,6 +119,7 @@ header{
 .logo{
 
   font-size:25px;
+
   color:var(--olive)
 
 }
@@ -100,7 +127,9 @@ header{
 h1{
 
   font:500 21px Georgia,"Times New Roman",serif;
+
   letter-spacing:.08em;
+
   margin:0
 
 }
@@ -108,7 +137,9 @@ h1{
 .sub{
 
   font-size:11px;
+
   color:var(--muted);
+
   margin-top:3px
 
 }
@@ -116,7 +147,9 @@ h1{
 nav{
 
   display:flex;
+
   gap:6px;
+
   flex-wrap:wrap
 
 }
@@ -124,9 +157,13 @@ nav{
 nav button,.btn{
 
   border:1px solid var(--line);
+
   background:transparent;
+
   color:var(--dark);
+
   padding:8px 12px;
+
   border-radius:4px
 
 }
@@ -134,7 +171,9 @@ nav button,.btn{
 nav button.active,.btn.primary{
 
   background:var(--olive);
+
   color:white;
+
   border-color:var(--olive)
 
 }
@@ -142,7 +181,9 @@ nav button.active,.btn.primary{
 main{
 
   max-width:1280px;
+
   margin:auto;
+
   padding:26px 5vw 60px
 
 }
@@ -162,6 +203,7 @@ main{
 .grid{
 
   display:grid;
+
   gap:16px
 
 }
@@ -181,8 +223,11 @@ main{
 .card{
 
   background:rgba(250,248,241,.72);
+
   border:1px solid var(--line);
+
   border-radius:6px;
+
   padding:19px
 
 }
@@ -190,8 +235,11 @@ main{
 .card h2{
 
   font-size:15px;
+
   font-weight:600;
+
   margin:0 0 14px;
+
   color:var(--dark)
 
 }
@@ -199,8 +247,11 @@ main{
 label{
 
   display:block;
+
   font-size:12px;
+
   color:var(--muted);
+
   margin-bottom:5px
 
 }
@@ -208,10 +259,15 @@ label{
 input,select{
 
   width:100%;
+
   background:var(--white);
+
   border:1px solid var(--line);
+
   border-radius:4px;
+
   padding:9px;
+
   color:var(--ink)
 
 }
@@ -219,8 +275,11 @@ input,select{
 .row{
 
   display:flex;
+
   gap:10px;
+
   align-items:center;
+
   flex-wrap:wrap
 
 }
@@ -234,7 +293,9 @@ input,select{
 .big{
 
   font:40px Georgia,serif;
+
   color:var(--olive);
+
   line-height:1
 
 }
@@ -242,8 +303,11 @@ input,select{
 .metric small{
 
   display:block;
+
   color:var(--muted);
+
   font-size:12px;
+
   margin-bottom:7px
 
 }
@@ -263,9 +327,13 @@ input,select{
 .notice{
 
   padding:11px 13px;
+
   background:var(--paper2);
+
   border-left:3px solid var(--olive);
+
   font-size:13px;
+
   margin-bottom:14px
 
 }
@@ -279,9 +347,13 @@ input,select{
 .actions{
 
   display:flex;
+
   gap:8px;
+
   justify-content:flex-end;
+
   margin-top:13px;
+
   flex-wrap:wrap
 
 }
@@ -289,8 +361,11 @@ input,select{
 .status{
 
   font-size:11px;
+
   color:var(--muted);
+
   text-align:right;
+
   margin-top:8px
 
 }
@@ -304,7 +379,9 @@ input,select{
 table{
 
   width:100%;
+
   border-collapse:collapse;
+
   font-size:13px
 
 }
@@ -312,7 +389,9 @@ table{
 th,td{
 
   border-bottom:1px solid var(--line);
+
   padding:8px 6px;
+
   text-align:left
 
 }
@@ -320,7 +399,9 @@ th,td{
 th{
 
   font-size:11px;
+
   color:var(--muted);
+
   font-weight:500
 
 }
@@ -328,7 +409,9 @@ th{
 .schedule{
 
   overflow:auto;
+
   user-select:none;
+
   -webkit-user-select:none
 
 }
@@ -342,7 +425,9 @@ th{
 .schedule th,.schedule td{
 
   height:30px;
+
   padding:2px 4px;
+
   text-align:center
 
 }
@@ -350,9 +435,13 @@ th{
 .schedule th:first-child,.schedule td:first-child{
 
   width:64px;
+
   text-align:right;
+
   padding-right:8px;
+
   color:var(--muted);
+
   font-size:11px
 
 }
@@ -362,6 +451,7 @@ th{
 .schedule th.day-header{
 
   padding:7px 4px 6px;
+
   line-height:1.35
 
 }
@@ -369,8 +459,11 @@ th{
 .day-name{
 
   display:block;
+
   font-size:12px;
+
   color:var(--dark);
+
   font-weight:600
 
 }
@@ -378,10 +471,15 @@ th{
 .day-total{
 
   display:block;
+
   margin-top:2px;
+
   font-size:10px;
+
   color:var(--olive);
+
   font-family:Georgia,serif;
+
   font-weight:600
 
 }
@@ -389,13 +487,21 @@ th{
 .slot{
 
   width:100%;
+
   height:26px;
+
   border:1px solid rgba(80,80,70,.08);
+
   border-radius:3px;
+
   background:transparent;
+
   font-size:10px;
+
   color:var(--ink);
+
   touch-action:none;
+
   transition:.08s
 
 }
@@ -433,7 +539,9 @@ th{
 .slot.selected{
 
   outline:2px solid var(--olive);
+
   outline-offset:-2px;
+
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.65)
 
 }
@@ -441,8 +549,11 @@ th{
 .palette{
 
   display:flex;
+
   gap:6px;
+
   flex-wrap:wrap;
+
   margin-bottom:8px
 
 }
@@ -450,9 +561,13 @@ th{
 .palette button{
 
   border:1px solid var(--line);
+
   padding:6px 9px;
+
   border-radius:4px;
+
   background:var(--white);
+
   font-size:12px
 
 }
@@ -460,6 +575,7 @@ th{
 .palette button.selected{
 
   outline:2px solid var(--olive);
+
   outline-offset:1px
 
 }
@@ -467,7 +583,9 @@ th{
 .selection-info{
 
   font-size:11px;
+
   color:var(--muted);
+
   margin-bottom:12px
 
 }
@@ -477,8 +595,11 @@ th{
 .subject-form{
 
   display:grid;
+
   grid-template-columns:2fr 1fr 1fr 1.2fr auto;
+
   gap:7px;
+
   align-items:end
 
 }
@@ -486,8 +607,11 @@ th{
 .score-form{
 
   display:grid;
+
   grid-template-columns:2fr 1fr auto;
+
   gap:7px;
+
   align-items:end
 
 }
@@ -495,8 +619,11 @@ th{
 .delete{
 
   border:0;
+
   background:none;
+
   color:#8a6858;
+
   font-size:17px
 
 }
@@ -504,21 +631,29 @@ th{
 .empty{
 
   text-align:center;
+
   padding:25px;
+
   color:var(--muted)
 
 }
 
 /* =========================
+
    配分總表：獨立視覺
+
 ========================= */
 
 .weight-section{
 
   background:var(--weight-bg);
+
   border:1px solid var(--weight-line);
+
   border-radius:6px;
+
   padding:17px;
+
   margin-bottom:24px
 
 }
@@ -532,6 +667,7 @@ th{
 .weight-section .notice{
 
   background:rgba(250,248,241,.48);
+
   border-left-color:var(--weight-accent)
 
 }
@@ -545,6 +681,7 @@ th{
 .weight-section .total-table{
 
   background:rgba(250,248,241,.38);
+
   border:1px solid rgba(129,115,84,.25)
 
 }
@@ -556,6 +693,7 @@ th{
 }
 
 .total-table th,
+
 .total-table td{
 
   text-align:center
@@ -563,6 +701,7 @@ th{
 }
 
 .total-table th:first-child,
+
 .total-table td:first-child{
 
   text-align:left
@@ -572,6 +711,7 @@ th{
 .total-table .ratio{
 
   font-family:Georgia,serif;
+
   color:var(--weight-accent)
 
 }
@@ -579,7 +719,9 @@ th{
 .total-table .hours{
 
   font-family:Georgia,serif;
+
   color:var(--dark);
+
   font-weight:600
 
 }
@@ -587,6 +729,7 @@ th{
 .sum-row td{
 
   font-weight:600;
+
   background:rgba(129,115,84,.10)
 
 }
@@ -594,20 +737,27 @@ th{
 .week-hours{
 
   font-family:Georgia,serif;
+
   color:var(--weight-accent);
+
   font-weight:600
 
 }
 
 /* =========================
+
    現階段科目表：另一套視覺
+
 ========================= */
 
 .subject-section{
 
   background:rgba(225,230,212,.40);
+
   border:1px solid var(--subject-line);
+
   border-radius:6px;
+
   padding:17px
 
 }
@@ -621,6 +771,7 @@ th{
 .subject-section .notice{
 
   background:rgba(250,248,241,.58);
+
   border-left-color:var(--subject-accent)
 
 }
@@ -638,13 +789,17 @@ th{
 }
 
 /* =========================
+
    自動排程
+
 ========================= */
 
 .plan-wrapper{
 
   overflow:auto;
+
   -webkit-overflow-scrolling:touch;
+
   padding-bottom:6px
 
 }
@@ -652,9 +807,13 @@ th{
 .plan-calendar{
 
   min-width:1050px;
+
   border:1px solid var(--line);
+
   background:rgba(250,248,241,.55);
+
   border-radius:6px;
+
   overflow:hidden
 
 }
@@ -674,10 +833,15 @@ th{
 .plan-week-title{
 
   padding:9px 12px;
+
   background:rgba(235,229,213,.72);
+
   border-bottom:1px solid var(--line);
+
   color:var(--dark);
+
   font-size:12px;
+
   font-weight:600
 
 }
@@ -685,6 +849,7 @@ th{
 .plan-grid{
 
   display:grid;
+
   grid-template-columns:64px repeat(7,minmax(0,1fr))
 
 }
@@ -692,7 +857,9 @@ th{
 .plan-corner{
 
   border-right:1px solid var(--line);
+
   border-bottom:1px solid var(--line);
+
   background:rgba(235,229,213,.42)
 
 }
@@ -700,10 +867,15 @@ th{
 .plan-day-header{
 
   min-height:54px;
+
   padding:7px 5px;
+
   text-align:center;
+
   border-right:1px solid var(--line);
+
   border-bottom:1px solid var(--line);
+
   background:rgba(250,248,241,.82)
 
 }
@@ -717,8 +889,11 @@ th{
 .plan-day-header .weekday{
 
   display:block;
+
   font-size:12px;
+
   font-weight:600;
+
   color:var(--dark)
 
 }
@@ -726,9 +901,13 @@ th{
 .plan-day-header .date{
 
   display:block;
+
   margin-top:3px;
+
   font-size:10px;
+
   color:var(--muted);
+
   font-family:Georgia,serif
 
 }
@@ -742,7 +921,9 @@ th{
 .plan-time-axis{
 
   position:relative;
+
   border-right:1px solid var(--line);
+
   background:rgba(235,229,213,.35)
 
 }
@@ -750,11 +931,17 @@ th{
 .plan-time-label{
 
   position:absolute;
+
   right:7px;
+
   transform:translateY(-50%);
+
   font-size:9px;
+
   color:var(--muted);
+
   font-family:Georgia,serif;
+
   white-space:nowrap
 
 }
@@ -762,7 +949,9 @@ th{
 .plan-days-area{
 
   grid-column:2 / 9;
+
   display:grid;
+
   grid-template-columns:repeat(7,minmax(0,1fr))
 
 }
@@ -770,7 +959,9 @@ th{
 .plan-day-column{
 
   position:relative;
+
   border-right:1px solid var(--line);
+
   background:rgba(250,248,241,.34)
 
 }
@@ -790,6 +981,7 @@ th{
 .plan-grid-area{
 
   position:relative;
+
   min-height:480px
 
 }
@@ -797,9 +989,13 @@ th{
 .plan-hour-line{
 
   position:absolute;
+
   left:0;
+
   right:0;
+
   border-top:1px solid rgba(105,112,77,.22);
+
   pointer-events:none
 
 }
@@ -807,9 +1003,13 @@ th{
 .plan-half-line{
 
   position:absolute;
+
   left:0;
+
   right:0;
+
   border-top:1px dashed rgba(105,112,77,.10);
+
   pointer-events:none
 
 }
@@ -817,14 +1017,23 @@ th{
 .plan-event{
 
   position:absolute;
+
   left:5px;
+
   right:5px;
+
   min-height:8px;
+
   padding:5px 6px;
+
   border-radius:4px;
+
   border:1px solid rgba(79,86,59,.16);
+
   overflow:hidden;
+
   z-index:3;
+
   box-shadow:0 1px 2px rgba(53,55,45,.06)
 
 }
@@ -832,9 +1041,13 @@ th{
 .plan-event b{
 
   display:block;
+
   font-size:10px;
+
   font-family:Georgia,"Times New Roman",serif;
+
   color:var(--dark);
+
   margin-bottom:2px
 
 }
@@ -842,8 +1055,11 @@ th{
 .plan-event .event-name{
 
   display:block;
+
   font-size:11px;
+
   font-weight:600;
+
   line-height:1.35
 
 }
@@ -851,9 +1067,13 @@ th{
 .plan-event .event-type{
 
   display:block;
+
   margin-top:2px;
+
   font-size:9px;
+
   color:var(--muted);
+
   line-height:1.3
 
 }
@@ -929,9 +1149,13 @@ th{
 .plan-blank{
 
   min-height:40px;
+
   padding:18px;
+
   text-align:center;
+
   color:var(--muted);
+
   font-size:11px
 
 }
@@ -939,10 +1163,15 @@ th{
 .plan-legend{
 
   display:flex;
+
   gap:7px;
+
   flex-wrap:wrap;
+
   margin-top:12px;
+
   font-size:10px;
+
   color:var(--muted)
 
 }
@@ -950,7 +1179,9 @@ th{
 .plan-legend-item{
 
   display:flex;
+
   align-items:center;
+
   gap:4px
 
 }
@@ -958,8 +1189,11 @@ th{
 .plan-legend-dot{
 
   width:10px;
+
   height:10px;
+
   border-radius:2px;
+
   border:1px solid rgba(79,86,59,.12)
 
 }
@@ -967,19 +1201,25 @@ th{
 .plan-note{
 
   margin-top:10px;
+
   font-size:10px;
+
   color:var(--muted)
 
 }
 
 /* =========================
+
    備份區
+
 ========================= */
 
 .backup-box{
 
   margin-top:16px;
+
   padding-top:16px;
+
   border-top:1px solid var(--line)
 
 }
@@ -987,7 +1227,9 @@ th{
 .backup-actions{
 
   display:flex;
+
   gap:8px;
+
   flex-wrap:wrap
 
 }
@@ -1003,6 +1245,7 @@ th{
   header{
 
     align-items:flex-start;
+
     flex-direction:column
 
   }
@@ -1036,6 +1279,7 @@ th{
   }
 
   .subject-form,
+
   .score-form{
 
     grid-template-columns:1fr
@@ -1081,19 +1325,27 @@ th{
   <nav>
 
     <button class="active" data-page="home">
+
       總覽
+
     </button>
 
     <button data-page="routine">
+
       每週作息
+
     </button>
 
     <button data-page="subjects">
+
       科目配置
+
     </button>
 
     <button data-page="planner">
+
       自動排程
+
     </button>
 
   </nav>
@@ -1174,16 +1426,22 @@ th{
       <div class="actions">
 
         <button class="btn primary" id="saveDates">
+
           儲存設定
+
         </button>
 
       </div>
 
 
       <div
+
         id="dateInfo"
+
         class="small muted"
+
         style="margin-top:10px">
+
       </div>
 
     </div>
@@ -1220,28 +1478,40 @@ th{
     <div class="backup-actions">
 
       <button class="btn primary" id="exportData">
+
         ↓ 匯出進度備份
+
       </button>
 
       <button class="btn" id="importData">
+
         ↑ 匯入進度備份
+
       </button>
 
       <button class="btn" id="clearData">
+
         清除全部資料
+
       </button>
 
       <input
+
         id="backupFile"
+
         class="file-input"
+
         type="file"
+
         accept=".json,application/json">
 
     </div>
 
 
     <div id="saveStatus" class="status saved">
+
       ✓ 資料已自動保存
+
     </div>
 
   </div>
@@ -1280,27 +1550,39 @@ th{
     <div class="palette" id="palette">
 
       <button class="selected" data-kind="study">
+
         讀書
+
       </button>
 
       <button data-kind="meal">
+
         吃飯
+
       </button>
 
       <button data-kind="exercise">
+
         運動
+
       </button>
 
       <button data-kind="flex">
+
         彈性時間
+
       </button>
 
       <button data-kind="rest">
+
         休息
+
       </button>
 
       <button data-kind="other">
+
         其他
+
       </button>
 
     </div>
@@ -1309,7 +1591,9 @@ th{
     <div class="selection-info">
 
       已選取：
+
       <b id="selectedCount">0</b>
+
       格
 
     </div>
@@ -1326,38 +1610,59 @@ th{
             <th>時間</th>
 
             <th class="day-header">
+
               <span class="day-name">一</span>
+
               <span class="day-total" id="dayTotal0">0.0 h</span>
+
             </th>
 
             <th class="day-header">
+
               <span class="day-name">二</span>
+
               <span class="day-total" id="dayTotal1">0.0 h</span>
+
             </th>
 
             <th class="day-header">
+
               <span class="day-name">三</span>
+
               <span class="day-total" id="dayTotal2">0.0 h</span>
+
             </th>
 
             <th class="day-header">
+
               <span class="day-name">四</span>
+
               <span class="day-total" id="dayTotal3">0.0 h</span>
+
             </th>
 
             <th class="day-header">
+
               <span class="day-name">五</span>
+
               <span class="day-total" id="dayTotal4">0.0 h</span>
+
             </th>
 
             <th class="day-header">
+
               <span class="day-name">六</span>
+
               <span class="day-total" id="dayTotal5">0.0 h</span>
+
             </th>
 
             <th class="day-header">
+
               <span class="day-name">日</span>
+
               <span class="day-total" id="dayTotal6">0.0 h</span>
+
             </th>
 
           </tr>
@@ -1374,28 +1679,37 @@ th{
     <div class="actions">
 
       <button class="btn" id="clearSelection">
+
         清除選取
+
       </button>
 
       <button class="btn" id="clearRoutine">
+
         清除全部
+
       </button>
 
       <button class="btn primary" id="saveRoutine">
+
         儲存作息
+
       </button>
 
     </div>
 
 
     <div class="status saved">
+
       ✓ 作息修改會自動保存
+
     </div>
 
 
     <div class="notice" style="margin-top:14px">
 
       每週可排讀書時間：
+
       <b id="routineTotal">0 小時</b>
 
     </div>
@@ -1415,16 +1729,23 @@ th{
 
 
     <!-- =========================
+
          ① 考試配分總表
+
     ========================= -->
 
     <div class="weight-section">
 
       <h3 style="
+
         font-size:13px;
+
         margin:0 0 10px
+
       ">
+
         ① 考試科目配分總表
+
       </h3>
 
 
@@ -1450,7 +1771,9 @@ th{
           <label>科目</label>
 
           <input
+
             id="wName"
+
             placeholder="例如：民法">
 
         </div>
@@ -1461,19 +1784,28 @@ th{
           <label>配分</label>
 
           <input
+
             id="wScore"
+
             type="number"
+
             min="0"
+
             step="1"
+
             placeholder="100">
 
         </div>
 
 
         <button
+
           class="btn primary"
+
           id="addWeight">
+
           新增科目
+
         </button>
 
       </div>
@@ -1488,10 +1820,15 @@ th{
             <tr>
 
               <th>科目</th>
+
               <th>配分</th>
+
               <th>配分比例</th>
+
               <th>準備期間總時數</th>
+
               <th>每週時數</th>
+
               <th></th>
 
             </tr>
@@ -1507,25 +1844,36 @@ th{
 
 
       <div
+
         id="weightSummary"
+
         class="small muted"
+
         style="margin-top:9px">
+
       </div>
 
     </div>
 
 
     <!-- =========================
+
          ② 現階段科目配置
+
     ========================= -->
 
     <div class="subject-section">
 
       <h3 style="
+
         font-size:13px;
+
         margin:0 0 10px
+
       ">
+
         ② 現階段科目配置
+
       </h3>
 
 
@@ -1547,7 +1895,9 @@ th{
           <label>科目</label>
 
           <input
+
             id="sName"
+
             placeholder="例如：民法">
 
         </div>
@@ -1558,10 +1908,15 @@ th{
           <label>每週時數</label>
 
           <input
+
             id="sHours"
+
             type="number"
+
             min=".5"
+
             step=".5"
+
             placeholder="6">
 
         </div>
@@ -1572,10 +1927,15 @@ th{
           <label>每次時數</label>
 
           <input
+
             id="sSession"
+
             type="number"
+
             min=".5"
+
             step=".5"
+
             placeholder="3">
 
         </div>
@@ -1588,9 +1948,13 @@ th{
           <select id="sType">
 
             <option>複習</option>
+
             <option>上課</option>
+
             <option>寫題目</option>
+
             <option>背誦</option>
+
             <option>其他</option>
 
           </select>
@@ -1599,9 +1963,13 @@ th{
 
 
         <button
+
           class="btn primary"
+
           id="addSubject">
+
           新增
+
         </button>
 
       </div>
@@ -1616,10 +1984,15 @@ th{
             <tr>
 
               <th>科目</th>
+
               <th>每週</th>
+
               <th>每次</th>
+
               <th>每週次數</th>
+
               <th>考前預估</th>
+
               <th></th>
 
             </tr>
@@ -1635,8 +2008,11 @@ th{
 
 
       <div
+
         id="subjectCapacityNotice"
+
         style="margin-top:12px">
+
       </div>
 
 
@@ -1688,15 +2064,21 @@ th{
         <select id="planRange">
 
           <option value="week">
+
             1 週
+
           </option>
 
           <option value="1">
+
             1 個月
+
           </option>
 
           <option value="3">
+
             3 個月
+
           </option>
 
         </select>
@@ -1705,13 +2087,19 @@ th{
 
 
       <div
+
         style="
+
           flex:0 0 auto;
+
           align-self:end
+
         ">
 
         <button
+
           class="btn primary"
+
           id="generate">
 
           生成讀書計畫
@@ -1724,14 +2112,20 @@ th{
 
 
     <div
+
       id="capacityNotice"
+
       style="margin-top:14px">
+
     </div>
 
 
     <div
+
       id="planOutput"
+
       style="margin-top:16px">
+
     </div>
 
   </div>
@@ -1744,7 +2138,9 @@ th{
 <script>
 
 /* =========================================================
+
    資料核心
+
 ========================================================= */
 
 const KEY="study-planner-v02";
@@ -1752,17 +2148,24 @@ const KEY="study-planner-v02";
 const BACKUP_VERSION=2;
 
 const days=[
+
   "一","二","三","四","五","六","日"
+
 ];
 
 
 const kinds={
 
   study:"讀書",
+
   meal:"吃飯",
+
   exercise:"運動",
+
   flex:"彈性",
+
   rest:"休息",
+
   other:"其他"
 
 };
@@ -1771,10 +2174,15 @@ const kinds={
 const kindClass={
 
   study:"study",
+
   meal:"meal",
+
   exercise:"exercise",
+
   flex:"flex",
+
   rest:"rest",
+
   other:"other"
 
 };
@@ -1785,7 +2193,9 @@ let data={};
 try{
 
   data=JSON.parse(
+
     localStorage.getItem(KEY)||"{}"
+
   );
 
 }catch(e){
@@ -1800,9 +2210,13 @@ try{
 if(!data.routine){
 
   data.routine=
+
     Array.from(
+
       {length:7},
+
       ()=>Array(40).fill("rest")
+
     );
 
 }
@@ -1811,16 +2225,21 @@ if(!data.routine){
 /*
 
   如果舊版本沒有 meal，
+
   原本的資料仍可正常使用。
 
 */
 
 data.routine=
+
   data.routine.map(dayArray=>{
 
     let arr=
+
       Array.isArray(dayArray)
+
         ? dayArray.slice(0,40)
+
         : [];
 
     while(arr.length<40){
@@ -1832,7 +2251,9 @@ data.routine=
     return arr.map(k=>
 
       kinds[k]
+
         ? k
+
         : "rest"
 
     );
@@ -1841,27 +2262,40 @@ data.routine=
 
 
 data.subjects=
+
   Array.isArray(data.subjects)
+
     ? data.subjects
+
     : [];
 
 
 data.subjectWeights=
+
   Array.isArray(data.subjectWeights)
+
     ? data.subjectWeights
+
     : data.subjects.map(
+
         s=>({
+
           name:s.name,
+
           score:Number(s.score||0)
+
         })
+
       );
 
 
 data.startDate=
+
   data.startDate||"";
 
 
 data.examDate=
+
   data.examDate||"";
 
 
@@ -1879,7 +2313,9 @@ let dragMode="add";
 
 
 /* =========================================================
+
    儲存
+
 ========================================================= */
 
 function save(){
@@ -1887,8 +2323,11 @@ function save(){
   try{
 
     localStorage.setItem(
+
       KEY,
+
       JSON.stringify(data)
+
     );
 
     showSaveStatus();
@@ -1898,8 +2337,11 @@ function save(){
     console.error(e);
 
     document.getElementById(
+
       "saveStatus"
+
     ).textContent=
+
       "⚠ 無法保存資料";
 
   }
@@ -1910,20 +2352,31 @@ function save(){
 function showSaveStatus(){
 
   const el=
+
     document.getElementById(
+
       "saveStatus"
+
     );
 
   if(!el)return;
 
   el.textContent=
+
     "✓ 已自動保存 · "+
+
     new Date().toLocaleTimeString(
+
       "zh-TW",
+
       {
+
         hour:"2-digit",
+
         minute:"2-digit"
+
       }
+
     );
 
   el.classList.add("saved");
@@ -1932,7 +2385,9 @@ function showSaveStatus(){
 
 
 /* =========================================================
+
    日期工具
+
 ========================================================= */
 
 const addDays=(d,n)=>{
@@ -1940,7 +2395,9 @@ const addDays=(d,n)=>{
   let x=new Date(d);
 
   x.setDate(
+
     x.getDate()+n
+
   );
 
   return x;
@@ -1949,32 +2406,47 @@ const addDays=(d,n)=>{
 
 
 const fmt=d=>
+
   d.toISOString().slice(0,10);
 
 
 const esc=s=>
 
   String(s).replace(
+
     /[&<>"']/g,
+
     c=>({
+
       "&":"&amp;",
+
       "<":"&lt;",
+
       ">":"&gt;",
+
       "\"":"&quot;",
+
       "'":"&#039;"
+
     }[c])
+
   );
 
 
 /* =========================================================
+
    準備期間
+
 ========================================================= */
 
 function dateDiffWeeks(){
 
   if(
+
     !data.startDate||
+
     !data.examDate
+
   ){
 
     return 0;
@@ -1983,24 +2455,33 @@ function dateDiffWeeks(){
 
 
   let s=new Date(
+
     data.startDate+"T00:00:00"
+
   );
 
   let e=new Date(
+
     data.examDate+"T00:00:00"
+
   );
 
 
   return Math.max(
+
     0,
+
     (e-s)/6048e5
+
   );
 
 }
 
 
 /* =========================================================
+
    剩餘週數
+
 ========================================================= */
 
 function remainingWeeks(){
@@ -2015,47 +2496,65 @@ function remainingWeeks(){
   let now=new Date();
 
   now.setHours(
+
     0,0,0,0
+
   );
 
 
   let ex=new Date(
+
     data.examDate+"T00:00:00"
+
   );
 
 
   return Math.max(
+
     0,
+
     (ex-now)/6048e5
+
   );
 
 }
 
 
 /* =========================================================
+
    每週可讀書時間
+
 ========================================================= */
 
 function cap(){
 
   return data.routine
+
     .flat()
+
     .filter(
+
       x=>x==="study"
+
     )
+
     .length*.5;
 
 }
 
 
 /* =========================================================
+
    每日讀書時間
+
 ========================================================= */
 
 function dailyStudyHours(dayIndex){
 
   if(
+
     !data.routine[dayIndex]
+
   ){
 
     return 0;
@@ -2064,29 +2563,42 @@ function dailyStudyHours(dayIndex){
 
 
   return data.routine[dayIndex]
+
     .filter(
+
       x=>x==="study"
+
     )
+
     .length*.5;
 
 }
 
 
 /* =========================================================
+
    更新每日總時數
+
 ========================================================= */
 
 function updateDailyTotals(){
 
   for(
+
     let d=0;
+
     d<7;
+
     d++
+
   ){
 
     const el=
+
       document.getElementById(
+
         "dayTotal"+d
+
       );
 
 
@@ -2094,8 +2606,11 @@ function updateDailyTotals(){
 
 
     el.textContent=
+
       dailyStudyHours(d)
+
         .toFixed(1)
+
       +" h";
 
   }
@@ -2104,31 +2619,42 @@ function updateDailyTotals(){
 
 
 /* =========================================================
+
    準備期間理論總時數
+
 ========================================================= */
 
 function totalPlanHours(){
 
   return cap()*
+
     dateDiffWeeks();
 
 }
 
 
 /* =========================================================
+
    倒數
+
 ========================================================= */
 
 function countdown(){
 
   const a=
+
     document.getElementById(
+
       "daysLeft"
+
     );
 
   const b=
+
     document.getElementById(
+
       "weeksLeft"
+
     );
 
 
@@ -2139,8 +2665,11 @@ function countdown(){
     b.textContent="—";
 
     document.getElementById(
+
       "dateInfo"
+
     ).textContent=
+
       "尚未設定考試日期";
 
     return;
@@ -2151,20 +2680,29 @@ function countdown(){
   let now=new Date();
 
   now.setHours(
+
     0,0,0,0
+
   );
 
 
   let ex=new Date(
+
     data.examDate+"T00:00:00"
+
   );
 
 
   let d=Math.max(
+
     0,
+
     Math.ceil(
+
       (ex-now)/864e5
+
     )
+
   );
 
 
@@ -2172,21 +2710,29 @@ function countdown(){
 
 
   b.textContent=
+
     (d/7).toFixed(1);
 
 
   document.getElementById(
+
     "dateInfo"
+
   ).textContent=
+
     data.startDate
+
       ? `準備期間：${data.startDate} ～ ${data.examDate}`
+
       : `考試日期：${data.examDate}`;
 
 }
 
 
 /* =========================================================
+
    每週作息
+
 ========================================================= */
 
 function cellKey(day,index){
@@ -2199,35 +2745,50 @@ function cellKey(day,index){
 function updateSelectionVisual(){
 
   document
+
     .querySelectorAll(".slot")
+
     .forEach(
+
       b=>{
 
         if(
+
           selectedCells.has(
+
             b.dataset.key
+
           )
+
         ){
 
           b.classList.add(
+
             "selected"
+
           );
 
         }else{
 
           b.classList.remove(
+
             "selected"
+
           );
 
         }
 
       }
+
     );
 
 
   document.getElementById(
+
     "selectedCount"
+
   ).textContent=
+
     selectedCells.size;
 
 }
@@ -2238,7 +2799,9 @@ function updateSelectionVisual(){
 function toggleCell(key){
 
   if(
+
     selectedCells.has(key)
+
   ){
 
     selectedCells.delete(key);
@@ -2283,29 +2846,38 @@ function applyKindToSelection(){
 
 
   selectedCells.forEach(
+
     key=>{
 
       let parts=
+
         key.split("-");
 
       let d=
+
         Number(parts[0]);
 
       let i=
+
         Number(parts[1]);
 
 
       if(
+
         data.routine[d] &&
+
         typeof data.routine[d][i]!=="undefined"
+
       ){
 
         data.routine[d][i]=
+
           selectedKind;
 
       }
 
     }
+
   );
 
 
@@ -2321,14 +2893,19 @@ function applyKindToSelection(){
 
 
 /* =========================================================
+
    Render 作息
+
 ========================================================= */
 
 function renderRoutine(){
 
   let body=
+
     document.getElementById(
+
       "routineBody"
+
     );
 
 
@@ -2336,74 +2913,103 @@ function renderRoutine(){
 
 
   for(
+
     let i=0;
+
     i<40;
+
     i++
+
   ){
 
     let mins=
+
       360+i*30;
 
 
     let h=
+
       Math.floor(mins/60)%24;
 
 
     let m=
+
       mins%60;
 
 
     let label=
+
       String(h).padStart(2,"0")
+
       +":"
+
       +
+
       String(m).padStart(2,"0");
 
 
     let tr=
+
       document.createElement("tr");
 
 
     tr.innerHTML=
+
       `<td>${label}</td>`;
 
 
     for(
+
       let d=0;
+
       d<7;
+
       d++
+
     ){
 
       let td=
+
         document.createElement("td");
 
 
       let b=
+
         document.createElement(
+
           "button"
+
         );
 
 
       let k=
+
         data.routine[d][i];
 
 
       b.className=
+
         "slot "+(
+
           kindClass[k]||"rest"
+
         );
 
 
       b.textContent=
+
         kinds[k]||"休息";
 
 
       b.dataset.key=
+
         cellKey(d,i);
 
 
       b.addEventListener(
+
         "pointerdown",
+
         e=>{
 
           e.preventDefault();
@@ -2411,11 +3017,14 @@ function renderRoutine(){
           isDragging=true;
 
           const key=
+
             b.dataset.key;
 
 
           if(
+
             selectedCells.has(key)
+
           ){
 
             dragMode="remove";
@@ -2434,30 +3043,39 @@ function renderRoutine(){
           updateSelectionVisual();
 
         }
+
       );
 
 
       b.addEventListener(
+
         "pointerenter",
+
         e=>{
 
           if(!isDragging)return;
 
           dragSelect(
+
             b.dataset.key
+
           );
 
         }
+
       );
 
 
       b.addEventListener(
+
         "click",
+
         e=>{
 
           e.preventDefault();
 
         }
+
       );
 
 
@@ -2474,9 +3092,13 @@ function renderRoutine(){
 
 
   document.getElementById(
+
     "routineTotal"
+
   ).textContent=
+
     cap().toFixed(1)
+
     +" 小時";
 
 
@@ -2494,38 +3116,55 @@ function renderRoutine(){
 */
 
 document.addEventListener(
+
   "pointerup",
+
   ()=>{
+
     isDragging=false;
+
   }
+
 );
 
 
 /* =========================================================
+
    配分總表
+
 ========================================================= */
 
 function renderWeights(){
 
   let body=
+
     document.getElementById(
+
       "weightBody"
+
     );
 
 
   let totalScore=
+
     data.subjectWeights.reduce(
+
       (a,s)=>
+
         a+Number(s.score||0),
+
       0
+
     );
 
 
   let totalHours=
+
     totalPlanHours();
 
 
   let weeklyCapacity=
+
     cap();
 
 
@@ -2533,20 +3172,30 @@ function renderWeights(){
 
 
   if(
+
     !data.subjectWeights.length
+
   ){
 
     body.innerHTML=
+
       '<tr>'+
+
       '<td colspan="6" class="empty">'+
+
       '尚未加入科目'+
+
       '</td>'+
+
       '</tr>';
 
 
     document.getElementById(
+
       "weightSummary"
+
     ).textContent=
+
       `目前準備期間可配置約 ${totalHours.toFixed(1)} 小時；每週可讀書 ${weeklyCapacity.toFixed(1)} 小時。`;
 
     return;
@@ -2555,28 +3204,37 @@ function renderWeights(){
 
 
   data.subjectWeights.forEach(
+
     (s,i)=>{
 
       let ratio=
+
         totalScore
+
           ? Number(s.score)/
+
             totalScore
+
           : 0;
 
 
       let totalSubjectHours=
+
         totalHours*ratio;
 
 
       let weeklyHours=
+
         weeklyCapacity*ratio;
 
 
       let tr=
+
         document.createElement("tr");
 
 
       tr.innerHTML=
+
         `<td>
 
           <b>${esc(s.name)}</b>
@@ -2610,8 +3268,11 @@ function renderWeights(){
         <td>
 
           <button
+
             class="delete"
+
             data-i="${i}"
+
             title="刪除">
 
             ×
@@ -2624,23 +3285,32 @@ function renderWeights(){
       body.appendChild(tr);
 
     }
+
   );
 
 
   let tr=
+
     document.createElement("tr");
 
 
   tr.className=
+
     "sum-row";
 
 
   tr.innerHTML=
+
     `<td>合計</td>
+
      <td>${totalScore}</td>
+
      <td>100%</td>
+
      <td>${totalHours.toFixed(1)} h</td>
+
      <td>${weeklyCapacity.toFixed(1)} h</td>
+
      <td></td>`;
 
 
@@ -2648,15 +3318,21 @@ function renderWeights(){
 
 
   body
+
     .querySelectorAll(".delete")
+
     .forEach(
+
       b=>{
 
         b.onclick=()=>{
 
           data.subjectWeights.splice(
+
             +b.dataset.i,
+
             1
+
           );
 
 
@@ -2669,26 +3345,35 @@ function renderWeights(){
         };
 
       }
+
     );
 
 
   document.getElementById(
+
     "weightSummary"
+
   ).textContent=
+
     `準備期間約 ${dateDiffWeeks().toFixed(1)} 週 × 每週 ${cap().toFixed(1)} 小時 ＝ ${totalHours.toFixed(1)} 小時；上表依考試配分比例換算。`;
 
 }
 
 
 /* =========================================================
+
    現階段科目配置
+
 ========================================================= */
 
 function renderSubjects(){
 
   let body=
+
     document.getElementById(
+
       "subjectBody"
+
     );
 
 
@@ -2698,16 +3383,24 @@ function renderSubjects(){
   if(!data.subjects.length){
 
     body.innerHTML=
+
       '<tr>'+
+
       '<td colspan="6" class="empty">'+
+
       '尚未加入科目'+
+
       '</td>'+
+
       '</tr>';
 
 
     const notice=
+
       document.getElementById(
+
         "subjectCapacityNotice"
+
       );
 
 
@@ -2724,22 +3417,28 @@ function renderSubjects(){
 
 
   let weeks=
+
     remainingWeeks();
 
 
   data.subjects.forEach(
+
     (s,i)=>{
 
       let n=
+
         Number(s.hours)/
+
         Number(s.session);
 
 
       let tr=
+
         document.createElement("tr");
 
 
       tr.innerHTML=
+
         `<td>
 
           <b>${esc(s.name)}</b>
@@ -2779,7 +3478,9 @@ function renderSubjects(){
         <td>
 
           <button
+
             class="delete"
+
             data-i="${i}">
 
             ×
@@ -2792,19 +3493,26 @@ function renderSubjects(){
       body.appendChild(tr);
 
     }
+
   );
 
 
   body
+
     .querySelectorAll(".delete")
+
     .forEach(
+
       b=>{
 
         b.onclick=()=>{
 
           data.subjects.splice(
+
             +b.dataset.i,
+
             1
+
           );
 
 
@@ -2817,6 +3525,7 @@ function renderSubjects(){
         };
 
       }
+
     );
 
 
@@ -2827,29 +3536,42 @@ function renderSubjects(){
   */
 
   let need=
+
     data.subjects.reduce(
+
       (a,s)=>
+
         a+Number(s.hours||0),
+
       0
+
     );
 
 
   let capacity=
+
     cap();
 
 
   const notice=
+
     document.getElementById(
+
       "subjectCapacityNotice"
+
     );
 
 
   if(
+
     notice &&
+
     need>capacity
+
   ){
 
     notice.innerHTML=
+
       `<div class="notice danger">
 
         ⚠ 目前科目每週需求共
@@ -2880,32 +3602,46 @@ function renderSubjects(){
 
 
 /* =========================================================
+
    總覽更新
+
 ========================================================= */
 
 function update(){
 
   let c=
+
     cap();
 
 
   let need=
+
     data.subjects.reduce(
+
       (a,s)=>
+
         a+Number(s.hours||0),
+
       0
+
     );
 
 
   document.getElementById(
+
     "weeklyStudy"
+
   ).textContent=
+
     c.toFixed(1);
 
 
   document.getElementById(
+
     "summary"
+
   ).innerHTML=
+
     `<p>
 
       每週可讀書：
@@ -2931,15 +3667,21 @@ function update(){
     </p>
 
     ${
+
       need>c
 
         ? '<div class="notice danger">'+
+
           '科目需求超過每週可讀書時間。'+
+
           '</div>'
 
         : '<div class="notice">'+
+
           '目前容量足以容納科目需求。'+
+
           '</div>'
+
     }`;
 
 
@@ -2951,90 +3693,141 @@ function update(){
 
 
 /* =========================================================
+
    分頁切換
+
 ========================================================= */
 
 document
+
   .querySelectorAll("nav button")
+
   .forEach(
+
     b=>{
 
       b.onclick=()=>{
 
         document
+
           .querySelectorAll(
+
             "nav button"
+
           )
+
           .forEach(
+
             x=>
+
               x.classList.remove(
+
                 "active"
+
               )
+
           );
 
 
         b.classList.add(
+
           "active"
+
         );
 
 
         document
+
           .querySelectorAll(
+
             ".page"
+
           )
+
           .forEach(
+
             x=>
+
               x.classList.remove(
+
                 "active"
+
               )
+
           );
 
 
         document
+
           .getElementById(
+
             b.dataset.page
+
           )
+
           .classList.add(
+
             "active"
+
           );
 
       };
 
     }
+
   );
 
 
 /* =========================================================
+
    作息類型
+
 ========================================================= */
 
 document
+
   .querySelectorAll(
+
     "#palette button"
+
   )
+
   .forEach(
+
     b=>{
 
       b.onclick=()=>{
 
         document
+
           .querySelectorAll(
+
             "#palette button"
+
           )
+
           .forEach(
+
             x=>
+
               x.classList.remove(
+
                 "selected"
+
               )
+
           );
 
 
         b.classList.add(
+
           "selected"
+
         );
 
 
         selectedKind=
+
           b.dataset.kind;
 
 
@@ -3043,15 +3836,20 @@ document
       };
 
     }
+
   );
 
 
 /* =========================================================
+
    清除選取
+
 ========================================================= */
 
 document.getElementById(
+
   "clearSelection"
+
 ).onclick=()=>{
 
   selectedCells.clear();
@@ -3062,32 +3860,47 @@ document.getElementById(
 
 
 /* =========================================================
+
    儲存日期
+
 ========================================================= */
 
 function saveDates(){
 
   const start=
+
     document.getElementById(
+
       "startDate"
+
     ).value;
 
 
   const exam=
+
     document.getElementById(
+
       "examDate"
+
     ).value;
 
 
   if(
+
     start&&
+
     exam&&
+
     new Date(exam+"T00:00:00")<
+
     new Date(start+"T00:00:00")
+
   ){
 
     alert(
+
       "考試日期不能早於起始日期。"
+
     );
 
     return false;
@@ -3118,45 +3931,70 @@ function saveDates(){
 */
 
 document.getElementById(
+
   "startDate"
+
 ).addEventListener(
+
   "change",
+
   saveDates
+
 );
 
 
 document.getElementById(
+
   "examDate"
+
 ).addEventListener(
+
   "change",
+
   saveDates
+
 );
 
 
 document.getElementById(
+
   "saveDates"
+
 ).onclick=
+
   saveDates;
 
 
 /* =========================================================
+
    清除作息
+
 ========================================================= */
 
 document.getElementById(
+
   "clearRoutine"
+
 ).onclick=()=>{
 
   if(
+
     confirm(
+
       "確定清除全部作息？"
+
     )
+
   ){
 
     data.routine=
+
       Array.from(
+
         {length:7},
+
         ()=>Array(40).fill("rest")
+
       );
 
 
@@ -3174,51 +4012,74 @@ document.getElementById(
 
 
 /* =========================================================
+
    儲存作息
+
 ========================================================= */
 
 document.getElementById(
+
   "saveRoutine"
+
 ).onclick=()=>{
 
   save();
 
   alert(
+
     "作息已保存。"
+
   );
 
 };
 
 
 /* =========================================================
+
    新增考試配分科目
+
 ========================================================= */
 
 document.getElementById(
+
   "addWeight"
+
 ).onclick=()=>{
 
   let name=
+
     document.getElementById(
+
       "wName"
+
     ).value.trim();
 
 
   let score=
+
     Number(
+
       document.getElementById(
+
         "wScore"
+
       ).value||0
+
     );
 
 
   if(
+
     !name||
+
     score<=0
+
   ){
 
     alert(
+
       "請填寫科目名稱與配分。"
+
     );
 
     return;
@@ -3239,12 +4100,16 @@ document.getElementById(
 
 
   document.getElementById(
+
     "wName"
+
   ).value="";
 
 
   document.getElementById(
+
     "wScore"
+
   ).value="";
 
 
@@ -3256,49 +4121,75 @@ document.getElementById(
 
 
 /* =========================================================
+
    新增現階段科目
+
 ========================================================= */
 
 document.getElementById(
+
   "addSubject"
+
 ).onclick=()=>{
 
   let name=
+
     document.getElementById(
+
       "sName"
+
     ).value.trim();
 
 
   let hours=
+
     Number(
+
       document.getElementById(
+
         "sHours"
+
       ).value||0
+
     );
 
 
   let session=
+
     Number(
+
       document.getElementById(
+
         "sSession"
+
       ).value||0
+
     );
 
 
   let type=
+
     document.getElementById(
+
       "sType"
+
     ).value;
 
 
   if(
+
     !name||
+
     hours<=0||
+
     session<=0
+
   ){
 
     alert(
+
       "請填寫科目、每週時數、每次時數。"
+
     );
 
     return;
@@ -3307,11 +4198,15 @@ document.getElementById(
 
 
   if(
+
     hours/session<1
+
   ){
 
     alert(
+
       "每週時數至少要能安排一次完整的每次時數。"
+
     );
 
     return;
@@ -3336,14 +4231,23 @@ document.getElementById(
 
 
   [
+
     "sName",
+
     "sHours",
+
     "sSession"
+
   ].forEach(
+
     id=>
+
       document.getElementById(
+
         id
+
       ).value=""
+
   );
 
 
@@ -3355,11 +4259,15 @@ document.getElementById(
 
 
 /* =========================================================
+
    匯出資料
+
 ========================================================= */
 
 document.getElementById(
+
   "exportData"
+
 ).onclick=()=>{
 
   const backup={
@@ -3369,6 +4277,7 @@ document.getElementById(
     version:BACKUP_VERSION,
 
     exportedAt:
+
       new Date().toISOString(),
 
     data:data
@@ -3377,37 +4286,55 @@ document.getElementById(
 
 
   const blob=
+
     new Blob(
+
       [
+
         JSON.stringify(
+
           backup,
+
           null,
+
           2
+
         )
+
       ],
+
       {
+
         type:"application/json"
+
       }
+
     );
 
 
   const url=
+
     URL.createObjectURL(blob);
 
 
   const a=
+
     document.createElement("a");
 
 
   const today=
+
     new Date()
+
       .toISOString()
+
       .slice(0,10);
 
 
   a.href=url;
 
   a.download=
+
     `讀書進度備份_${today}.json`;
 
 
@@ -3424,27 +4351,38 @@ document.getElementById(
 
 
 /* =========================================================
+
    匯入資料
+
 ========================================================= */
 
 document.getElementById(
+
   "importData"
+
 ).onclick=()=>{
 
   document.getElementById(
+
     "backupFile"
+
   ).click();
 
 };
 
 
 document.getElementById(
+
   "backupFile"
+
 ).addEventListener(
+
   "change",
+
   async e=>{
 
     const file=
+
       e.target.files[0];
 
 
@@ -3454,24 +4392,32 @@ document.getElementById(
     try{
 
       const text=
+
         await file.text();
 
 
       const backup=
+
         JSON.parse(text);
 
 
       let imported=
+
         backup.data||backup;
 
 
       if(
+
         !imported||
+
         typeof imported!=="object"
+
       ){
 
         throw new Error(
+
           "格式錯誤"
+
         );
 
       }
@@ -3480,37 +4426,55 @@ document.getElementById(
       /* 基本資料檢查 */
 
       if(
+
         imported.routine &&
+
         !Array.isArray(
+
           imported.routine
+
         )
+
       ){
 
         throw new Error(
+
           "作息資料格式錯誤"
+
         );
 
       }
 
 
       if(
+
         imported.subjects &&
+
         !Array.isArray(
+
           imported.subjects
+
         )
+
       ){
 
         throw new Error(
+
           "科目資料格式錯誤"
+
         );
 
       }
 
 
       if(
+
         !confirm(
+
           "匯入後會覆蓋目前資料，確定繼續嗎？"
+
         )
+
       ){
 
         e.target.value="";
@@ -3523,26 +4487,39 @@ document.getElementById(
       data={
 
         routine:
+
           imported.routine||
+
           Array.from(
+
             {length:7},
+
             ()=>Array(40).fill("rest")
+
           ),
 
         subjects:
+
           imported.subjects||
+
           [],
 
         subjectWeights:
+
           imported.subjectWeights||
+
           [],
 
         startDate:
+
           imported.startDate||
+
           "",
 
         examDate:
+
           imported.examDate||
+
           ""
 
       };
@@ -3551,19 +4528,28 @@ document.getElementById(
       /* 修正作息陣列 */
 
       data.routine=
+
         data.routine
+
           .slice(0,7)
+
           .map(dayArray=>{
 
             let arr=
+
               Array.isArray(dayArray)
+
                 ? dayArray
+
                     .slice(0,40)
+
                 : [];
 
 
             while(
+
               arr.length<40
+
             ){
 
               arr.push("rest");
@@ -3572,21 +4558,30 @@ document.getElementById(
 
 
             return arr.map(
+
               k=>
+
                 kinds[k]
+
                   ? k
+
                   : "rest"
+
             );
 
           });
 
 
       while(
+
         data.routine.length<7
+
       ){
 
         data.routine.push(
+
           Array(40).fill("rest")
+
         );
 
       }
@@ -3599,14 +4594,20 @@ document.getElementById(
 
 
       document.getElementById(
+
         "startDate"
+
       ).value=
+
         data.startDate;
 
 
       document.getElementById(
+
         "examDate"
+
       ).value=
+
         data.examDate;
 
 
@@ -3618,15 +4619,20 @@ document.getElementById(
 
 
       alert(
+
         "進度備份已成功匯入。"
+
       );
 
 
     }catch(err){
 
       alert(
+
         "無法匯入這個備份檔案。\n\n"+
+
         "請確認它是本工具匯出的 JSON 備份。"
+
       );
 
 
@@ -3638,20 +4644,28 @@ document.getElementById(
     e.target.value="";
 
   }
+
 );
 
 
 /* =========================================================
+
    清除全部資料
+
 ========================================================= */
 
 document.getElementById(
+
   "clearData"
+
 ).onclick=()=>{
 
   const ok=
+
     confirm(
+
       "這會清除本工具目前保存的所有資料，包括日期、作息、科目與配分。\n\n確定要全部清除嗎？"
+
     );
 
 
@@ -3664,9 +4678,13 @@ document.getElementById(
   data={
 
     routine:
+
       Array.from(
+
         {length:7},
+
         ()=>Array(40).fill("rest")
+
       ),
 
     subjects:[],
@@ -3684,12 +4702,16 @@ document.getElementById(
 
 
   document.getElementById(
+
     "startDate"
+
   ).value="";
 
 
   document.getElementById(
+
     "examDate"
+
   ).value="";
 
 
@@ -3703,14 +4725,18 @@ document.getElementById(
 
 
   alert(
+
     "所有資料已清除。"
+
   );
 
 };
 
 
 /* =========================================================
+
    自動排程
+
 ========================================================= */
 
 function generate(){
@@ -3718,7 +4744,9 @@ function generate(){
   if(!data.startDate){
 
     alert(
+
       "請先設定起始日期。"
+
     );
 
     return;
@@ -3729,7 +4757,9 @@ function generate(){
   if(!data.examDate){
 
     alert(
+
       "請先設定考試日期。"
+
     );
 
     return;
@@ -3738,73 +4768,106 @@ function generate(){
 
 
   let range=
+
     document.getElementById(
+
       "planRange"
+
     ).value;
 
 
   let daysCount=
+
     range==="week"
+
       ? 7
+
       : range==="1"
+
         ? 30
+
         : 90;
 
 
   /*
+
     自動排程從「設定的起始日期」開始。
 
-    排程期間只依照使用者選擇的：
-    1 週／1 個月／3 個月。
+    排程期間完全依照上方選擇：
 
-    考試日期仍然只作為考試倒數與
-    準備期間資料使用，不再截斷排程。
+    1 週 = 7 天
+
+    1 個月 = 30 天
+
+    3 個月 = 90 天
+
   */
 
   let start=
+
     new Date(
+
       data.startDate+"T00:00:00"
+
     );
 
 
   start.setHours(
+
     0,0,0,0
+
   );
 
 
   let end=
+
     addDays(
+
       start,
+
       daysCount
+
     );
 
 
   let c=
+
     cap();
 
 
   let need=
+
     data.subjects.reduce(
+
       (a,s)=>
+
         a+Number(s.hours||0),
+
       0
+
     );
 
 
   document.getElementById(
+
     "capacityNotice"
+
   ).innerHTML=
+
     need>c
 
       ? `<div class="notice danger">
 
           ⚠ 每週科目需求
+
           ${need.toFixed(1)} 小時，
 
           可用
+
           ${c.toFixed(1)} 小時，
 
           超出
+
           ${(need-c).toFixed(1)} 小時。
 
         </div>`
@@ -3812,24 +4875,34 @@ function generate(){
       : `<div class="notice">
 
           ✓ 每週科目需求
+
           ${need.toFixed(1)} 小時／
 
           可用
+
           ${c.toFixed(1)} 小時。
 
         </div>`;
 
 
   if(
+
     !data.subjects.length||
+
     !c
+
   ){
 
     document.getElementById(
+
       "planOutput"
+
     ).innerHTML=
+
       '<div class="empty">'+
+
       '請先設定作息與科目。'+
+
       '</div>';
 
     return;
@@ -3838,76 +4911,240 @@ function generate(){
 
 
   /*
-    events 以日期為 key。
 
-    occupied：
-    記錄每一天 40 個半小時時段
-    是否已經被其他科目使用。
+    events 以實際日期為 key。
 
-    這可以避免不同科目互相重疊。
+    occupied 以實際日期記錄 40 個半小時格，
+
+    避免不同科目排到同一時間。
+
   */
 
   let events={};
 
   let occupied={};
 
-  let unscheduled=[];
+  let shortfall={};
 
 
   /*
-    取得指定日期所在週的星期一。
 
-    排程週期與週曆顯示方式一致，
-    都採用星期一～星期日。
+    取得某日期所在曆週的星期一。
+
+    JS：
+
+    日=0
+
+    一=1
+
+    二=2
+
+    ...
+
+    六=6
+
   */
 
-  function getWeekMondayLocal(date){
+  const getWeekMondayLocal=d=>{
 
-    let d=
-      new Date(date);
+    let x=
+
+      new Date(d);
 
 
-    d.setHours(
+    x.setHours(
+
       0,0,0,0
+
     );
 
 
     let day=
-      d.getDay();
+
+      x.getDay();
 
 
     let diff=
+
       day===0
+
         ? -6
+
         : 1-day;
 
 
     return addDays(
-      d,
+
+      x,
+
       diff
+
     );
 
-  }
+  };
 
 
   /*
-    一週一週進行排程。
 
-    第一週如果起始日不是星期一，
-    只使用真正落在排程期間內的日期。
+    尋找某一天可以完整容納某次讀書的連續時段。
+
+    每一格 30 分鐘。
+
+    40 格 = 06:00～隔日 02:00。
+
+  */
+
+  const findSlot=(date,needSlots)=>{
+
+    let key=
+
+      fmt(date);
+
+
+    if(!occupied[key]){
+
+      occupied[key]=
+
+        Array(40).fill(false);
+
+    }
+
+
+    let dow=
+
+      (date.getDay()+6)%7;
+
+
+    if(
+
+      !data.routine[dow]
+
+    ){
+
+      return -1;
+
+    }
+
+
+    for(
+
+      let st=0;
+
+      st<=40-needSlots;
+
+      st++
+
+    ){
+
+      let ok=true;
+
+
+      for(
+
+        let j=0;
+
+        j<needSlots;
+
+        j++
+
+      ){
+
+        if(
+
+          data.routine[dow][st+j]!=="study"||
+
+          occupied[key][st+j]
+
+        ){
+
+          ok=false;
+
+          break;
+
+        }
+
+      }
+
+
+      if(ok){
+
+        return st;
+
+      }
+
+    }
+
+
+    return -1;
+
+  };
+
+
+  /*
+
+    將實際時段標記為已使用。
+
+  */
+
+  const occupySlot=(date,st,needSlots)=>{
+
+    let key=
+
+      fmt(date);
+
+
+    if(!occupied[key]){
+
+      occupied[key]=
+
+        Array(40).fill(false);
+
+    }
+
+
+    for(
+
+      let j=0;
+
+      j<needSlots;
+
+      j++
+
+    ){
+
+      occupied[key][st+j]=true;
+
+    }
+
+  };
+
+
+  /*
+
+    依星期一～星期日逐週處理。
+
+    第一週與最後一週雖然可能只有部分日期落在排程範圍內，
+
+    但「每週需求」仍以曆週計算。
+
   */
 
   for(
 
     let weekMonday=
+
       getWeekMondayLocal(start);
 
     weekMonday<end;
 
     weekMonday=
+
       addDays(
+
         weekMonday,
+
         7
+
       )
 
   ){
@@ -3926,15 +5163,22 @@ function generate(){
     ){
 
       let d=
+
         addDays(
+
           weekMonday,
+
           i
+
         );
 
 
       if(
+
         d>=start&&
+
         d<end
+
       ){
 
         weekDates.push(d);
@@ -3952,148 +5196,125 @@ function generate(){
 
 
     /*
-      每個日期建立 40 個半小時的佔用狀態。
+
+      先排每一科。
+
+      同一科優先使用不同日期，
+
+      讓每週讀書分布比較平均。
+
     */
 
-    weekDates.forEach(
-      d=>{
+    data.subjects.forEach(
 
-        let key=
-          fmt(d);
+      (s,si)=>{
 
+        let sessionHours=
 
-        occupied[key]=
-          Array(40).fill(false);
-
-      }
-    );
+          Number(s.session);
 
 
-    /*
-      逐科安排。
+        let weeklyHours=
 
-      每週次數：
-
-      每週時數 ÷ 每次時數
-
-      例如：
-      6h ÷ 2h = 3 次
-    */
-
-    for(
-
-      let si=0;
-
-      si<data.subjects.length;
-
-      si++
-
-    ){
-
-      let s=
-        data.subjects[si];
+          Number(s.hours);
 
 
-      let weeklyHours=
-        Number(
-          s.hours||0
-        );
+        let sessions=
+
+          Math.max(
+
+            1,
+
+            Math.round(
+
+              weeklyHours/sessionHours
+
+            )
+
+          );
 
 
-      let sessionHours=
-        Number(
-          s.session||0
-        );
+        let needSlots=
 
-
-      if(
-        weeklyHours<=0||
-        sessionHours<=0
-      ){
-
-        continue;
-
-      }
-
-
-      let sessionsPerWeek=
-        Math.max(
-          1,
           Math.round(
-            weeklyHours/
-            sessionHours
-          )
-        );
 
-
-      let needSlots=
-        Math.max(
-          1,
-          Math.round(
             sessionHours*2
-          )
-        );
+
+          );
 
 
-      let placed=0;
+        /*
 
-      let usedDays=
-        new Set();
+          不可能塞進一天的情況。
+
+          例如一次 21 小時，
+
+          直接視為本週無法安排。
+
+        */
+
+        if(
+
+          !Number.isFinite(needSlots)||
+
+          needSlots<=0||
+
+          needSlots>40
+
+        ){
+
+          shortfall[si]=
+
+            (shortfall[si]||0)+
+
+            sessions;
+
+          return;
+
+        }
 
 
-      /*
-        第一輪：
-        優先安排到尚未使用的日期。
+        let placed=0;
 
-        例如同一科一週要讀 3 次，
-        優先分散到三個不同日期。
-      */
+        let usedDays=new Set();
 
-      for(
 
-        let pass=0;
+        /*
 
-        pass<2&&
-        placed<sessionsPerWeek;
+          第一輪：
 
-        pass++
+          優先每天最多排一次，
 
-      ){
+          盡量把同一科分散到不同日期。
+
+        */
 
         for(
 
           let di=0;
 
-          di<weekDates.length&&
-          placed<sessionsPerWeek;
+          di<weekDates.length &&
+
+          placed<sessions;
 
           di++
 
         ){
 
           let d=
+
             weekDates[di];
 
 
           let key=
+
             fmt(d);
 
 
-          let dow=
-            (d.getDay()+6)%7;
-
-
-          /*
-            第一輪不允許同一科在同一天
-            出現兩次。
-
-            第二輪若仍有需要，
-            才允許使用已經安排過的日期。
-          */
-
           if(
-            pass===0&&
+
             usedDays.has(key)
+
           ){
 
             continue;
@@ -4101,248 +5322,351 @@ function generate(){
           }
 
 
-          /*
-            尋找連續的可用讀書時段。
-          */
+          let st=
 
-          for(
+            findSlot(
 
-            let st=0;
+              d,
 
-            st<=40-needSlots;
+              needSlots
 
-            st++
-
-          ){
-
-            let ok=true;
+            );
 
 
-            for(
+          if(st<0){
 
-              let j=0;
-
-              j<needSlots;
-
-              j++
-
-            ){
-
-              let slot=
-                st+j;
-
-
-              if(
-                data.routine[dow][slot]
-                !=="study"||
-                occupied[key][slot]
-              ){
-
-                ok=false;
-
-                break;
-
-              }
-
-            }
-
-
-            if(!ok){
-
-              continue;
-
-            }
-
-
-            /*
-              確認後正式占用這些時段。
-            */
-
-            for(
-
-              let j=0;
-
-              j<needSlots;
-
-              j++
-
-            ){
-
-              occupied[key][st+j]=true;
-
-            }
-
-
-            events[key]=
-              events[key]||[];
-
-
-            let startMinutes=
-              360+st*30;
-
-
-            let endMinutes=
-              startMinutes+
-              needSlots*30;
-
-
-            events[key].push({
-
-              time:
-                formatTime(
-                  startMinutes
-                ),
-
-              startTime:
-                formatTime(
-                  startMinutes
-                ),
-
-              endTime:
-                formatTime(
-                  endMinutes
-                ),
-
-              startMinutes,
-
-              endMinutes,
-
-              name:
-                s.name,
-
-              type:
-                s.type,
-
-              hours:
-                s.session,
-
-              subjectIndex:si
-
-            });
-
-
-            usedDays.add(key);
-
-            placed++;
-
-            break;
+            continue;
 
           }
+
+
+          occupySlot(
+
+            d,
+
+            st,
+
+            needSlots
+
+          );
+
+
+          let startMinutes=
+
+            360+st*30;
+
+
+          let endMinutes=
+
+            startMinutes+
+
+            needSlots*30;
+
+
+          events[key]=
+
+            events[key]||[];
+
+
+          events[key].push({
+
+            time:
+
+              formatTime(
+
+                startMinutes
+
+              ),
+
+            startTime:
+
+              formatTime(
+
+                startMinutes
+
+              ),
+
+            endTime:
+
+              formatTime(
+
+                endMinutes
+
+              ),
+
+            startMinutes,
+
+            endMinutes,
+
+            name:
+
+              s.name,
+
+            type:
+
+              s.type,
+
+            hours:
+
+              s.session,
+
+            subjectIndex:si
+
+          });
+
+
+          usedDays.add(key);
+
+          placed++;
+
+        }
+
+
+        /*
+
+          第二輪：
+
+          如果一週天數不足以分散完全部次數，
+
+          再允許同一天安排第二次或更多次。
+
+        */
+
+        for(
+
+          let di=0;
+
+          di<weekDates.length &&
+
+          placed<sessions;
+
+          di++
+
+        ){
+
+          let d=
+
+            weekDates[di];
+
+
+          let key=
+
+            fmt(d);
+
+
+          let st=
+
+            findSlot(
+
+              d,
+
+              needSlots
+
+            );
+
+
+          if(st<0){
+
+            continue;
+
+          }
+
+
+          occupySlot(
+
+            d,
+
+            st,
+
+            needSlots
+
+          );
+
+
+          let startMinutes=
+
+            360+st*30;
+
+
+          let endMinutes=
+
+            startMinutes+
+
+            needSlots*30;
+
+
+          events[key]=
+
+            events[key]||[];
+
+
+          events[key].push({
+
+            time:
+
+              formatTime(
+
+                startMinutes
+
+              ),
+
+            startTime:
+
+              formatTime(
+
+                startMinutes
+
+              ),
+
+            endTime:
+
+              formatTime(
+
+                endMinutes
+
+              ),
+
+            startMinutes,
+
+            endMinutes,
+
+            name:
+
+              s.name,
+
+            type:
+
+              s.type,
+
+            hours:
+
+              s.session,
+
+            subjectIndex:si
+
+          });
+
+
+          placed++;
+
+        }
+
+
+        if(
+
+          placed<sessions
+
+        ){
+
+          shortfall[si]=
+
+            (shortfall[si]||0)+
+
+            (sessions-placed);
 
         }
 
       }
 
-
-      /*
-        如果本週實際可用時段不足，
-        不再默默漏掉，而是記錄實際排入次數。
-      */
-
-      if(
-        placed<sessionsPerWeek
-      ){
-
-        unscheduled.push({
-
-          name:s.name,
-
-          requested:sessionsPerWeek,
-
-          placed
-
-        });
-
-      }
-
-    }
+    );
 
   }
 
 
   /*
-    每一天依開始時間排序。
+
+    每天按照開始時間排序，
+
+    確保週曆上的事件由早到晚排列。
+
   */
 
   Object.keys(events).forEach(
+
     key=>{
 
       events[key].sort(
+
         (a,b)=>
+
           a.startMinutes-
+
           b.startMinutes
+
       );
 
     }
+
   );
 
 
   /*
-    如果有科目沒有完全排滿，
-    在原本的容量提示區顯示。
+
+    如果有科目沒有完全排入，
+
+    明確顯示「少了幾次」。
+
   */
 
   if(
-    unscheduled.length
+
+    Object.keys(shortfall).length
+
   ){
 
-    let unique=[];
+    let detail=
+
+      Object.keys(shortfall)
+
+        .map(
+
+          si=>{
+
+            let s=
+
+              data.subjects[si];
 
 
-    unscheduled.forEach(
-      item=>{
+            return `${esc(s.name)} ${shortfall[si]} 次`;
 
-        let existing=
-          unique.find(
-            x=>x.name===item.name
-          );
+          }
 
+        )
 
-        if(existing){
-
-          existing.requested+=
-            item.requested;
-
-          existing.placed+=
-            item.placed;
-
-        }else{
-
-          unique.push({
-
-            name:item.name,
-
-            requested:item.requested,
-
-            placed:item.placed
-
-          });
-
-        }
-
-      }
-    );
+        .join("、");
 
 
     document.getElementById(
+
       "capacityNotice"
+
     ).innerHTML+=
-      `<div
-        class="notice danger"
-        style="margin-top:8px">
+
+      `<div class="notice danger" style="margin-top:8px">
 
         ⚠ 部分科目無法完全排入：
 
-        ${unique.map(
-          x=>
-            `${esc(x.name)}
-            ${x.placed}/${x.requested} 次`
-        ).join("、")}
+        ${detail}
 
         <br>
 
         請檢查每週作息中的「讀書」時段、
+
         每次時數，以及各科每週需求。
+
+      </div>`;
+
+  }else{
+
+    document.getElementById(
+
+      "capacityNotice"
+
+    ).innerHTML+=
+
+      `<div class="notice" style="margin-top:8px">
+
+        ✓ 本排程期間內，各科每週需求均已成功安排。
 
       </div>`;
 
@@ -4350,21 +5674,28 @@ function generate(){
 
 
   renderPlan(
+
     events,
+
     start,
+
     end
+
   );
 
 }
 
 
 /* =========================================================
+
    時間格式
+
 ========================================================= */
 
 function formatTime(mins){
 
   let normalized=
+
     mins%(24*60);
 
 
@@ -4376,152 +5707,218 @@ function formatTime(mins){
 
 
   let h=
+
     Math.floor(
+
       normalized/60
+
     );
 
 
   let m=
+
     normalized%60;
 
 
   return String(h).padStart(2,"0")
+
     +":"
+
     +String(m).padStart(2,"0");
 
 }
 
 
 /* =========================================================
+
    取得某日期所在週的星期一
+
 ========================================================= */
 
 function getMonday(date){
 
   let d=
+
     new Date(date);
 
 
   d.setHours(
+
     0,0,0,0
+
   );
 
 
   let day=
+
     d.getDay();
 
 
   /*
+
     JS：
+
     日=0
+
     一=1
+
     二=2
+
     ...
+
     六=6
+
   */
 
   let diff=
+
     day===0
+
       ? -6
+
       : 1-day;
 
 
   return addDays(
+
     d,
+
     diff
+
   );
 
 }
 
 
 /* =========================================================
+
    顯示自動排程
+
 ========================================================= */
 
 function renderPlan(
+
   events,
+
   start,
+
   end
+
 ){
 
   /*
+
     第一週固定從「起始日期所在週」的星期一開始。
 
     例如：
+
     起始日＝星期三
 
     第一週：
+
     一 二 → 空白
+
     三 四 五 六 日 → 可排程
 
     後面全部按照完整週顯示。
+
   */
 
   let firstMonday=
+
     getMonday(start);
 
 
   /*
+
     最後一週要完整顯示到星期日，
+
     但超過排程結束日期的部分保持空白。
+
   */
 
   let lastDisplaySunday=
+
     addDays(
+
       getMonday(
+
         addDays(end,-1)
+
       ),
+
       6
+
     );
 
 
   let html=
+
     '<div class="plan-wrapper">';
 
 
   html+=
+
     '<div class="plan-calendar">';
 
 
   /*
+
     每週一個區塊。
+
   */
 
   for(
 
     let weekMonday=
+
       new Date(firstMonday);
 
     weekMonday<=lastDisplaySunday;
 
     weekMonday=
+
       addDays(
+
         weekMonday,
+
         7
+
       )
 
   ){
 
     let weekSunday=
+
       addDays(
+
         weekMonday,
+
         6
+
       );
 
 
     let firstWeekText=
+
       formatDateShort(
+
         weekMonday
+
       );
 
 
     let lastWeekText=
+
       formatDateShort(
+
         weekSunday
+
       );
 
 
     html+=
+
       `<div class="plan-week">
 
         <div class="plan-week-title">
@@ -4536,7 +5933,9 @@ function renderPlan(
 
 
     /*
+
       七天標題。
+
     */
 
     for(
@@ -4550,34 +5949,50 @@ function renderPlan(
     ){
 
       let day=
+
         addDays(
+
           weekMonday,
+
           i
+
         );
 
 
       let key=
+
         fmt(day);
 
 
       let insideRange=
+
         day>=start &&
+
         day<end;
 
 
       html+=
+
         `<div class="plan-day-header ${
+
           insideRange
+
             ? ""
+
             : "outside"
+
         }">
 
           <span class="weekday">
+
             星期${days[i]}
+
           </span>
 
           <span class="date">
+
             ${key}
+
           </span>
 
         </div>`;
@@ -4586,33 +6001,45 @@ function renderPlan(
 
 
     /*
+
       時間軸與七天內容。
 
       一天仍然沿用「06:00～隔日02:00」，
+
       共 40 個半小時 = 20 小時。
+
     */
 
     const totalMinutes=
+
       40*30;
 
 
     const pxPerHalfHour=
+
       24;
 
 
     const gridHeight=
+
       40*pxPerHalfHour;
 
 
     html+=
+
       `<div
+
         class="plan-time-axis"
+
         style="height:${gridHeight}px">`;
 
 
     /*
+
       每 30 分鐘顯示時間文字，
+
       但每小時顯示一次即可，避免過度密集。
+
     */
 
     for(
@@ -4629,20 +6056,26 @@ function renderPlan(
 
 
       let mins=
+
         360+slot*30;
 
 
       let top=
+
         slot*pxPerHalfHour;
 
 
       let label=
+
         formatTime(mins);
 
 
       html+=
+
         `<div
+
           class="plan-time-label"
+
           style="top:${top}px">
 
           ${label}
@@ -4653,16 +6086,22 @@ function renderPlan(
 
 
     html+=
+
       '</div>';
 
 
     /*
+
       七個日期欄。
+
     */
 
     html+=
+
       `<div
+
         class="plan-days-area"
+
         style="height:${gridHeight}px">`;
 
 
@@ -4677,36 +6116,53 @@ function renderPlan(
     ){
 
       let day=
+
         addDays(
+
           weekMonday,
+
           i
+
         );
 
 
       let key=
+
         fmt(day);
 
 
       let insideRange=
+
         day>=start &&
+
         day<end;
 
 
       html+=
+
         `<div
+
           class="plan-day-column ${
+
             insideRange
+
               ? ""
+
               : "outside"
+
           }">
 
           <div
+
             class="plan-grid-area"
+
             style="height:${gridHeight}px">`;
 
 
       /*
+
         每小時實線。
+
       */
 
       for(
@@ -4720,20 +6176,27 @@ function renderPlan(
       ){
 
         let top=
+
           slot*pxPerHalfHour;
 
 
         html+=
+
           `<div
+
             class="plan-hour-line"
+
             style="top:${top}px">
+
           </div>`;
 
       }
 
 
       /*
+
         每半小時虛線。
+
       */
 
       for(
@@ -4747,168 +6210,233 @@ function renderPlan(
       ){
 
         let top=
+
           slot*pxPerHalfHour;
 
 
         html+=
+
           `<div
+
             class="plan-half-line"
+
             style="top:${top}px">
+
           </div>`;
 
       }
 
 
       /*
+
         只有在真正排程範圍內的日期才放行程。
+
       */
 
       if(insideRange){
 
         let list=
+
           events[key]||[];
 
 
         list.forEach(
+
           e=>{
 
             /*
+
               06:00 是時間軸的起點。
 
               因此：
+
               06:00 → top 0
+
               06:30 → top 24
+
               07:00 → top 48
+
             */
 
             let top=
+
               (e.startMinutes-360)/
+
               30*
+
               pxPerHalfHour;
 
 
             let height=
+
               (e.endMinutes-e.startMinutes)/
+
               30*
+
               pxPerHalfHour;
 
 
             /*
+
               如果事件跨過 02:00，
+
               不讓它超出當日時間軸。
+
             */
 
             let maxHeight=
+
               gridHeight-top;
 
 
             height=
+
               Math.min(
+
                 height,
+
                 maxHeight
+
               );
 
 
             let subjectClass=
+
               e.subjectIndex<10
+
                 ? `subject-${e.subjectIndex}`
+
                 : "subject-other";
 
 
             html+=
+
               `<div
+
                 class="plan-event ${subjectClass}"
+
                 style="
+
                   top:${top}px;
+
                   height:${height}px;
+
                 ">
 
                 <b>
+
                   ${e.startTime}–${e.endTime}
+
                 </b>
 
                 <span class="event-name">
+
                   ${esc(e.name)}
+
                 </span>
 
                 <span class="event-type">
+
                   ${esc(e.type)} · ${e.hours}h
+
                 </span>
 
               </div>`;
 
           }
+
         );
 
       }
 
 
       html+=
+
         `</div>
+
         </div>`;
 
     }
 
 
     html+=
+
       '</div>';
 
     html+=
+
       '</div>';
 
     html+=
+
       '</div>';
 
   }
 
 
   html+=
+
     '</div>';
 
 
   /*
+
     科目色彩圖例。
+
   */
 
   if(data.subjects.length){
 
     html+=
+
       '<div class="plan-legend">';
 
 
     data.subjects.forEach(
+
       (s,i)=>{
 
         let cls=
+
           i<10
+
             ? `subject-${i}`
+
             : "subject-other";
 
 
         html+=
+
           `<div class="plan-legend-item">
 
             <span
+
               class="plan-legend-dot ${cls}">
+
             </span>
 
             <span>
+
               ${esc(s.name)}
+
             </span>
 
           </div>`;
 
       }
+
     );
 
 
     html+=
+
       '</div>';
 
   }
 
 
   html+=
+
     `<div class="plan-note">
 
       時間軸：06:00～隔日02:00 · 每30分鐘一格。
@@ -4921,19 +6449,25 @@ function renderPlan(
 
 
   html+=
+
     '</div>';
 
 
   document.getElementById(
+
     "planOutput"
+
   ).innerHTML=
+
     html;
 
 }
 
 
 /* =========================================================
+
    日期顯示
+
 ========================================================= */
 
 function formatDateShort(d){
@@ -4944,24 +6478,35 @@ function formatDateShort(d){
 
 
 /* =========================================================
+
    初始化
+
 ========================================================= */
 
 document.getElementById(
+
   "generate"
+
 ).onclick=
+
   generate;
 
 
 document.getElementById(
+
   "startDate"
+
 ).value=
+
   data.startDate;
 
 
 document.getElementById(
+
   "examDate"
+
 ).value=
+
   data.examDate;
 
 
