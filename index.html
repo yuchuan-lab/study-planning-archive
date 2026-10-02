@@ -1757,7 +1757,7 @@ th{
 
           自動排程會優先按照「每次時數」安排；
 
-          若連續時間不足，會自動拆成 1 小時為主的讀書單位。
+          若連續時間不足，只會拆成 1 小時以上的完整讀書區塊。
 
         </strong>
 
@@ -1908,23 +1908,43 @@ th{
 
       系統會檢查當週<strong>所有</strong>「讀書」時段。
 
-      優先安排完整的「每次時數」；
+      <br>
 
-      如果找不到足夠的連續時間，
-
-      會將無法完整放入的時數拆成
-
-      <strong>1 小時為主要單位</strong>繼續安排。
+      ① 優先安排完整的「每次時數」。
 
       <br>
+
+      ② 如果完整 session 無法放入，
+
+      只會使用 <strong>≥ 1 小時</strong>的完整讀書區塊。
+
+      <br>
+
+      ③ 在 ≥ 1 小時的區塊中，
+
+      優先使用 1.5 小時、2 小時以上等較完整的連續時段。
+
+      <br>
+
+      ④ 某一天只剩 0.5 小時時，
+
+      <strong>直接留白，不會硬塞 30 分鐘。</strong>
+
+      <br><br>
 
       例如每次 3 小時，
 
       如果沒有 3 小時連續時間，
 
-      可以改排成 2 小時＋1 小時，
+      會優先尋找：
 
-      或 1 小時＋1 小時＋1 小時。
+      <strong>1.5 小時＋1.5 小時</strong>、
+
+      <strong>2 小時＋1 小時</strong>等組合。
+
+      如果真的無法安排完整時數，
+
+      剩餘部分會保留為「尚未排入」。
 
     </div>
 
@@ -4801,7 +4821,589 @@ function findBestFullPosition(
 
 /* =========================================================
 
-   找可以放入指定「拆分時數」的位置
+   ★ 新的拆分邏輯
+
+   最低單位 = 1 小時 = 2 slots
+
+   不再產生 0.5 小時。
+
+========================================================= */
+
+
+/*
+
+  取得所有「至少 1 小時」的可用區塊。
+
+  注意：
+
+  這裡刻意排除只有 1 slot = 0.5h 的區塊。
+
+*/
+
+function getChunkBlocks(
+
+  weekDates,
+
+  occupied
+
+){
+
+  const result=[];
+
+  weekDates.forEach(
+
+    date=>{
+
+      const key=
+
+        fmt(date);
+
+      const blocks=
+
+        getAvailableBlocks(
+
+          date,
+
+          occupied
+
+        );
+
+      blocks.forEach(
+
+        block=>{
+
+          if(block.slots<2){
+
+            return;
+
+          }
+
+          result.push({
+
+            date:new Date(date),
+
+            key,
+
+            startSlot:block.startSlot,
+
+            blockSlots:block.slots,
+
+            alreadyUsed:false
+
+          });
+
+        }
+
+      );
+
+    }
+
+  );
+
+  return result;
+
+}
+
+
+/*
+
+  找出一組「不低於 1 小時」的拆分方式。
+
+  核心原則：
+
+  1. 不允許 1 slot（0.5h）。
+
+  2. 優先尋找可以「剛好完成」remainingSlots 的組合。
+
+  3. 若有多種剛好完成的組合，
+
+     優先較少的事件數。
+
+  4. 若事件數相同，
+
+     優先較大的連續區塊。
+
+  5. 如果無法剛好完成，
+
+     找出「不超過剩餘時數」的最大可安排量。
+
+  6. 絕不為了填滿而使用 0.5h。
+
+*/
+
+function findBestSplitPlan(
+
+  weekDates,
+
+  remainingSlots,
+
+  occupied,
+
+  usedDays
+
+){
+
+  if(remainingSlots<2){
+
+    return [];
+
+  }
+
+
+  const blocks=
+
+    getChunkBlocks(
+
+      weekDates,
+
+      occupied
+
+    );
+
+
+  if(!blocks.length){
+
+    return [];
+
+  }
+
+
+  /*
+
+    每個區塊最多只取到 remainingSlots。
+
+    每個候選 chunk 都至少 2 slots。
+
+  */
+
+  const candidates=[];
+
+
+  blocks.forEach(
+
+    block=>{
+
+      const maxChunk=
+
+        Math.min(
+
+          block.blockSlots,
+
+          remainingSlots
+
+        );
+
+
+      for(
+
+        let slots=2;
+
+        slots<=maxChunk;
+
+        slots++
+
+      ){
+
+        candidates.push({
+
+          date:new Date(block.date),
+
+          key:block.key,
+
+          startSlot:block.startSlot,
+
+          blockSlots:block.blockSlots,
+
+          slots,
+
+          alreadyUsed:
+
+            usedDays.has(block.key)
+
+        });
+
+      }
+
+    }
+
+  );
+
+
+  if(!candidates.length){
+
+    return [];
+
+  }
+
+
+  /*
+
+    動態規劃：
+
+    dp[sum] = 到目前為止可以形成的最佳組合。
+
+    每個候選區塊只能被使用一次。
+
+    同一天可以有多個區塊，但不會重複使用同一個
+
+    實際 block。
+
+  */
+
+  const dp=
+
+    Array.from(
+
+      {length:remainingSlots+1},
+
+      ()=>null
+
+    );
+
+
+  dp[0]=[];
+
+
+  candidates.forEach(
+
+    candidate=>{
+
+      for(
+
+        let sum=
+
+          remainingSlots-
+
+          candidate.slots;
+
+        sum>=0;
+
+        sum--
+
+      ){
+
+        if(!dp[sum])continue;
+
+
+        const newSum=
+
+          sum+candidate.slots;
+
+
+        if(newSum>remainingSlots){
+
+          continue;
+
+        }
+
+
+        const newPlan=
+
+          dp[sum].concat(candidate);
+
+
+        const existing=
+
+          dp[newSum];
+
+
+        if(
+
+          !existing||
+
+          isBetterSplitPlan(
+
+            newPlan,
+
+            existing
+
+          )
+
+        ){
+
+          dp[newSum]=newPlan;
+
+        }
+
+      }
+
+    }
+
+  );
+
+
+  /*
+
+    優先剛好完成。
+
+  */
+
+  if(dp[remainingSlots]){
+
+    return optimizeSplitPlan(
+
+      dp[remainingSlots]
+
+    );
+
+  }
+
+
+  /*
+
+    如果無法剛好完成，
+
+    找「最大可以安排的整數小時量」。
+
+    例如 remaining = 3h，
+
+    只有 1.5h + 1.5h 可以剛好完成，
+
+    就使用 3h。
+
+    若只有 2h + 0.5h，
+
+    只使用 2h，
+
+    0.5h 留下，不排。
+
+  */
+
+  for(
+
+    let sum=
+
+      remainingSlots-1;
+
+    sum>=2;
+
+    sum--
+
+  ){
+
+    if(dp[sum]){
+
+      return optimizeSplitPlan(
+
+        dp[sum]
+
+      );
+
+    }
+
+  }
+
+
+  return [];
+
+}
+
+
+/*
+
+  比較兩個拆分方案。
+
+  score 越好越優先。
+
+*/
+
+function isBetterSplitPlan(
+
+  candidate,
+
+  existing
+
+){
+
+  if(!existing)return true;
+
+
+  /*
+
+    第一優先：
+
+    事件數越少越好。
+
+  */
+
+  if(
+
+    candidate.length!==
+
+    existing.length
+
+  ){
+
+    return(
+
+      candidate.length<
+
+      existing.length
+
+    );
+
+  }
+
+
+  /*
+
+    第二優先：
+
+    排序後比較最大的 chunk。
+
+    優先較大的連續時段。
+
+  */
+
+  const a=
+
+    candidate
+
+      .map(x=>x.slots)
+
+      .sort((x,y)=>y-x);
+
+  const b=
+
+    existing
+
+      .map(x=>x.slots)
+
+      .sort((x,y)=>y-x);
+
+
+  for(
+
+    let i=0;
+
+    i<a.length;
+
+    i++
+
+  ){
+
+    if(a[i]!==b[i]){
+
+      return a[i]>b[i];
+
+    }
+
+  }
+
+
+  /*
+
+    第三優先：
+
+    未使用過的日期優先。
+
+    讓同一科目盡量分散到不同日期。
+
+  */
+
+  const aUsed=
+
+    candidate.filter(
+
+      x=>x.alreadyUsed
+
+    ).length;
+
+  const bUsed=
+
+    existing.filter(
+
+      x=>x.alreadyUsed
+
+    ).length;
+
+
+  if(aUsed!==bUsed){
+
+    return aUsed<bUsed;
+
+  }
+
+
+  return false;
+
+}
+
+
+/*
+
+  將拆分方案排序：
+
+  先使用較完整的大區塊，
+
+  同時優先沒有使用過的日期，
+
+  最後才按照日期／時間排列。
+
+*/
+
+function optimizeSplitPlan(
+
+  plan
+
+){
+
+  return plan
+
+    .slice()
+
+    .sort(
+
+      (a,b)=>{
+
+        if(
+
+          a.alreadyUsed!==
+
+          b.alreadyUsed
+
+        ){
+
+          return(
+
+            a.alreadyUsed
+
+              ? 1
+
+              : -1
+
+          );
+
+        }
+
+        if(a.slots!==b.slots){
+
+          return b.slots-a.slots;
+
+        }
+
+        if(a.date-b.date!==0){
+
+          return a.date-b.date;
+
+        }
+
+        return a.startSlot-b.startSlot;
+
+      }
+
+    );
+
+}
+
+
+/* =========================================================
+
+   舊函式保留：
+
+   供其他程式邏輯使用。
+
+   但新的自動排程不再使用 0.5h chunk。
 
 ========================================================= */
 
@@ -4831,9 +5433,29 @@ function findBestChunkPosition(
 
   }
 
+
+  const validBlocks=
+
+    blocks.filter(
+
+      block=>
+
+        block.slots>=2
+
+    );
+
+
+  if(!validBlocks.length){
+
+    return null;
+
+  }
+
+
   const positions=[];
 
-  blocks.forEach(
+
+  validBlocks.forEach(
 
     block=>{
 
@@ -4847,11 +5469,20 @@ function findBestChunkPosition(
 
         );
 
-      if(chunkSlots<=0)return;
+
+      /*
+
+        ★ 最低 1 小時。
+
+      */
+
+      if(chunkSlots<2)return;
+
 
       const startSlot=
 
         block.startSlot;
+
 
       positions.push({
 
@@ -4877,9 +5508,28 @@ function findBestChunkPosition(
 
   );
 
+
   positions.sort(
 
     (a,b)=>{
+
+      if(
+
+        a.needSlots!==
+
+        b.needSlots
+
+      ){
+
+        return(
+
+          b.needSlots-
+
+          a.needSlots
+
+        );
+
+      }
 
       if(
 
@@ -4924,6 +5574,7 @@ function findBestChunkPosition(
     }
 
   );
+
 
   return positions[0]||null;
 
@@ -5236,7 +5887,7 @@ function getPlanningDates(){
 
 /* =========================================================
 
-   自動排程主程式
+   ★ 自動排程主程式
 
 ========================================================= */
 
@@ -5359,7 +6010,9 @@ function generate(){
 
           <br>
 
-          系統仍會盡可能將可用時段排入。
+          系統會只使用 ≥1 小時的完整讀書區塊，
+
+          無法安排的部分會保留為未排時數。
 
         </div>`
 
@@ -5375,7 +6028,11 @@ function generate(){
 
           <br>
 
-          系統會依各科每週需求分配所有可用讀書時段。
+          系統會優先使用完整 session，
+
+          其次使用 ≥1 小時的完整連續時段，
+
+          不會為了填滿而安排 0.5 小時。
 
         </div>`;
 
@@ -5679,6 +6336,14 @@ function generate(){
             new Set();
 
 
+          /* =================================================
+
+             第一階段：
+
+             優先安排完整 session。
+
+          ================================================= */
+
           while(
 
             remainingSlots>=
@@ -5853,211 +6518,178 @@ function generate(){
           }
 
 
+          /* =================================================
+
+             第二階段：
+
+             完整 session 放不下時，
+
+             尋找 ≥1 小時的最佳拆分組合。
+
+             ★ 這裡是本次主要修改。
+
+          ================================================= */
+
           while(
 
-            remainingSlots>0
+            remainingSlots>=2
 
           ){
 
-            const candidates=[];
+            const splitPlan=
 
-            weekDates.forEach(
+              findBestSplitPlan(
 
-              date=>{
+                weekDates,
 
-                const key=
+                remainingSlots,
 
-                  fmt(date);
+                occupied,
 
-                const blocks=
+                usedDays
 
-                  getAvailableBlocks(
-
-                    date,
-
-                    occupied
-
-                  );
-
-                if(!blocks.length){
-
-                  return;
-
-                }
-
-                const position=
-
-                  findBestChunkPosition(
-
-                    date,
-
-                    Math.min(
-
-                      2,
-
-                      remainingSlots
-
-                    ),
-
-                    occupied
-
-                  );
-
-                if(!position){
-
-                  return;
-
-                }
-
-                const remainingCapacity=
-
-                  getRemainingDaySlots(
-
-                    date,
-
-                    occupied
-
-                  );
-
-                candidates.push({
-
-                  date,
-
-                  key,
-
-                  position,
-
-                  remainingCapacity,
-
-                  alreadyUsed:
-
-                    usedDays.has(key)
-
-                });
-
-              }
-
-            );
+              );
 
 
-            if(!candidates.length){
+            if(!splitPlan.length){
 
               break;
 
             }
 
 
-            candidates.sort(
+            /*
 
-              (a,b)=>{
+              splitPlan 已經按照：
 
-                if(
+              ① 未使用日期
 
-                  a.alreadyUsed!==
+              ② 較大區塊
 
-                  b.alreadyUsed
+              ③ 日期
 
-                ){
+              ④ 時間
 
-                  return(
+              排好。
 
-                    a.alreadyUsed
+            */
 
-                      ? 1
 
-                      : -1
+            let addedThisRound=0;
 
-                  );
 
-                }
+            for(
 
-                if(
+              const chunk of splitPlan
 
-                  a.position.remainingAfter!==
+            ){
 
-                  b.position.remainingAfter
+              if(
 
-                ){
+                remainingSlots<2
 
-                  return(
+              ){
 
-                    a.position.remainingAfter-
-
-                    b.position.remainingAfter
-
-                  );
-
-                }
-
-                if(
-
-                  a.remainingCapacity!==
-
-                  b.remainingCapacity
-
-                ){
-
-                  return(
-
-                    a.remainingCapacity-
-
-                    b.remainingCapacity
-
-                  );
-
-                }
-
-                return(
-
-                  a.date-b.date
-
-                );
+                break;
 
               }
 
-            );
+
+              const actualSlots=
+
+                Math.min(
+
+                  chunk.slots,
+
+                  remainingSlots,
+
+                  chunk.blockSlots
+
+                );
 
 
-            const chosen=
+              /*
 
-              candidates[0];
+                ★ 最低單位 = 1 小時。
 
+                如果只能剩 0.5h，
 
-            addPlanEvent(
+                不排。
 
-              events,
+              */
 
-              chosen.date,
+              if(actualSlots<2){
 
-              chosen.position.startSlot,
+                continue;
 
-              chosen.position.needSlots,
-
-              subject,
-
-              subjectIndex,
-
-              occupied
-
-            );
+              }
 
 
-            usedDays.add(
+              addPlanEvent(
 
-              chosen.key
+                events,
 
-            );
+                chunk.date,
 
-            remainingSlots-=
+                chunk.startSlot,
 
-              chosen.position.needSlots;
+                actualSlots,
 
-            placedSlots+=
+                subject,
 
-              chosen.position.needSlots;
+                subjectIndex,
+
+                occupied
+
+              );
+
+
+              usedDays.add(
+
+                chunk.key
+
+              );
+
+
+              remainingSlots-=
+
+                actualSlots;
+
+              placedSlots+=
+
+                actualSlots;
+
+              addedThisRound+=
+
+                actualSlots;
+
+            }
+
+
+            if(
+
+              addedThisRound<=0
+
+            ){
+
+              break;
+
+            }
 
           }
 
+
+          /* =================================================
+
+             第三階段：
+
+             如果只剩 0.5h，
+
+             直接留白。
+
+             不再硬塞。
+
+          ================================================= */
 
           if(
 
@@ -6200,7 +6832,7 @@ function generate(){
 
               `${esc(subject.name)} `+
 
-              `缺 ${hours.toFixed(1)} 小時`
+              `${hours.toFixed(1)} 小時`
 
             );
 
@@ -6215,15 +6847,25 @@ function generate(){
 
       `<div class="notice danger" style="margin-top:8px">
 
-        ⚠ 本次排程已盡可能使用所有可用讀書時段，
-
-        但仍有部分時數無法安排：
+        ⚠ 尚未排入：
 
         <b>${detail}</b>
 
         <br><br>
 
-        系統已經嘗試：
+        自動排程只使用
+
+        <strong>≥ 1 小時</strong>
+
+        的完整讀書區塊。
+
+        <br>
+
+        不會為了填滿剩餘時間而安排 0.5 小時。
+
+        <br><br>
+
+        系統排程順序：
 
         <br>
 
@@ -6231,21 +6873,17 @@ function generate(){
 
         <br>
 
-        ② 無法完整安排時，拆成 1 小時為主要單位
+        ② 完整 session 無法放入時，
+
+        尋找 1.5 小時、2 小時以上等完整區塊
 
         <br>
 
-        ③ 最後不足 1 小時時，以 30 分鐘安排
+        ③ 優先尋找可以剛好完成剩餘時數的組合
 
-        <br><br>
+        <br>
 
-        因此這個「缺少時數」代表：
-
-        <strong>
-
-          在本次排程期間內，真的沒有足夠的可用讀書格。
-
-        </strong>
+        ④ 最後不足 1 小時的部分直接留白
 
       </div>`;
 
@@ -6259,9 +6897,13 @@ function generate(){
 
         <br>
 
-        完整 session 會優先使用連續時段；
+        系統優先使用完整 session；
 
-        無法完整放入的部分會自動拆成較小單位。
+        無法完整安排時，只使用 ≥1 小時的連續讀書區塊。
+
+        <br>
+
+        不會產生 0.5 小時的自動排程。
 
       </div>`;
 
@@ -6650,7 +7292,7 @@ function renderSavedPlan(){
 
               `${esc(subject.name)} `+
 
-              `缺 ${Number(shortfall[index]).toFixed(1)} 小時`
+              `${Number(shortfall[index]).toFixed(1)} 小時`
 
             );
 
@@ -6671,17 +7313,15 @@ function renderSavedPlan(){
 
       `<div class="notice danger" style="margin-top:8px">
 
-        ⚠ 上一次排程仍有：
+        ⚠ 上一次排程尚未排入：
 
         <b>${detail}</b>
 
-        未能安排。
-
         <br>
 
-        已使用所有能利用的讀書時段，
+        系統沒有使用 0.5 小時硬塞，
 
-        並嘗試以 1 小時單位拆分。
+        因此剩餘不足 1 小時的部分保留未排。
 
       </div>`;
 
@@ -6836,29 +7476,7 @@ function mergeAdjacentPlanEvents(events){
 
    顯示自動排程
 
-   ★ 本次修改：
-
-   1. 相鄰的同科目／同類型 event 會先合併。
-
-   2. 合併後的 event 直接按照自己的
-
-      startMinutes / endMinutes 計算 top / height。
-
-   例如：
-
-   14:00～15:00
-
-   15:00～16:00
-
-   16:00～16:30
-
-   ↓
-
-   14:00～16:30
-
-   ↓
-
-   一個完整色塊。
+   ★ 保留你剛完成的色塊合併功能。
 
 ========================================================= */
 
@@ -6871,14 +7489,6 @@ function renderPlan(
   end
 
 ){
-
-  /*
-
-    ★ 只在顯示時合併。
-
-    不修改 data.generatedPlan 裡的原始事件資料。
-
-  */
 
   const displayEvents=
 
@@ -7168,22 +7778,6 @@ function renderPlan(
             style="height:${gridHeight}px">`;
 
 
-      /*
-
-        背景時間格線。
-
-        注意：
-
-        這些只是背景線，
-
-        不是事件本身。
-
-        真正的讀書事件會在下面
-
-        以 z-index:10 顯示於格線之上。
-
-      */
-
       for(
 
         let slot=0;
@@ -7240,16 +7834,6 @@ function renderPlan(
 
       if(insideRange){
 
-        /*
-
-          ★ 這裡改成使用「合併後」的 displayEvents。
-
-          原本：
-
-          events[key]||[]
-
-        */
-
         let list=
 
           displayEvents[key]||[];
@@ -7258,24 +7842,6 @@ function renderPlan(
         list.forEach(
 
           e=>{
-
-            /*
-
-              直接使用事件自己的開始／結束分鐘。
-
-              時間軸起點為 06:00 = 360 分鐘。
-
-              因此：
-
-              top =
-
-                (開始時間 - 06:00) / 30分鐘 × 24px
-
-              height =
-
-                (結束時間 - 開始時間) / 30分鐘 × 24px
-
-            */
 
             const top=
 
@@ -7481,7 +8047,11 @@ function renderPlan(
 
       完整 session 會優先安排；
 
-      無法完整安排時，系統會自動拆成 1 小時為主要單位。
+      無法完整安排時，只使用 ≥1 小時的完整連續讀書區塊。
+
+      <br>
+
+      不足 1 小時的剩餘時間會保留空白，不會自動安排 0.5 小時。
 
       <br>
 
