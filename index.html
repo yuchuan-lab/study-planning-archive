@@ -2536,9 +2536,7 @@ function cap(){
 
       x=>x==="study"
 
-    )
-
-    .length*.5;
+    ).length*.5;
 
 }
 
@@ -2568,9 +2566,7 @@ function dailyStudyHours(dayIndex){
 
       x=>x==="study"
 
-    )
-
-    .length*.5;
+    ).length*.5;
 
 }
 
@@ -4793,8 +4789,6 @@ function generate(){
 
     自動排程從「設定的起始日期」開始。
 
-    排程期間完全依照上方選擇：
-
     1 週 = 7 天
 
     1 個月 = 30 天
@@ -4912,11 +4906,17 @@ function generate(){
 
   /*
 
-    events 以實際日期為 key。
+    events：
 
-    occupied 以實際日期記錄 40 個半小時格，
+    以實際日期為 key。
 
-    避免不同科目排到同一時間。
+    occupied：
+
+    以實際日期記錄 40 個半小時格。
+
+    每個日期的 40 格：
+
+    06:00～隔日 02:00
 
   */
 
@@ -4929,68 +4929,19 @@ function generate(){
 
   /*
 
-    取得某日期所在曆週的星期一。
+    ---------------------------------------------------------
 
-    JS：
+    尋找某一天可以完整容納某次讀書的連續時段
 
-    日=0
+    ---------------------------------------------------------
 
-    一=1
+    每次讀書都必須：
 
-    二=2
+    1. 完整位於「讀書」格
 
-    ...
+    2. 不與其他科目重疊
 
-    六=6
-
-  */
-
-  const getWeekMondayLocal=d=>{
-
-    let x=
-
-      new Date(d);
-
-
-    x.setHours(
-
-      0,0,0,0
-
-    );
-
-
-    let day=
-
-      x.getDay();
-
-
-    let diff=
-
-      day===0
-
-        ? -6
-
-        : 1-day;
-
-
-    return addDays(
-
-      x,
-
-      diff
-
-    );
-
-  };
-
-
-  /*
-
-    尋找某一天可以完整容納某次讀書的連續時段。
-
-    每一格 30 分鐘。
-
-    40 格 = 06:00～隔日 02:00。
+    3. 必須是連續時段
 
   */
 
@@ -5121,27 +5072,145 @@ function generate(){
 
   /*
 
-    依星期一～星期日逐週處理。
-
-    第一週與最後一週雖然可能只有部分日期落在排程範圍內，
-
-    但「每週需求」仍以曆週計算。
+    建立排程事件。
 
   */
 
+  const addEvent=(date,st,needSlots,s,si)=>{
+
+    let key=
+
+      fmt(date);
+
+
+    occupySlot(
+
+      date,
+
+      st,
+
+      needSlots
+
+    );
+
+
+    let startMinutes=
+
+      360+st*30;
+
+
+    let endMinutes=
+
+      startMinutes+
+
+      needSlots*30;
+
+
+    events[key]=
+
+      events[key]||[];
+
+
+    events[key].push({
+
+      time:
+
+        formatTime(
+
+          startMinutes
+
+        ),
+
+      startTime:
+
+        formatTime(
+
+          startMinutes
+
+        ),
+
+      endTime:
+
+        formatTime(
+
+          endMinutes
+
+        ),
+
+      startMinutes,
+
+      endMinutes,
+
+      name:
+
+        s.name,
+
+      type:
+
+        s.type,
+
+      hours:
+
+        s.session,
+
+      subjectIndex:si
+
+    });
+
+  };
+
+
+  /*
+
+    =========================================================
+
+    建立真正的「排程週」
+
+    =========================================================
+
+    這裡不再使用：
+
+      起始日所在的星期一
+
+    來切割第一週。
+
+    而是：
+
+      起始日 → 連續 7 天
+
+    例如起始日是星期三：
+
+      第 1 週：星期三～星期二
+
+      第 2 週：星期三～星期二
+
+    等等。
+
+    這樣每週需求才會和實際排程期間一致。
+
+    注意：
+
+    畫面上的週曆仍然維持星期一～星期日，
+
+    只有「計算排程」的方式改變。
+  */
+
+  let planningWeeks=[];
+
+
   for(
 
-    let weekMonday=
+    let weekStart=
 
-      getWeekMondayLocal(start);
+      new Date(start);
 
-    weekMonday<end;
+    weekStart<end;
 
-    weekMonday=
+    weekStart=
 
       addDays(
 
-        weekMonday,
+        weekStart,
 
         7
 
@@ -5149,435 +5218,578 @@ function generate(){
 
   ){
 
+    let weekEnd=
+
+      addDays(
+
+        weekStart,
+
+        7
+
+      );
+
+
+    let actualEnd=
+
+      weekEnd<end
+
+        ? weekEnd
+
+        : end;
+
+
     let weekDates=[];
 
 
     for(
 
-      let i=0;
-
-      i<7;
-
-      i++
-
-    ){
-
       let d=
+
+        new Date(weekStart);
+
+      d<actualEnd;
+
+      d=
 
         addDays(
 
-          weekMonday,
+          d,
 
-          i
+          1
 
-        );
+        )
 
+    ){
 
-      if(
+      weekDates.push(
 
-        d>=start&&
+        new Date(d)
 
-        d<end
-
-      ){
-
-        weekDates.push(d);
-
-      }
+      );
 
     }
 
 
-    if(!weekDates.length){
+    if(
 
-      continue;
+      weekDates.length
+
+    ){
+
+      planningWeeks.push(
+
+        weekDates
+
+      );
 
     }
-
-
-    /*
-
-      先排每一科。
-
-      同一科優先使用不同日期，
-
-      讓每週讀書分布比較平均。
-
-    */
-
-    data.subjects.forEach(
-
-      (s,si)=>{
-
-        let sessionHours=
-
-          Number(s.session);
-
-
-        let weeklyHours=
-
-          Number(s.hours);
-
-
-        let sessions=
-
-          Math.max(
-
-            1,
-
-            Math.round(
-
-              weeklyHours/sessionHours
-
-            )
-
-          );
-
-
-        let needSlots=
-
-          Math.round(
-
-            sessionHours*2
-
-          );
-
-
-        /*
-
-          不可能塞進一天的情況。
-
-          例如一次 21 小時，
-
-          直接視為本週無法安排。
-
-        */
-
-        if(
-
-          !Number.isFinite(needSlots)||
-
-          needSlots<=0||
-
-          needSlots>40
-
-        ){
-
-          shortfall[si]=
-
-            (shortfall[si]||0)+
-
-            sessions;
-
-          return;
-
-        }
-
-
-        let placed=0;
-
-        let usedDays=new Set();
-
-
-        /*
-
-          第一輪：
-
-          優先每天最多排一次，
-
-          盡量把同一科分散到不同日期。
-
-        */
-
-        for(
-
-          let di=0;
-
-          di<weekDates.length &&
-
-          placed<sessions;
-
-          di++
-
-        ){
-
-          let d=
-
-            weekDates[di];
-
-
-          let key=
-
-            fmt(d);
-
-
-          if(
-
-            usedDays.has(key)
-
-          ){
-
-            continue;
-
-          }
-
-
-          let st=
-
-            findSlot(
-
-              d,
-
-              needSlots
-
-            );
-
-
-          if(st<0){
-
-            continue;
-
-          }
-
-
-          occupySlot(
-
-            d,
-
-            st,
-
-            needSlots
-
-          );
-
-
-          let startMinutes=
-
-            360+st*30;
-
-
-          let endMinutes=
-
-            startMinutes+
-
-            needSlots*30;
-
-
-          events[key]=
-
-            events[key]||[];
-
-
-          events[key].push({
-
-            time:
-
-              formatTime(
-
-                startMinutes
-
-              ),
-
-            startTime:
-
-              formatTime(
-
-                startMinutes
-
-              ),
-
-            endTime:
-
-              formatTime(
-
-                endMinutes
-
-              ),
-
-            startMinutes,
-
-            endMinutes,
-
-            name:
-
-              s.name,
-
-            type:
-
-              s.type,
-
-            hours:
-
-              s.session,
-
-            subjectIndex:si
-
-          });
-
-
-          usedDays.add(key);
-
-          placed++;
-
-        }
-
-
-        /*
-
-          第二輪：
-
-          如果一週天數不足以分散完全部次數，
-
-          再允許同一天安排第二次或更多次。
-
-        */
-
-        for(
-
-          let di=0;
-
-          di<weekDates.length &&
-
-          placed<sessions;
-
-          di++
-
-        ){
-
-          let d=
-
-            weekDates[di];
-
-
-          let key=
-
-            fmt(d);
-
-
-          let st=
-
-            findSlot(
-
-              d,
-
-              needSlots
-
-            );
-
-
-          if(st<0){
-
-            continue;
-
-          }
-
-
-          occupySlot(
-
-            d,
-
-            st,
-
-            needSlots
-
-          );
-
-
-          let startMinutes=
-
-            360+st*30;
-
-
-          let endMinutes=
-
-            startMinutes+
-
-            needSlots*30;
-
-
-          events[key]=
-
-            events[key]||[];
-
-
-          events[key].push({
-
-            time:
-
-              formatTime(
-
-                startMinutes
-
-              ),
-
-            startTime:
-
-              formatTime(
-
-                startMinutes
-
-              ),
-
-            endTime:
-
-              formatTime(
-
-                endMinutes
-
-              ),
-
-            startMinutes,
-
-            endMinutes,
-
-            name:
-
-              s.name,
-
-            type:
-
-              s.type,
-
-            hours:
-
-              s.session,
-
-            subjectIndex:si
-
-          });
-
-
-          placed++;
-
-        }
-
-
-        if(
-
-          placed<sessions
-
-        ){
-
-          shortfall[si]=
-
-            (shortfall[si]||0)+
-
-            (sessions-placed);
-
-        }
-
-      }
-
-    );
 
   }
 
 
   /*
 
-    每天按照開始時間排序，
+    =========================================================
 
-    確保週曆上的事件由早到晚排列。
+    每個排程週開始安排
+
+    =========================================================
+
+    科目先按照「每次時數」由大到小。
+
+    長時數比較難塞入，
+
+    因此先處理長時數可以降低零碎時段造成的問題。
+  */
+
+  planningWeeks.forEach(
+
+    weekDates=>{
+
+      let subjectsToSchedule=
+
+        data.subjects
+
+          .map(
+
+            (s,si)=>({
+
+              s,
+
+              si,
+
+              sessionHours:
+
+                Number(s.session),
+
+              weeklyHours:
+
+                Number(s.hours)
+
+            })
+
+          )
+
+          .sort(
+
+            (a,b)=>
+
+              b.sessionHours-
+
+              a.sessionHours
+
+          );
+
+
+      subjectsToSchedule.forEach(
+
+        item=>{
+
+          let s=
+
+            item.s;
+
+
+          let si=
+
+            item.si;
+
+
+          let sessionHours=
+
+            item.sessionHours;
+
+
+          let weeklyHours=
+
+            item.weeklyHours;
+
+
+          /*
+
+            每次時數轉成 30 分鐘格。
+
+            例如：
+
+            3 小時 = 6 格
+
+            2 小時 = 4 格
+
+            1.5 小時 = 3 格
+          */
+
+          let needSlots=
+
+            Math.round(
+
+              sessionHours*2
+
+            );
+
+
+          /*
+
+            每週時數 ÷ 每次時數
+
+            不再使用 Math.round()。
+
+            例如：
+
+            6 ÷ 3 = 2 次
+
+            6 ÷ 2 = 3 次
+
+            5 ÷ 3 = 1.67
+
+            → 只安排 1 次完整的 3 小時。
+
+          */
+
+          let exactSessions=
+
+            weeklyHours/sessionHours;
+
+
+          let sessions=
+
+            Math.floor(
+
+              exactSessions+1e-9
+
+            );
+
+
+          if(
+
+            sessions<=0
+
+          ){
+
+            return;
+
+          }
+
+
+          /*
+
+            一天最多 40 格，
+
+            即 20 小時。
+
+          */
+
+          if(
+
+            !Number.isFinite(needSlots)||
+
+            needSlots<=0||
+
+            needSlots>40
+
+          ){
+
+            shortfall[si]=
+
+              (shortfall[si]||0)+
+
+              sessions;
+
+            return;
+
+          }
+
+
+          let placed=0;
+
+
+          let usedDays=
+
+            new Set();
+
+
+          /*
+
+            -------------------------------------------------
+
+            尋找候選日期。
+
+            優先剩餘「連續讀書空間」比較多的日期。
+
+            -------------------------------------------------
+          */
+
+          let candidates=
+
+            weekDates
+
+              .map(
+
+                d=>({
+
+                  date:d,
+
+                  key:fmt(d),
+
+                  dow:
+
+                    (d.getDay()+6)%7
+
+                })
+
+              )
+
+
+              .sort(
+
+                (a,b)=>{
+
+                  const getBestBlock=
+
+                    item=>{
+
+                      let key=
+
+                        item.key;
+
+
+                      let occ=
+
+                        occupied[key]||
+
+                        Array(40).fill(false);
+
+
+                      let dow=
+
+                        item.dow;
+
+
+                      if(
+
+                        !data.routine[dow]
+
+                      ){
+
+                        return 0;
+
+                      }
+
+
+                      let best=0;
+
+                      let current=0;
+
+
+                      for(
+
+                        let i=0;
+
+                        i<40;
+
+                        i++
+
+                      ){
+
+                        if(
+
+                          data.routine[dow][i]==="study"&&
+
+                          !occ[i]
+
+                        ){
+
+                          current++;
+
+                          best=
+
+                            Math.max(
+
+                              best,
+
+                              current
+
+                            );
+
+                        }else{
+
+                          current=0;
+
+                        }
+
+                      }
+
+
+                      return best;
+
+                    };
+
+
+                  return
+
+                    getBestBlock(b)-
+
+                    getBestBlock(a);
+
+                }
+
+              );
+
+
+          /*
+
+            =================================================
+
+            第一輪
+
+            =================================================
+
+            同一科優先分散到不同日期。
+
+            每一天最多一次。
+          */
+
+          for(
+
+            let ci=0;
+
+            ci<candidates.length&&
+
+            placed<sessions;
+
+            ci++
+
+          ){
+
+            let d=
+
+              candidates[ci].date;
+
+
+            let key=
+
+              candidates[ci].key;
+
+
+            if(
+
+              usedDays.has(key)
+
+            ){
+
+              continue;
+
+            }
+
+
+            let st=
+
+              findSlot(
+
+                d,
+
+                needSlots
+
+              );
+
+
+            if(
+
+              st<0
+
+            ){
+
+              continue;
+
+            }
+
+
+            addEvent(
+
+              d,
+
+              st,
+
+              needSlots,
+
+              s,
+
+              si
+
+            );
+
+
+            usedDays.add(key);
+
+            placed++;
+
+          }
+
+
+          /*
+
+            =================================================
+
+            第二輪
+
+            =================================================
+
+            如果每週需要的次數超過可以分散的日期，
+
+            才允許同一天安排第二次、第三次。
+          */
+
+          for(
+
+            let ci=0;
+
+            ci<candidates.length&&
+
+            placed<sessions;
+
+            ci++
+
+          ){
+
+            let d=
+
+              candidates[ci].date;
+
+
+            let st=
+
+              findSlot(
+
+                d,
+
+                needSlots
+
+              );
+
+
+            if(
+
+              st<0
+
+            ){
+
+              continue;
+
+            }
+
+
+            addEvent(
+
+              d,
+
+              st,
+
+              needSlots,
+
+              s,
+
+              si
+
+            );
+
+
+            placed++;
+
+          }
+
+
+          /*
+
+            如果還是排不完，
+
+            記錄缺少幾次。
+          */
+
+          if(
+
+            placed<sessions
+
+          ){
+
+            shortfall[si]=
+
+              (shortfall[si]||0)+
+
+              (sessions-placed);
+
+          }
+
+        }
+
+      );
+
+    }
+
+  );
+
+
+  /*
+
+    每天按照開始時間排序。
 
   */
 
@@ -5602,10 +5814,11 @@ function generate(){
 
   /*
 
-    如果有科目沒有完全排入，
+    =========================================================
 
-    明確顯示「少了幾次」。
+    顯示排程結果
 
+    =========================================================
   */
 
   if(
@@ -5627,7 +5840,9 @@ function generate(){
               data.subjects[si];
 
 
-            return `${esc(s.name)} ${shortfall[si]} 次`;
+            return
+
+              `${esc(s.name)} ${shortfall[si]} 次`;
 
           }
 
@@ -5653,6 +5868,18 @@ function generate(){
         請檢查每週作息中的「讀書」時段、
 
         每次時數，以及各科每週需求。
+
+        <br>
+
+        <span class="small">
+
+          注意：即使每週「讀書」總時數足夠，
+
+          如果讀書時段被切割成太多短區段，
+
+          仍可能無法容納較長的單次讀書時數。
+
+        </span>
 
       </div>`;
 
